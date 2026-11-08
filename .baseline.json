@@ -1,0 +1,34 @@
+{
+    "schemaVersion":  1,
+    "baselineVersion":  "0.3.0",
+    "mode":  "local",
+    "installedAt":  "2026-11-08T16:29:46.3441533-03:00",
+    "skills":  [
+                   "memoria",
+                   "angular",
+                   "ui-ux-mockup"
+               ],
+    "targets":  [
+                    "none"
+                ],
+    "targetFileCreated":  false,
+    "targetPermissionsAdded":  false,
+    "targetFiles":  [
+
+                    ],
+    "files":  {
+                  ".baseline/AGENTS.md":  "9E07AD1820DC2DCE57A1B88108D78CB830D573BA749D38D047C9FA987ED98325",
+                  ".baseline/session.md":  "4D3C2F6F652C3CB880A5204CC5434CB32B40E873AEF9A11C18EFEF094940F484",
+                  ".baseline/skills/angular/references/auth.md":  "61D4BEC10027ACFBA631E454D2F47BFE8F74E86C8CEF2F2A91EFA77BC14C0F02",
+                  ".baseline/skills/angular/references/componentes-select.md":  "15D3BA03916B371D71859EF690057E66902420AC8CF6988949058EC164CA4F07",
+                  ".baseline/skills/angular/references/crud-page.md":  "7B5F68803B1C18253D9E39442B4E919455AF86486AC73B0B38E1080571520006",
+                  ".baseline/skills/angular/references/ejemplo-referencia.md":  "4E900A5C7C0A700FA96D356B89FF56EBF5C69F4E67D3120254CAB398365BFC94",
+                  ".baseline/skills/angular/references/feedback.md":  "EDA14CC8A989E81BA840CA789E80676F1A08FF2648D30ABA5D3C41784C90AEFF",
+                  ".baseline/skills/angular/references/filtro-catalogo.md":  "8255A1E249002334E5D22152F5D5F89984D7DFB360BF0939EF2D9CA04135A528",
+                  ".baseline/skills/angular/references/ssr.md":  "6FB7AE8F53E721008B0ACADAC4692C570A84023DDDBEDC8A9D725B1AFC827831",
+                  ".baseline/skills/angular/SKILL.md":  "CE2E8473C939AB3DC7901B1C63D24042883F9F8DA7CC47BBC9C96CD0843BDFDA",
+                  ".baseline/skills/memoria/SKILL.md":  "A2525491C32FC1F5CAF24444C3DDBFC02FD8843D2AA493624A9CEC13811A71BB",
+                  ".baseline/skills/ui-ux-mockup/SKILL.md":  "41A69D6A8DF413A6C00CCE4238A92B7877B98F3C23E96B6BAA063B15FA09E2F5",
+                  ".baseline/VERSION":  "550613537FC488F3B372AF74A4001879F012C8465B816F1B85C6D3446B2CFB49"
+              }
+}

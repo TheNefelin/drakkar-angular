@@ -1,3 +1,53 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "drakar";
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: #0a0c10;
+  --color-base-200: #11141b;
+  --color-base-300: #181d26;
+  --color-base-content: #e7e5e4;
+
+  --color-primary: #f0b429;
+  --color-primary-content: #0a0c10;
+
+  --color-secondary: #e8a23c;
+  --color-secondary-content: #0a0c10;
+
+  --color-accent: #14202b;
+  --color-accent-content: #e7e5e4;
+
+  --color-neutral: #232a36;
+  --color-neutral-content: #e7e5e4;
+
+  --color-info: #3abff8;
+  --color-success: #36d399;
+  --color-warning: #fbbd23;
+  --color-error: #f87272;
+  --color-danger: #dc2626;
+}
+
+@theme {
+  --font-runic: 'Noto Sans Runic', sans-serif;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Roboto', sans-serif;
+  --color-danger: #dc2626;
+}
+
+.rail-teeth {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-primary) 0px, var(--color-primary) 14px,
+    transparent 14px, transparent 26px
+  );
+  height: 12px;
+}
+
+.scroll-mt-nav { scroll-margin-top: 92px; }
+.step-rune-shadow { text-shadow: 0 0 18px color-mix(in oklab, var(--color-primary) 55%, transparent); }

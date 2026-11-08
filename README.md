@@ -1,5 +1,16 @@
 # DrakarAngular
 
+```sh
+ng g c shared/components/navbar-component --skip-tests --style=none
+ng g c features/home/pages/home-page --skip-tests --style=none
+```
+
+---
+---
+---
+
+# DrakarAngular
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.4.
 
 ## Development server

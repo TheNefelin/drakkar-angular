@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DRAKAR · Cotiza tu mudanza o flete</title>
+  <meta name="description" content="Mudanzas y retiro de compras en DIMASA y Home Center. Flota propia, precio cerrado en 48 h. Cotiza en un minuto." />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0d11'/%3E%3Ctext x='32' y='44' font-size='36' text-anchor='middle' fill='%23f0b429' font-family='serif'%3E%E1%9B%9E%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            night: '#0a0c10',
+            deck: '#11141b',
+            hull: '#181d26',
+            beam: '#232a36',
+            rune: '#f0b429',
+            ember: '#e8a23c',
+            ash: '#8b93a1',
+            cinder: '#5b616e',
+            sea: '#14202b',
+          },
+          fontFamily: {
+            runic: ['Cinzel', 'serif'],
+            body: ['Manrope', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <style>
+    .rail-teeth {
+      background-image: repeating-linear-gradient(
+        90deg,
+        #f0b429 0px, #f0b429 14px,
+        transparent 14px, transparent 26px
+      );
+      height: 12px;
+    }
+    body { color-scheme: dark; }
+    .scroll-mt-nav { scroll-margin-top: 92px; }
+    .step-rune-shadow { text-shadow: 0 0 18px rgba(240, 180, 41, 0.55); }
+  </style>
+</head>
+
+<body class="bg-night text-stone-200 font-body antialiased selection:bg-rune/30">
+
+  <!-- NAV (solo CTA) -->
+  <header class="fixed inset-x-0 top-0 z-50 border-b border-rune/10 bg-night/85 backdrop-blur-md">
+    <div class="rail-teeth opacity-70"></div>
+    <nav class="mx-auto flex max-w-4xl items-center justify-between gap-4 px-5 py-4" aria-label="Principal">
+      <a href="#inicio" class="group flex items-center gap-3">
+        <span class="grid h-11 w-11 place-items-center rounded-full border-2 border-rune/60 bg-hull font-bold text-rune transition group-hover:rotate-[-8deg] group-hover:border-rune" aria-hidden="true">ᛞ</span>
+        <span class="font-runic text-2xl font-black tracking-widest text-stone-100">DRAKAR</span>
+      </a>
+      <a href="#cotizar" class="btn btn-sm rounded-sm border-0 bg-rune px-6 text-night hover:bg-ember">Cotizar ahora</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section id="inicio" class="relative overflow-hidden pt-44">
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div class="absolute left-0 top-24 font-runic text-[14rem] leading-none text-rune/[0.04] select-none">ᛞ</div>
+      <div class="absolute right-0 bottom-0 hidden font-runic text-[12rem] leading-none text-ember/[0.05] select-none xl:block">ᚱ</div>
+    </div>
+
+    <div class="relative mx-auto max-w-4xl px-5">
+      <p class="mb-6 flex items-center justify-center gap-3 text-xs font-bold uppercase tracking-[0.4em] text-ember">
+        <span aria-hidden="true">ᛞᚱᚨᚲᚨᚱ</span>
+        <span class="h-px w-8 bg-ember/60"></span>
+        mudanzas y fletes
+      </p>
+      <h1 class="text-center font-runic text-5xl font-black leading-[1.08] text-stone-100 sm:text-7xl">
+        ¿Listo para<br />
+        <span class="text-rune step-rune-shadow">zarpar?</span>
+      </h1>
+      <p class="mx-auto mt-7 max-w-xl text-center text-lg leading-relaxed text-ash">
+        Mudamos tu hogar y retiramos tus compras en
+        <span class="font-semibold text-stone-200">DIMASA</span> y
+        <span class="font-semibold text-stone-200">Home Center</span>.
+        Flota propia y precio cerrado en menos de 48 horas.
+      </p>
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <a href="#cotizar" class="btn btn-lg rounded-sm border-0 bg-rune px-10 font-bold text-night hover:bg-ember">Pedir cotización gratis</a>
+        <a href="https://wa.me/56961234567" target="_blank" rel="noopener" class="btn btn-lg rounded-sm border border-ember/50 bg-transparent px-10 font-semibold text-ember hover:border-ember hover:bg-ember/10">WhatsApp directo</a>
+      </div>
+      <p class="mt-8 text-center text-xs font-bold uppercase tracking-[0.3em] text-ash">
+        <span class="text-rune">100%</span> flota propia ·
+        <span class="text-rune">48 h</span> respuesta ·
+        <span class="text-rune">RM+</span> cobertura
+      </p>
+    </div>
+
+    <div class="relative mx-auto mt-14 w-full max-w-lg" aria-hidden="true">
+      <svg viewBox="0 0 560 400" class="w-full drop-shadow-[0_0_40px_rgba(240,180,41,0.10)]">
+        <defs>
+          <radialGradient id="aura" cx="50%" cy="45%" r="65%">
+            <stop offset="0%" stop-color="rgba(240,180,41,0.16)" />
+            <stop offset="100%" stop-color="rgba(240,180,41,0)" />
+          </radialGradient>
+        </defs>
+        <circle cx="280" cy="200" r="190" fill="url(#aura)" />
+        <g stroke="#f0b429" stroke-width="2" fill="rgba(240,180,41,0.06)">
+          <rect x="262" y="128" width="82" height="112" rx="2" />
+          <path d="M262 156h82M262 184h82M262 212h82" stroke="rgba(240,180,41,0.5)" stroke-width="1.4" />
+        </g>
+        <line x1="303" y1="118" x2="303" y2="300" stroke="#f0b429" stroke-width="3" />
+        <path d="M112 246 C150 320 430 322 472 240" fill="none" stroke="#f0b429" stroke-width="4" stroke-linecap="round" />
+        <path d="M112 246 C150 292 420 294 472 240" fill="none" stroke="#f0b429" stroke-width="2" opacity="0.6" stroke-linecap="round" />
+        <path d="M132 292 C180 324 400 326 452 282" fill="none" stroke="rgba(240,180,41,0.25)" stroke-width="1.5" stroke-dasharray="4 8" />
+        <path d="M112 246 C76 236 58 206 72 174 C96 160 118 182 112 246" fill="none" stroke="#f0b429" stroke-width="4" stroke-linecap="round" />
+        <circle cx="82" cy="182" r="3" fill="#f0b429" />
+        <path d="M472 240 C492 220 496 200 490 186" fill="none" stroke="#f0b429" stroke-width="4" stroke-linecap="round" />
+        <g fill="rgba(11,13,17,0.9)" stroke="#f0b429" stroke-width="2">
+          <circle cx="210" cy="272" r="9" /><circle cx="250" cy="276" r="9" /><circle cx="290" cy="278" r="9" /><circle cx="330" cy="278" r="9" /><circle cx="370" cy="274" r="9" /><circle cx="410" cy="266" r="9" />
+        </g>
+        <g stroke="#e8a23c" stroke-width="2" stroke-linecap="round" opacity="0.7">
+          <line x1="220" y1="308" x2="186" y2="330" /><line x1="268" y1="312" x2="234" y2="338" /><line x1="316" y1="314" x2="284" y2="340" /><line x1="364" y1="310" x2="334" y2="336" />
+        </g>
+        <g fill="none" stroke="#5b616e" stroke-width="2" opacity="0.8">
+          <path d="M20 348 Q70 340 120 348 T220 348 T320 348 T420 348 T540 348" />
+          <path d="M30 368 Q80 360 130 368 T230 368 T330 368 T430 368 T550 368" stroke-dasharray="6 10" opacity="0.6" />
+        </g>
+        <text x="280" y="352" text-anchor="middle" font-size="14" fill="#e8a23c" opacity="0.85" letter-spacing="8">ᛞ ᚱ ᚨ ᚲ ᚨ ᚱ</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- BENEFICIOS -->
+  <section id="beneficios" class="border-t border-rune/10 bg-deck">
+    <div class="mx-auto grid max-w-4xl gap-6 px-5 py-14 md:grid-cols-3">
+      <div class="rounded-sm border border-beam bg-hull p-6 text-center">
+        <p class="font-runic text-3xl text-rune" aria-hidden="true">ᛊ</p>
+        <h3 class="mt-3 font-runic text-lg font-bold text-stone-100">Retiro en tienda</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ash">Retiramos tus compras y materiales en DIMASA y Home Center, y te los dejamos puestos en destino.</p>
+      </div>
+      <div class="rounded-sm border border-rune/40 bg-hull p-6 text-center">
+        <p class="font-runic text-3xl text-rune" aria-hidden="true">ᛞ</p>
+        <h3 class="mt-3 font-runic text-lg font-bold text-stone-100">Mudanza completa</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ash">Empaque, carguío, traslado y montaje con cuadrilla y flota propia, siempre asegurada.</p>
+      </div>
+      <div class="rounded-sm border border-beam bg-hull p-6 text-center">
+        <p class="font-runic text-3xl text-rune" aria-hidden="true">ᚨ</p>
+        <h3 class="mt-3 font-runic text-lg font-bold text-stone-100">Precio cerrado</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ash">Cotización cerrada en menos de 48 horas. Lo que tachamos en la bitácora, es lo que se cobra.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COTIZAR (formulario corto) -->
+  <section id="cotizar" class="relative scroll-mt-nav overflow-hidden py-24">
+    <div class="pointer-events-none absolute right-0 top-10 hidden font-runic text-[10rem] leading-none text-beam/20 select-none xl:block" aria-hidden="true">ᛟ</div>
+    <div class="mx-auto max-w-3xl px-5">
+      <div class="text-center">
+        <p class="mb-3 text-xs font-bold uppercase tracking-[0.4em] text-ember">Todo a bordo</p>
+        <h2 class="font-runic text-4xl font-black text-stone-100 sm:text-5xl">Cotiza en un minuto</h2>
+        <p class="mx-auto mt-4 max-w-md text-ash">Déjanos tus datos y la tripulación te responde por WhatsApp en menos de 48 horas.</p>
+      </div>
+
+      <form id="quote-form" class="mt-12 rounded-sm border border-beam bg-hull p-7 sm:p-10">
+        <fieldset class="grid gap-5 sm:grid-cols-2">
+          <legend class="mb-2 sr-only">Cotización rápida</legend>
+          <label class="block">
+            <span class="mb-1.5 block text-xs font-bold uppercase tracking-widest text-ash">Tu nombre</span>
+            <input name="nombre" required class="input w-full rounded-sm border-beam bg-night text-stone-100" placeholder="Ej.: Lorena Andrade" />
+          </label>
+          <label class="block">
+            <span class="mb-1.5 block text-xs font-bold uppercase tracking-widest text-ash">Teléfono / WhatsApp</span>
+            <input name="telefono" required class="input w-full rounded-sm border-beam bg-night text-stone-100" placeholder="+56 9 ..." />
+          </label>
+          <label class="block sm:col-span-2">
+            <span class="mb-1.5 block text-xs font-bold uppercase tracking-widest text-ash">Servicio</span>
+            <select name="servicio" class="select w-full rounded-sm border-beam bg-night text-stone-100">
+              <option>Mudanza hogar completa</option>
+              <option>Retiro DIMASA / Home Center</option>
+              <option>Traslado de materiales</option>
+              <option>Flete simple</option>
+              <option>Guardado temporal</option>
+            </select>
+          </label>
+        </fieldset>
+        <button type="submit" class="btn btn-lg mt-7 w-full rounded-sm border-0 bg-rune font-bold text-night hover:bg-ember">Enviar y recibir cotización</button>
+        <p id="form-success" class="mt-4 hidden items-center justify-center gap-2 rounded-sm border border-rune/40 bg-rune/10 p-4 text-sm font-semibold text-rune" role="status">
+          Gracias por tu mensaje. Te contactamos en menos de 48 horas.
+        </p>
+        <p class="mt-5 text-center text-xs text-ash">¿Más rápido? Llámanos o escríbenos: <span class="font-bold text-stone-200">+56 9 6123 4567</span></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-rune/10 bg-deck">
+    <div class="rail-teeth rotate-180 opacity-60"></div>
+    <div class="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3 px-5 py-7 text-xs text-cinder">
+      <p>© <span id="year">2026</span> DRAKAR Transportes · Mockup sin fines comerciales.</p>
+      <p class="font-runic tracking-widest text-cinder/70" aria-hidden="true">ᛞ · buen viento y buena mar</p>
+    </div>
+  </footer>
+
+  <script>
+    // ---- Formulario demo (sin backend) ----
+    (function () {
+      const form = document.getElementById('quote-form');
+      if (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const ok = document.getElementById('form-success');
+          if (ok) { ok.classList.remove('hidden'); ok.classList.add('flex'); }
+        });
+      }
+    })();
+
+    // ---- Año dinámico en el pie ----
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
