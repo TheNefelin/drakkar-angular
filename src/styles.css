@@ -49,6 +49,7 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: #0a0c10;
 }
 /* Chrome, Safari */
 body::-webkit-scrollbar{
