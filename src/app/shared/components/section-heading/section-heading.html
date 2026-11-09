@@ -1,0 +1,7 @@
+@if (level() === 'h1') {
+  <p class="animate-hero-fade mb-3 text-xs font-bold uppercase tracking-[0.4em] text-secondary">{{ eyebrow() }}</p>
+  <h1 class="animate-hero-fade font-display text-3xl md:text-4xl font-black text-base-content">{{ title() }}</h1>
+} @else {
+  <p class="text-xs font-bold uppercase tracking-[0.4em] text-secondary">{{ eyebrow() }}</p>
+  <h2 class="mt-3 font-display text-3xl md:text-4xl font-black text-base-content">{{ title() }}</h2>
+}

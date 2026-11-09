@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { SectionHeadingComponent } from '@shared/components/section-heading/section-heading';
 
 interface CotizacionResult {
   km: number;
@@ -9,7 +10,7 @@ interface CotizacionResult {
 }
 
 @Component({
-  imports: [],
+  imports: [SectionHeadingComponent],
   selector: 'app-cotizacion-page',
   templateUrl: './cotizacion-page.html',
 })

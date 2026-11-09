@@ -1,8 +1,7 @@
 <section id="servicios" class="bg-base-100">
-  <div class="mx-auto max-w-5xl px-5 py-16">
+  <div appReveal class="mx-auto max-w-5xl px-5 py-16">
     <div class="mb-10 text-center">
-      <p class="text-xs font-bold uppercase tracking-[0.4em] text-secondary">Nuestros servicios</p>
-      <h2 class="mt-3 font-display text-3xl font-black text-base-content sm:text-4xl">Transporte terrestre y retiro</h2>
+      <app-section-heading eyebrow="Nuestros servicios" title="Transporte terrestre y retiro" />
     </div>
     <div class="grid gap-6 sm:grid-cols-2">
       @for (service of services(); track service.name) {

@@ -38,6 +38,13 @@
   --font-display: 'Cinzel Decorative', serif;
   --font-body: 'Roboto', sans-serif;
   --color-danger: #dc2626;
+
+  --animate-hero-fade: heroFade 1s ease-out both;
+
+  @keyframes heroFade {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: none; }
+  }
 }
 
 html {
@@ -61,3 +68,25 @@ html {
 }
 
 .step-rune-shadow { text-shadow: 0 0 18px color-mix(in oklab, var(--color-primary) 55%, transparent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-fade {
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
