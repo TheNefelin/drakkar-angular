@@ -6,7 +6,7 @@
     </div>
     <div class="grid gap-6 sm:grid-cols-2">
       @for (service of services(); track service.name) {
-        <div class="card bg-base-300 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+        <div class="card bg-base-300 shadow-sm transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg">
           <div class="card-body items-center text-center">
             <div class="grid h-14 w-14 place-items-center rounded-full border-2 border-primary/40 bg-base-200 text-2xl text-primary">{{ service.icon }}</div>
             <h3 class="card-title mt-2 font-display text-lg text-base-content">{{ service.name }}</h3>
