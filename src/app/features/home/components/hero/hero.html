@@ -1,5 +1,5 @@
-<section id="inicio" class="hero pt-10">
-  <div class="hero-content mx-auto flex w-full max-w-5xl flex-col items-center gap-8 px-5 py-26 text-center">
+<section id="inicio" class="hero min-h-dvh pt-10">
+  <div class="hero-content flex max-w-5xl flex-col items-center gap-8 px-5 text-center">
     <h1 class="font-display text-5xl font-semibold leading-[1.05] text-base-content sm:text-7xl">
       ¿Listo para
       <span class="text-primary">cargar?</span>
@@ -7,7 +7,7 @@
     <p class="max-w-2xl text-lg leading-relaxed text-base-content/70">
       Fletes, Retiro de Escombros, Mudanzas y mas... <br> Con flota propia y precio cerrado en menos de 48 horas.
     </p>
-    <div class="flex flex-wrap items-center justify-center gap-4">
+    <div class="grid w-fit grid-cols-1 gap-4 sm:grid-flow-col sm:auto-cols-fr">
       <a href="/cotizacion" class="btn btn-lg btn-primary rounded-sm">Simula tu cotización</a>
       <a href="https://wa.me/56988609980" target="_blank" rel="noopener" class="btn btn-lg btn-outline btn-secondary rounded-sm">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -26,10 +26,10 @@
         WhatsApp directo
       </a>
     </div>
-    <p class="font-bold uppercase text-base-content/60">
-      <span class="text-primary">100%</span> flota propia
-      <span class="px-5 text-primary"> · ᛟ · </span>
-      <span class="text-primary">48H</span> respuesta
+    <p class="flex flex-col items-center gap-1 text-center font-bold uppercase text-base-content/60 md:flex-row md:justify-center md:gap-3">
+      <span><span class="text-primary">100%</span> flota propia</span>
+      <span class="hidden text-primary md:inline">· ᛟ ·</span>
+      <span><span class="text-primary">48H</span> respuesta</span>
     </p>
   </div>
 </section>

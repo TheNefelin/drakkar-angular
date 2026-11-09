@@ -1,6 +1,6 @@
 <header class="fixed inset-x-0 top-0 z-50 border-b border-base-300 bg-base-100/90 backdrop-blur-md">
   <div class="navbar mx-auto max-w-4xl px-5 py-2">
-    <div class="navbar-start gap-3">
+    <div class="navbar-start w-auto flex-1 gap-3">
       <a href="#inicio" class="flex items-center gap-3">
         <span class="grid h-13 w-13 place-items-center overflow-hidden border-2 border-danger bg-danger text-white">
           <img ngSrc="logo.png" width="900" height="900" priority alt="Logo Transportes Drakar" class="h-full w-full object-cover" />
@@ -14,8 +14,24 @@
         </span>
       </a>
     </div>
-    <div class="navbar-end">
-      <a href="#contacto" class="btn btn-primary rounded-sm">Contáctanos</a>
+
+    <div class="navbar-end w-auto">
+      <!-- Desde 640px: botón visible -->
+      <a href="#contacto" class="btn btn-primary hidden rounded-sm sm:inline-flex">Contáctanos</a>
+
+      <!-- Bajo 640px: hamburguesa con el botón dentro -->
+      <div class="dropdown dropdown-end sm:hidden">
+        <div tabindex="0" role="button" class="btn btn-ghost" aria-label="Abrir menú">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </div>
+        <ul tabindex="-1" class="menu dropdown-content z-10 mt-3 w-56 rounded-box bg-base-100 p-2 shadow">
+          <li>
+            <a href="#contacto" class="btn btn-primary rounded-sm" onclick="document.activeElement.blur()">Contáctanos</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </header>
