@@ -1,8 +1,38 @@
-# DrakarAngular
+# Transportes Drakar
 
-```sh
-ng g c shared/components/navbar-component --skip-tests --style=none
-ng g c features/home/pages/home-page --skip-tests --style=none
+Landing y cotizador estimativo para Transportes Drakar (fletes, mudanzas y retiro de escombros).
+Stack: Angular 21+ signal-based, SSR, Tailwind 4 + DaisyUI 5, pnpm.
+
+## Rutas
+
+- `/` — Home con hero, servicios y contacto.
+- `/cotizacion` — Simula tu cotización (origen, destino, servicio, peso, volumen, km) y obtiene un estimado con desglose.
+
+## Estructura
+
+```text
+src/app/
+├── layouts/main-layout/        → navbar + router-outlet + footer + rune-line
+├── shared/components/          → navbar, footer, rune-line
+└── features/
+    ├── home/
+    │   ├── components/         → hero, services, contacto
+    │   └── pages/home-page/  → compone las secciones
+    └── cotizacion/
+        └── pages/cotizacion-page/
+```
+
+## Fuentes y tema
+
+- Fuentes por CDN: Noto Sans Runic (runas), Cinzel Decorative (display), Roboto (cuerpo).
+- Tema `drakar` en `src/styles.css` con variables DaisyUI/Tailwind.
+
+## Comandos
+
+```bash
+pnpm start        # ng serve (desarrollo)
+pnpm build        # build de producción
+pnpm test -- --watch=false  # tests (Vitest)
 ```
 
 ---
