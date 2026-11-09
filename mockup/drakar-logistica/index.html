@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DRAKAR · Mudanzas y fletes en la Región Metropolitana</title>
+  <meta name="description" content="Mudanzas de hogar, retiros en DIMASA y Home Center y traslado de materiales. Flota propia, carga asegurada y precio cerrado en 48 horas." />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f2b46'/%3E%3Ctext x='32' y='45' font-size='34' text-anchor='middle' fill='%23f97316' font-family='Arial' font-weight='bold'%3ED%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0f172a',
+            muted: '#475569',
+            line: '#e2e8f0',
+            paper: '#f8fafc',
+            brand: '#1558b0',
+            branddark: '#0f2b46',
+            brandsoft: '#eaf2fc',
+            flame: '#f97316',
+            flamedark: '#ea580c',
+          },
+          fontFamily: {
+            display: ['Sora', 'sans-serif'],
+            body: ['Manrope', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    .scroll-mt-nav { scroll-margin-top: 96px; }
+    .hero-fade { animation: heroFade 1s ease-out both; }
+    @keyframes heroFade {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .js .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+    .js .reveal.in { opacity: 1; transform: none; }
+    .grid-dots {
+      background-image: radial-gradient(rgba(21, 88, 176, 0.14) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-fade { animation: none; }
+      .js .reveal { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+
+<body class="bg-white font-body text-ink antialiased">
+
+  <a href="#inicio" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-branddark focus:px-4 focus:py-2 focus:text-white">Saltar al contenido</a>
+
+  <!-- BARRA DE CONTACTO -->
+  <div class="bg-branddark text-slate-200">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-5 py-2 text-xs">
+      <p class="flex items-center gap-2">
+        <span class="text-flame" aria-hidden="true">●</span>
+        Lunes a sábado · 8:00 a 19:00
+      </p>
+      <div class="flex items-center gap-5">
+        <span class="hidden sm:inline text-slate-300">Cobertura: Región Metropolitana</span>
+        <a href="tel:+56961234567" class="flex items-center gap-2 font-semibold text-white transition hover:text-flame">
+          <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 4h4l1.5 4-2 1.5a12 12 0 006 6l1.5-2 4 1.5v4a1 1 0 01-1 1A16 16 0 014 5a1 1 0 011-1z" stroke-linejoin="round"/></svg>
+          +56 9 6123 4567
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <header class="sticky top-0 z-50 border-b border-line bg-white/90 backdrop-blur-md">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5" aria-label="Principal">
+      <a href="#inicio" class="flex items-center gap-3">
+        <span class="grid h-10 w-10 place-items-center rounded-lg bg-branddark font-display text-xl font-extrabold text-flame" aria-hidden="true">D</span>
+        <span class="font-display text-xl font-extrabold tracking-tight text-branddark">DRAKAR</span>
+      </a>
+      <div class="flex items-center gap-7">
+        <a href="#servicios" class="hidden text-sm font-semibold text-muted transition hover:text-brand sm:inline">Servicios</a>
+        <a href="#proceso" class="hidden text-sm font-semibold text-muted transition hover:text-brand sm:inline">Cómo funciona</a>
+        <a href="#cotizar" class="rounded-lg bg-flame px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-flamedark focus:outline-none focus-visible:ring-2 focus-visible:ring-flame focus-visible:ring-offset-2">Cotizar ahora</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section id="inicio" class="relative overflow-hidden bg-paper">
+    <div class="pointer-events-none absolute inset-0 grid-dots opacity-60" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute -right-32 top-0 h-[26rem] w-[26rem] rounded-full bg-brand/10 blur-3xl" aria-hidden="true"></div>
+
+    <div class="relative mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 lg:grid-cols-2 lg:py-24">
+      <div class="hero-fade">
+        <p class="mb-5 inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brandsoft px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand">
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="17.5" r="1.5"/><circle cx="17.5" cy="17.5" r="1.5"/></svg>
+          Transporte y mudanzas
+        </p>
+        <h1 class="font-display text-4xl font-extrabold leading-[1.08] tracking-tight text-branddark sm:text-5xl lg:text-6xl">
+          Mudanzas y fletes,<br />
+          <span class="text-brand">sin sorpresas.</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-muted">
+          Trasladamos tu hogar y retiramos tus compras en
+          <span class="font-semibold text-ink">DIMASA</span> y
+          <span class="font-semibold text-ink">Home Center</span>.
+          Flota propia y precio cerrado en menos de 48 horas.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a href="#cotizar" class="rounded-lg bg-flame px-7 py-3.5 font-bold text-white shadow-sm transition hover:bg-flamedark focus:outline-none focus-visible:ring-2 focus-visible:ring-flame focus-visible:ring-offset-2">Pedir cotización gratis</a>
+          <a href="https://wa.me/56961234567" target="_blank" rel="noopener" class="rounded-lg border border-line bg-white px-7 py-3.5 font-semibold text-ink transition hover:border-brand hover:text-brand">Escríbenos por WhatsApp</a>
+        </div>
+
+        <ul class="mt-9 grid gap-3 sm:grid-cols-3" aria-label="Garantías">
+          <li class="flex items-center gap-2.5 text-sm font-semibold text-ink">
+            <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0 text-brand" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Flota propia
+          </li>
+          <li class="flex items-center gap-2.5 text-sm font-semibold text-ink">
+            <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0 text-brand" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Carga asegurada
+          </li>
+          <li class="flex items-center gap-2.5 text-sm font-semibold text-ink">
+            <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0 text-brand" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Precio cerrado en 48 h
+          </li>
+        </ul>
+      </div>
+
+      <div class="hero-fade relative">
+        <img
+          src="https://images.pexels.com/photos/5025669/pexels-photo-5025669.jpeg?auto=compress&cs=tinysrgb&w=1600"
+          alt="Trabajador trasladando cajas junto a una van de mudanza"
+          fetchpriority="high"
+          class="aspect-[4/3] w-full rounded-2xl border border-line object-cover shadow-xl" />
+        <div class="absolute -bottom-5 left-5 flex items-center gap-3 rounded-xl border border-line bg-white px-5 py-3.5 shadow-lg">
+          <span class="grid h-10 w-10 place-items-center rounded-lg bg-brandsoft text-brand" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <div>
+            <p class="font-display text-base font-bold leading-none text-branddark">Respuesta en 48 h</p>
+            <p class="mt-1 text-xs text-muted">Cotización cerrada, sin costos ocultos</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FRANJA DE CONFIANZA -->
+  <section class="border-y border-line bg-white">
+    <ul class="mx-auto grid max-w-6xl gap-6 px-5 py-10 sm:grid-cols-2 lg:grid-cols-4" aria-label="Por qué elegir DRAKAR">
+      <li class="flex items-start gap-3">
+        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brandsoft text-brand" aria-hidden="true">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="17.5" r="1.5"/><circle cx="17.5" cy="17.5" r="1.5"/></svg>
+        </span>
+        <div>
+          <p class="font-display font-bold text-branddark">Flota propia</p>
+          <p class="text-sm text-muted">Camiones y cuadrilla propios, sin intermediarios.</p>
+        </div>
+      </li>
+      <li class="flex items-start gap-3">
+        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brandsoft text-brand" aria-hidden="true">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke-linejoin="round"/></svg>
+        </span>
+        <div>
+          <p class="font-display font-bold text-branddark">Carga asegurada</p>
+          <p class="text-sm text-muted">Tu traslado cubierto de principio a fin.</p>
+        </div>
+      </li>
+      <li class="flex items-start gap-3">
+        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brandsoft text-brand" aria-hidden="true">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div>
+          <p class="font-display font-bold text-branddark">Precio cerrado</p>
+          <p class="text-sm text-muted">Acordado en 48 h. Lo pactado es lo que se paga.</p>
+        </div>
+      </li>
+      <li class="flex items-start gap-3">
+        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brandsoft text-brand" aria-hidden="true">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s6-5.5 6-10a6 6 0 10-12 0c0 4.5 6 10 6 10z" stroke-linejoin="round"/><circle cx="12" cy="11" r="2.2"/></svg>
+        </span>
+        <div>
+          <p class="font-display font-bold text-branddark">Cobertura RM</p>
+          <p class="text-sm text-muted">Santiago y comunas de la Región Metropolitana.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section id="servicios" class="scroll-mt-nav bg-paper py-20">
+    <div class="mx-auto max-w-6xl px-5">
+      <div class="reveal max-w-2xl">
+        <p class="mb-3 text-sm font-bold uppercase tracking-widest text-brand">Servicios</p>
+        <h2 class="font-display text-3xl font-extrabold tracking-tight text-branddark sm:text-4xl">Qué necesitas mover</h2>
+        <p class="mt-4 text-lg text-muted">Elige el servicio y te damos un precio cerrado. Si no estás seguro, cuéntanos y te orientamos.</p>
+      </div>
+
+      <div class="reveal mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <article class="group flex flex-col rounded-2xl border border-line bg-white p-7 shadow-sm transition hover:border-brand/40 hover:shadow-md">
+          <span class="grid h-12 w-12 place-items-center rounded-xl bg-brandsoft text-brand" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="17.5" r="1.5"/><circle cx="17.5" cy="17.5" r="1.5"/></svg>
+          </span>
+          <h3 class="mt-5 font-display text-lg font-bold text-branddark">Mudanza de hogar</h3>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-muted">Embalaje, carguío, traslado y montaje. Casa, departamento u oficina.</p>
+          <a href="#cotizar" class="mt-5 text-sm font-bold text-brand transition group-hover:text-branddark">Cotizar este servicio →</a>
+        </article>
+
+        <article class="group flex flex-col rounded-2xl border border-line bg-white p-7 shadow-sm transition hover:border-brand/40 hover:shadow-md">
+          <span class="grid h-12 w-12 place-items-center rounded-xl bg-brandsoft text-brand" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9l1.5-5h13L20 9"/><path d="M4 9h16v11H4z"/><path d="M9 20v-6h6v6"/></svg>
+          </span>
+          <h3 class="mt-5 font-display text-lg font-bold text-branddark">Retiro en tienda</h3>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-muted">Retiramos tus compras en DIMASA y Home Center y las dejamos en destino.</p>
+          <a href="#cotizar" class="mt-5 text-sm font-bold text-brand transition group-hover:text-branddark">Cotizar este servicio →</a>
+        </article>
+
+        <article class="group flex flex-col rounded-2xl border border-line bg-white p-7 shadow-sm transition hover:border-brand/40 hover:shadow-md">
+          <span class="grid h-12 w-12 place-items-center rounded-xl bg-brandsoft text-brand" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" stroke-linejoin="round"/><path d="M4 7.5l8 4.5 8-4.5"/><path d="M12 12v9"/></svg>
+          </span>
+          <h3 class="mt-5 font-display text-lg font-bold text-branddark">Traslado de materiales</h3>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-muted">Volúmenes de material de construcción y carga pesada, coordinado por tramos.</p>
+          <a href="#cotizar" class="mt-5 text-sm font-bold text-brand transition group-hover:text-branddark">Cotizar este servicio →</a>
+        </article>
+
+        <article class="group flex flex-col rounded-2xl border border-line bg-white p-7 shadow-sm transition hover:border-brand/40 hover:shadow-md">
+          <span class="grid h-12 w-12 place-items-center rounded-xl bg-brandsoft text-brand" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <h3 class="mt-5 font-display text-lg font-bold text-branddark">Flete simple</h3>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-muted">Un solo traslado puntual, sin embalaje ni montaje. Rápido y directo.</p>
+          <a href="#cotizar" class="mt-5 text-sm font-bold text-brand transition group-hover:text-branddark">Cotizar este servicio →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESO -->
+  <section id="proceso" class="scroll-mt-nav border-t border-line bg-white py-20">
+    <div class="mx-auto max-w-6xl px-5">
+      <div class="reveal max-w-2xl">
+        <p class="mb-3 text-sm font-bold uppercase tracking-widest text-brand">Cómo funciona</p>
+        <h2 class="font-display text-3xl font-extrabold tracking-tight text-branddark sm:text-4xl">Cotizar es simple</h2>
+      </div>
+
+      <ol class="reveal mt-12 grid gap-6 md:grid-cols-3">
+        <li class="relative rounded-2xl border border-line bg-paper p-7">
+          <span class="font-display text-4xl font-extrabold text-brand/25" aria-hidden="true">01</span>
+          <h3 class="mt-3 font-display text-lg font-bold text-branddark">Cuéntanos qué necesitas</h3>
+          <p class="mt-2 text-sm leading-relaxed text-muted">Completa el formulario con el servicio, el origen y el destino.</p>
+        </li>
+        <li class="relative rounded-2xl border border-line bg-paper p-7">
+          <span class="font-display text-4xl font-extrabold text-brand/25" aria-hidden="true">02</span>
+          <h3 class="mt-3 font-display text-lg font-bold text-branddark">Te cotizamos en 48 h</h3>
+          <p class="mt-2 text-sm leading-relaxed text-muted">Recibes un precio cerrado por WhatsApp, sin costos ocultos.</p>
+        </li>
+        <li class="relative rounded-2xl border border-line bg-paper p-7">
+          <span class="font-display text-4xl font-extrabold text-brand/25" aria-hidden="true">03</span>
+          <h3 class="mt-3 font-display text-lg font-bold text-branddark">Trasladamos y entregamos</h3>
+          <p class="mt-2 text-sm leading-relaxed text-muted">Coordina tu cuadrilla, cuidamos tus cosas y las dejamos listas.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- COTIZAR -->
+  <section id="cotizar" class="scroll-mt-nav border-t border-line bg-paper py-20">
+    <div class="mx-auto grid max-w-6xl items-start gap-12 px-5 lg:grid-cols-2">
+      <div class="reveal">
+        <p class="mb-3 text-sm font-bold uppercase tracking-widest text-brand">Cotiza ahora</p>
+        <h2 class="font-display text-3xl font-extrabold tracking-tight text-branddark sm:text-4xl">Pide tu precio cerrado</h2>
+        <p class="mt-4 text-lg text-muted">Déjanos tus datos y te respondemos por WhatsApp en menos de 48 horas.</p>
+
+        <img
+          src="https://images.pexels.com/photos/6169669/pexels-photo-6169669.jpeg?auto=compress&cs=tinysrgb&w=1200"
+          alt="Cajas de cartón apiladas y rotuladas, listas para el traslado"
+          loading="lazy"
+          class="mt-8 hidden aspect-[16/9] w-full rounded-2xl border border-line object-cover shadow-sm lg:block" />
+
+        <div class="mt-8 space-y-3 text-sm">
+          <p class="flex items-center gap-3 text-ink">
+            <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0 text-brand" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Sin costo y sin compromiso
+          </p>
+          <p class="flex items-center gap-3 text-ink">
+            <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0 text-brand" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Atención directa, un solo contacto
+          </p>
+          <p class="flex items-center gap-3 text-ink">
+            <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0 text-brand" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Fecha y hora a tu medida
+          </p>
+        </div>
+      </div>
+
+      <form id="quote-form" class="reveal rounded-2xl border border-line bg-white p-7 shadow-sm sm:p-9">
+        <fieldset class="grid gap-5 sm:grid-cols-2">
+          <legend class="mb-2 sr-only">Solicitud de cotización</legend>
+          <label class="block">
+            <span class="mb-1.5 block text-sm font-semibold text-ink">Tu nombre</span>
+            <input name="nombre" required class="w-full rounded-lg border border-line bg-paper px-4 py-3 text-ink placeholder:text-muted/60 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20" placeholder="Ej.: Lorena Andrade" />
+          </label>
+          <label class="block">
+            <span class="mb-1.5 block text-sm font-semibold text-ink">Teléfono / WhatsApp</span>
+            <input name="telefono" required class="w-full rounded-lg border border-line bg-paper px-4 py-3 text-ink placeholder:text-muted/60 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20" placeholder="+56 9 ..." />
+          </label>
+          <label class="block sm:col-span-2">
+            <span class="mb-1.5 block text-sm font-semibold text-ink">Servicio</span>
+            <select name="servicio" class="w-full rounded-lg border border-line bg-paper px-4 py-3 text-ink focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20">
+              <option>Mudanza de hogar</option>
+              <option>Retiro DIMASA / Home Center</option>
+              <option>Traslado de materiales</option>
+              <option>Flete simple</option>
+              <option>Guardado temporal</option>
+            </select>
+          </label>
+          <label class="block">
+            <span class="mb-1.5 block text-sm font-semibold text-ink">Origen</span>
+            <input name="origen" class="w-full rounded-lg border border-line bg-paper px-4 py-3 text-ink placeholder:text-muted/60 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20" placeholder="Comuna o dirección" />
+          </label>
+          <label class="block">
+            <span class="mb-1.5 block text-sm font-semibold text-ink">Destino</span>
+            <input name="destino" class="w-full rounded-lg border border-line bg-paper px-4 py-3 text-ink placeholder:text-muted/60 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20" placeholder="Comuna o dirección" />
+          </label>
+        </fieldset>
+        <button type="submit" class="mt-7 w-full rounded-lg bg-flame px-8 py-4 font-bold text-white shadow-sm transition hover:bg-flamedark focus:outline-none focus-visible:ring-2 focus-visible:ring-flame focus-visible:ring-offset-2">Enviar y recibir cotización</button>
+        <p id="form-success" class="mt-4 hidden items-center justify-center gap-2 rounded-lg border border-brand/30 bg-brandsoft p-4 text-sm font-semibold text-brand" role="status">
+          Gracias por tu mensaje. Te contactamos en menos de 48 horas.
+        </p>
+        <p class="mt-5 text-center text-xs text-muted">¿Prefieres hablar? <a href="tel:+56961234567" class="font-bold text-ink underline underline-offset-2 hover:text-brand">+56 9 6123 4567</a></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-branddark text-slate-300">
+    <div class="mx-auto grid max-w-6xl gap-8 px-5 py-12 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="sm:col-span-2 lg:col-span-1">
+        <div class="flex items-center gap-3">
+          <span class="grid h-10 w-10 place-items-center rounded-lg bg-white/10 font-display text-xl font-extrabold text-flame" aria-hidden="true">D</span>
+          <span class="font-display text-xl font-extrabold text-white">DRAKAR</span>
+        </div>
+        <p class="mt-4 max-w-xs text-sm text-slate-400">Mudanzas y fletes en la Región Metropolitana. Flota propia y precio cerrado.</p>
+      </div>
+      <div>
+        <p class="font-display text-sm font-bold uppercase tracking-widest text-white">Servicios</p>
+        <ul class="mt-4 space-y-2 text-sm">
+          <li><a href="#servicios" class="transition hover:text-flame">Mudanza de hogar</a></li>
+          <li><a href="#servicios" class="transition hover:text-flame">Retiro en tienda</a></li>
+          <li><a href="#servicios" class="transition hover:text-flame">Traslado de materiales</a></li>
+          <li><a href="#servicios" class="transition hover:text-flame">Flete simple</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-display text-sm font-bold uppercase tracking-widest text-white">Contacto</p>
+        <ul class="mt-4 space-y-2 text-sm">
+          <li><a href="tel:+56961234567" class="transition hover:text-flame">+56 9 6123 4567</a></li>
+          <li><a href="https://wa.me/56961234567" target="_blank" rel="noopener" class="transition hover:text-flame">WhatsApp</a></li>
+          <li>Lunes a sábado · 8:00 a 19:00</li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-display text-sm font-bold uppercase tracking-widest text-white">Cobertura</p>
+        <ul class="mt-4 space-y-2 text-sm">
+          <li>Santiago y comunas de la RM</li>
+          <li>Traslados regionales a coordinar</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10">
+      <div class="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-5 text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+        <p>© <span id="year">2026</span> DRAKAR Transportes · Mockup sin fines comerciales.</p>
+        <p>Imágenes: Pexels</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ---- Formulario demo (sin backend) ----
+    (function () {
+      const form = document.getElementById('quote-form');
+      if (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const ok = document.getElementById('form-success');
+          if (ok) { ok.classList.remove('hidden'); ok.classList.add('flex'); }
+        });
+      }
+    })();
+
+    // ---- Año dinámico ----
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ---- Reveal al hacer scroll (con fallback) ----
+    (function () {
+      const items = document.querySelectorAll('.reveal');
+      if (!items.length) return;
+      if (!('IntersectionObserver' in window)) {
+        items.forEach(function (el) { el.classList.add('in'); });
+        return;
+      }
+      const obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+      items.forEach(function (el) { obs.observe(el); });
+    })();
+  </script>
+</body>
+</html>

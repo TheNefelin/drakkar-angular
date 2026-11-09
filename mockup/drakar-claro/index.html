@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DRAKAR · Transporte, mudanzas y materiales</title>
+<meta name="description" content="DRAKAR: mudanzas de hogar, retiro en tienda (DIMASA, Home Center), traslado de materiales y fletes. Flota propia, carga asegurada y precio cerrado." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          paper: '#f3efe7',
+          paper2: '#ece6db',
+          ink: '#16181d',
+          signal: '#ff531a',
+          signaldeep: '#c83400',
+          steel: '#5c636e',
+          line: '#d8d2c6'
+        },
+        fontFamily: {
+          display: ['Archivo', 'system-ui', 'sans-serif'],
+          body: ['Inter', 'system-ui', 'sans-serif'],
+          mono: ['"Space Mono"', 'ui-monospace', 'monospace']
+        }
+      }
+    }
+  }
+</script>
+<script>document.documentElement.classList.add('js');</script>
+<style>
+  :root{
+    --paper:#f3efe7; --paper2:#ece6db; --ink:#16181d;
+    --signal:#ff531a; --signal-deep:#c83400; --line:#d8d2c6; --steel:#5c636e;
+  }
+  body{background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased;}
+  section[id]{scroll-margin-top:96px;}
+  :focus-visible{outline:3px solid var(--signal); outline-offset:2px; border-radius:2px;}
+
+  /* Ticker estilo tablero de tránsito */
+  .ticker{overflow:hidden;}
+  .ticker__track{display:inline-flex; white-space:nowrap; animation:ticker 34s linear infinite;}
+  .ticker:hover .ticker__track{animation-play-state:paused;}
+  @keyframes ticker{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+
+  /* Franjas de advertencia (obra) */
+  .stripes{background-image:repeating-linear-gradient(45deg,var(--ink) 0 11px,var(--signal) 11px 22px);}
+  .stripes-soft{background-image:repeating-linear-gradient(45deg,var(--line) 0 11px,transparent 11px 22px);}
+
+  /* Etiqueta de envío */
+  .label-card{background:#fff; border:1.5px solid var(--ink); border-radius:10px;}
+  .label-card--dashed{border-style:dashed;}
+  .barcode{height:30px;background-image:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 6px,transparent 6px 10px,var(--ink) 10px 11px,transparent 11px 15px);}
+
+  /* Ruta punteada */
+  .route-dash{border-top:2px dashed var(--line);}
+
+  /* Resaltado del titular */
+  .hl{background:linear-gradient(transparent 62%, rgba(255,83,26,.35) 62%);}
+
+  /* Revelado al hacer scroll (solo con JS) */
+  html.js .reveal{opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease;}
+  html.js .reveal.is-visible{opacity:1; transform:none;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .ticker__track{animation:none;}
+    html.js .reveal{opacity:1; transform:none; transition:none;}
+    *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+  }
+</style>
+</head>
+<body class="font-body">
+
+<!-- ===== NAV ===== -->
+<header class="sticky top-0 z-50 border-b border-line bg-paper/90 backdrop-blur">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div class="flex h-16 items-center justify-between gap-4">
+      <a href="#inicio" class="flex items-center gap-2">
+        <span class="grid h-8 w-8 place-items-center rounded-md bg-ink text-paper">
+          <span class="h-2.5 w-2.5 rounded-sm bg-signal"></span>
+        </span>
+        <span class="font-display text-lg font-black tracking-tight">DRAKAR</span>
+      </a>
+      <nav class="hidden items-center gap-7 md:flex">
+        <a href="#servicios" class="text-sm font-medium text-steel hover:text-ink">Servicios</a>
+        <a href="#ruta" class="text-sm font-medium text-steel hover:text-ink">Cómo funciona</a>
+        <a href="#cobertura" class="text-sm font-medium text-steel hover:text-ink">Cobertura</a>
+        <a href="#cotizar" class="text-sm font-medium text-steel hover:text-ink">Cotizar</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <a href="#cotizar" class="rounded-full bg-signal px-4 py-2 text-sm font-semibold text-white hover:bg-signaldeep">Cotizar</a>
+        <button type="button" id="menu-btn" aria-expanded="false" aria-controls="mobile-menu"
+          class="grid h-10 w-10 place-items-center rounded-md border border-line md:hidden">
+          <span class="sr-only">Abrir menú</span>
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="mobile-menu" hidden class="border-t border-line bg-paper md:hidden">
+    <nav class="mx-auto flex max-w-6xl flex-col px-4 py-2 sm:px-6">
+      <a href="#servicios" class="border-b border-line py-3 text-sm font-medium">Servicios</a>
+      <a href="#ruta" class="border-b border-line py-3 text-sm font-medium">Cómo funciona</a>
+      <a href="#cobertura" class="border-b border-line py-3 text-sm font-medium">Cobertura</a>
+      <a href="#cotizar" class="py-3 text-sm font-medium">Cotizar</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== TICKER ===== -->
+<div class="border-b border-line bg-paper2 ticker py-2.5" aria-hidden="true">
+  <div class="ticker__track font-mono text-xs uppercase tracking-widest text-steel">
+    <span class="px-4">Mudanzas</span><span class="text-signal">◆</span>
+    <span class="px-4">Retiro en tienda</span><span class="text-signal">◆</span>
+    <span class="px-4">Materiales de construcción</span><span class="text-signal">◆</span>
+    <span class="px-4">Fletes y encomiendas</span><span class="text-signal">◆</span>
+    <span class="px-4">Flota propia</span><span class="text-signal">◆</span>
+    <span class="px-4">Carga asegurada</span><span class="text-signal">◆</span>
+    <span class="px-4">Mudanzas</span><span class="text-signal">◆</span>
+    <span class="px-4">Retiro en tienda</span><span class="text-signal">◆</span>
+    <span class="px-4">Materiales de construcción</span><span class="text-signal">◆</span>
+    <span class="px-4">Fletes y encomiendas</span><span class="text-signal">◆</span>
+    <span class="px-4">Flota propia</span><span class="text-signal">◆</span>
+    <span class="px-4">Carga asegurada</span><span class="text-signal">◆</span>
+  </div>
+</div>
+
+<main id="inicio">
+
+  <!-- ===== HERO ===== -->
+  <section class="relative overflow-hidden">
+    <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 py-14 sm:px-6 lg:grid-cols-2 lg:py-20">
+      <div class="reveal">
+        <p class="font-mono text-xs uppercase tracking-[0.25em] text-signaldeep">Transporte · Mudanzas · Materiales</p>
+        <h1 class="mt-5 font-display text-4xl font-black leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
+          Mueve lo que importa.<br />
+          <span class="hl">Nosotros cargamos el peso.</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg text-steel">
+          Mudanza de hogar, retiro en tiendas como <strong class="text-ink">DIMASA</strong> y
+          <strong class="text-ink">Home Center</strong>, y traslado de materiales de construcción.
+          Flota propia, carga asegurada y precio cerrado antes de salir.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#cotizar" class="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 font-semibold text-paper hover:bg-signal">
+            Cotizar ahora
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#cotizar" class="inline-flex items-center gap-2 rounded-full border border-ink px-6 py-3 font-semibold hover:bg-paper2">
+            Escríbenos por WhatsApp
+          </a>
+        </div>
+        <ul class="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium">
+          <li class="flex items-center gap-2"><span class="text-signal">✓</span> Flota propia</li>
+          <li class="flex items-center gap-2"><span class="text-signal">✓</span> Carga asegurada</li>
+          <li class="flex items-center gap-2"><span class="text-signal">✓</span> Precio cerrado</li>
+          <li class="flex items-center gap-2"><span class="text-signal">✓</span> Atención directa</li>
+        </ul>
+      </div>
+
+      <!-- Composición: foto + etiquetas de envío -->
+      <div class="reveal relative">
+        <div class="overflow-hidden rounded-2xl border-2 border-ink">
+          <img src="https://images.pexels.com/photos/21838827/pexels-photo-21838827.jpeg?auto=compress&cs=tinysrgb&w=1400"
+               alt="Cajas de cartón cargadas dentro de un vehículo listo para la ruta"
+               class="h-[360px] w-full object-cover sm:h-[440px]" loading="eager" />
+        </div>
+
+        <div class="label-card absolute -left-3 -top-5 w-52 -rotate-3 p-3 shadow-[6px_6px_0_0_var(--ink)] sm:-left-6">
+          <div class="flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-steel">
+            <span>DRAKAR</span><span>Nº DRK-2026-0417</span>
+          </div>
+          <p class="mt-2 font-display text-sm font-extrabold uppercase leading-tight">Destino: obra / hogar</p>
+          <div class="barcode mt-3 w-full"></div>
+          <p class="mt-2 font-mono text-[10px] uppercase tracking-widest text-signaldeep">Frágil · Este lado arriba ↑</p>
+        </div>
+
+        <div class="absolute -bottom-4 -right-3 rounded-full bg-signal px-4 py-2 font-mono text-xs font-bold uppercase tracking-widest text-white shadow-lg sm:-right-6">
+          Entrega hoy
+        </div>
+      </div>
+    </div>
+
+    <div class="stripes h-2 w-full"></div>
+  </section>
+
+  <!-- ===== STATS ===== -->
+  <section class="border-b border-line">
+    <div class="mx-auto grid max-w-6xl grid-cols-2 gap-y-8 px-4 py-12 sm:px-6 lg:grid-cols-4">
+      <div class="reveal lg:border-l lg:border-line lg:pl-6">
+        <p class="font-display text-4xl font-black">+12</p>
+        <p class="mt-1 font-mono text-xs uppercase tracking-widest text-steel">Años en la vía</p>
+      </div>
+      <div class="reveal lg:border-l lg:border-line lg:pl-6">
+        <p class="font-display text-4xl font-black">+1.500</p>
+        <p class="mt-1 font-mono text-xs uppercase tracking-widest text-steel">Mudanzas hechas</p>
+      </div>
+      <div class="reveal lg:border-l lg:border-line lg:pl-6">
+        <p class="font-display text-4xl font-black">98%</p>
+        <p class="mt-1 font-mono text-xs uppercase tracking-widest text-steel">Entregas a tiempo</p>
+      </div>
+      <div class="reveal lg:border-l lg:border-line lg:pl-6">
+        <p class="font-display text-4xl font-black">100%</p>
+        <p class="mt-1 font-mono text-xs uppercase tracking-widest text-steel">Carga asegurada</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICIOS ===== -->
+  <section id="servicios" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-24">
+    <div class="reveal max-w-2xl">
+      <p class="font-mono text-xs uppercase tracking-[0.25em] text-signaldeep">Servicios</p>
+      <h2 class="mt-3 font-display text-3xl font-black tracking-tight sm:text-4xl">Todo lo que se mueve, en un solo equipo.</h2>
+      <p class="mt-4 text-steel">Cargas del hogar, compras de tienda y materiales de obra. Tú señalas el destino; nosotros hacemos el resto.</p>
+    </div>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <!-- 01 -->
+      <article class="reveal label-card p-6 transition hover:-translate-y-1 hover:shadow-[6px_6px_0_0_var(--signal)]">
+        <span class="font-mono text-sm text-steel">01</span>
+        <span class="mt-4 grid h-11 w-11 place-items-center rounded-lg bg-ink text-paper">
+          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 16V8a1 1 0 0 1 1-1h9v9M13 10h5l3 3v3h-2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+        </span>
+        <h3 class="mt-5 font-display text-xl font-extrabold">Mudanza de hogar</h3>
+        <p class="mt-2 text-sm text-steel">Empacamos, cargamos y acomodamos tus muebles y electrodomésticos con cuidado.</p>
+      </article>
+      <!-- 02 -->
+      <article class="reveal label-card p-6 transition hover:-translate-y-1 hover:shadow-[6px_6px_0_0_var(--signal)]">
+        <span class="font-mono text-sm text-steel">02</span>
+        <span class="mt-4 grid h-11 w-11 place-items-center rounded-lg bg-ink text-paper">
+          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l1.5-5h15L21 9M4 9h16v10H4zM9 19v-6h6v6"/></svg>
+        </span>
+        <h3 class="mt-5 font-display text-xl font-extrabold">Retiro en tienda</h3>
+        <p class="mt-2 text-sm text-steel">Recogemos tus compras en DIMASA, Home Center y más, y las llevamos a tu casa u obra.</p>
+      </article>
+      <!-- 03 -->
+      <article class="reveal label-card p-6 transition hover:-translate-y-1 hover:shadow-[6px_6px_0_0_var(--signal)]">
+        <span class="font-mono text-sm text-steel">03</span>
+        <span class="mt-4 grid h-11 w-11 place-items-center rounded-lg bg-ink text-paper">
+          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18v10H3zM3 11h18M8 7v4M16 7v4"/></svg>
+        </span>
+        <h3 class="mt-5 font-display text-xl font-extrabold">Materiales de obra</h3>
+        <p class="mt-2 text-sm text-steel">Cemento, ladrillo, herramienta y acabados, directo a tu proyecto cuando los necesitas.</p>
+      </article>
+      <!-- 04 -->
+      <article class="reveal label-card p-6 transition hover:-translate-y-1 hover:shadow-[6px_6px_0_0_var(--signal)]">
+        <span class="font-mono text-sm text-steel">04</span>
+        <span class="mt-4 grid h-11 w-11 place-items-center rounded-lg bg-ink text-paper">
+          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>
+        </span>
+        <h3 class="mt-5 font-display text-xl font-extrabold">Fletes y encomiendas</h3>
+        <p class="mt-2 text-sm text-steel">Traslados puntuales y entregas locales, para cuando necesitas mover algo rápido.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== CÓMO FUNCIONA / RUTA ===== -->
+  <section id="ruta" class="border-y border-line bg-paper2">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-24">
+      <div class="reveal max-w-2xl">
+        <p class="font-mono text-xs uppercase tracking-[0.25em] text-signaldeep">Cómo funciona</p>
+        <h2 class="mt-3 font-display text-3xl font-black tracking-tight sm:text-4xl">Tu carga, paso a paso.</h2>
+      </div>
+
+      <div class="relative mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="route-dash absolute left-0 right-0 top-6 hidden lg:block" aria-hidden="true"></div>
+        <div class="reveal relative">
+          <span class="grid h-12 w-12 place-items-center rounded-full border-2 border-ink bg-paper font-display text-lg font-black">1</span>
+          <h3 class="mt-5 font-display text-lg font-extrabold">Cotiza</h3>
+          <p class="mt-2 text-sm text-steel">Cuéntanos qué necesitas por el formulario o WhatsApp y te damos el precio.</p>
+        </div>
+        <div class="reveal relative">
+          <span class="grid h-12 w-12 place-items-center rounded-full border-2 border-ink bg-paper font-display text-lg font-black">2</span>
+          <h3 class="mt-5 font-display text-lg font-extrabold">Agenda</h3>
+          <p class="mt-2 text-sm text-steel">Elegimos juntos la fecha y la hora que mejor te sirvan.</p>
+        </div>
+        <div class="reveal relative">
+          <span class="grid h-12 w-12 place-items-center rounded-full border-2 border-ink bg-paper font-display text-lg font-black">3</span>
+          <h3 class="mt-5 font-display text-lg font-extrabold">Cargamos</h3>
+          <p class="mt-2 text-sm text-steel">Nuestro equipo empaca, sube y asegura cada cosa con protección.</p>
+        </div>
+        <div class="reveal relative">
+          <span class="grid h-12 w-12 place-items-center rounded-full border-2 border-signal bg-signal font-display text-lg font-black text-white">4</span>
+          <h3 class="mt-5 font-display text-lg font-extrabold">Entregamos</h3>
+          <p class="mt-2 text-sm text-steel">Llegamos, descargamos y dejamos todo listo donde lo pediste.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COBERTURA ===== -->
+  <section id="cobertura" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-24">
+    <div class="grid items-center gap-12 lg:grid-cols-2">
+      <div class="reveal">
+        <p class="font-mono text-xs uppercase tracking-[0.25em] text-signaldeep">Cobertura</p>
+        <h2 class="mt-3 font-display text-3xl font-black tracking-tight sm:text-4xl">Cubrimos tu ciudad y sus alrededores.</h2>
+        <p class="mt-4 max-w-lg text-steel">
+          Servicio local para hogares y tiendas, y cobertura regional para materiales y cargas
+          de mayor volumen. Si tu destino queda más lejos, lo evaluamos sin compromiso.
+        </p>
+        <ul class="mt-7 flex flex-wrap gap-2">
+          <li class="rounded-full border border-ink px-4 py-1.5 text-sm font-medium">Centro</li>
+          <li class="rounded-full border border-ink px-4 py-1.5 text-sm font-medium">Norte</li>
+          <li class="rounded-full border border-ink px-4 py-1.5 text-sm font-medium">Sur</li>
+          <li class="rounded-full border border-ink px-4 py-1.5 text-sm font-medium">Occidente</li>
+          <li class="rounded-full border border-ink px-4 py-1.5 text-sm font-medium">Oriente</li>
+          <li class="rounded-full border border-ink px-4 py-1.5 text-sm font-medium">Municipios cercanos</li>
+        </ul>
+        <div class="mt-7 flex items-center gap-3 rounded-xl border border-line bg-paper2 p-4">
+          <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-signal text-white">
+            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v5l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z"/></svg>
+          </span>
+          <p class="text-sm text-steel"><strong class="text-ink">Lunes a sábado</strong>, 7:00 a 19:00. Agendamos tu ruta con anticipación.</p>
+        </div>
+      </div>
+
+      <div class="reveal grid grid-cols-2 gap-4">
+        <img src="https://images.pexels.com/photos/5156696/pexels-photo-5156696.jpeg?auto=compress&cs=tinysrgb&w=1000"
+             alt="Estanterías de bodega con cajas y paquetes organizados"
+             class="col-span-2 h-56 w-full rounded-2xl border-2 border-ink object-cover sm:h-64" loading="lazy" />
+        <img src="https://images.pexels.com/photos/7363131/pexels-photo-7363131.jpeg?auto=compress&cs=tinysrgb&w=1000"
+             alt="Repartidor cargando una caja de cartón"
+             class="h-40 w-full rounded-2xl border-2 border-ink object-cover sm:h-48" loading="lazy" />
+        <img src="https://images.pexels.com/photos/5025503/pexels-photo-5025503.jpeg?auto=compress&cs=tinysrgb&w=1000"
+             alt="Cajas de cartón apiladas listas para el despacho"
+             class="h-40 w-full rounded-2xl border-2 border-ink object-cover sm:h-48" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COTIZAR ===== -->
+  <section id="cotizar" class="border-t border-line bg-ink text-paper">
+    <div class="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:py-24">
+      <div class="reveal">
+        <p class="font-mono text-xs uppercase tracking-[0.25em] text-signal">Cotiza sin costo</p>
+        <h2 class="mt-3 font-display text-3xl font-black tracking-tight text-white sm:text-4xl">Cuéntanos qué necesitas mover.</h2>
+        <p class="mt-4 max-w-md text-white/70">
+          Déjanos tus datos y te respondemos con el precio y la disponibilidad. También puedes
+          escribirnos directo por WhatsApp o llamarnos.
+        </p>
+        <div class="mt-8 space-y-3 font-mono text-sm">
+          <p class="flex items-center gap-3"><span class="text-signal">Tel</span> +00 000 000 0000</p>
+          <p class="flex items-center gap-3"><span class="text-signal">WA</span> +00 000 000 0000</p>
+          <p class="flex items-center gap-3"><span class="text-signal">Hor</span> Lunes a sábado, 7:00–19:00</p>
+        </div>
+      </div>
+
+      <form id="quote-form" class="reveal rounded-2xl bg-paper p-6 text-ink sm:p-8" novalidate>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label class="block">
+            <span class="font-mono text-xs uppercase tracking-widest text-steel">Nombre</span>
+            <input name="nombre" type="text" required autocomplete="name"
+              class="mt-1.5 w-full rounded-lg border border-line bg-white px-3.5 py-2.5 outline-none placeholder:text-steel/60 focus:border-ink" placeholder="Tu nombre" />
+          </label>
+          <label class="block">
+            <span class="font-mono text-xs uppercase tracking-widest text-steel">Teléfono</span>
+            <input name="telefono" type="tel" required autocomplete="tel"
+              class="mt-1.5 w-full rounded-lg border border-line bg-white px-3.5 py-2.5 outline-none placeholder:text-steel/60 focus:border-ink" placeholder="Tu teléfono" />
+          </label>
+        </div>
+        <label class="mt-4 block">
+          <span class="font-mono text-xs uppercase tracking-widest text-steel">Servicio</span>
+          <select name="servicio" required
+            class="mt-1.5 w-full rounded-lg border border-line bg-white px-3.5 py-2.5 outline-none focus:border-ink">
+            <option value="">Elige un servicio</option>
+            <option>Mudanza de hogar</option>
+            <option>Retiro en tienda (DIMASA, Home Center)</option>
+            <option>Materiales de obra</option>
+            <option>Flete o encomienda</option>
+            <option>Otro</option>
+          </select>
+        </label>
+        <label class="mt-4 block">
+          <span class="font-mono text-xs uppercase tracking-widest text-steel">Detalles</span>
+          <textarea name="detalles" rows="3"
+            class="mt-1.5 w-full rounded-lg border border-line bg-white px-3.5 py-2.5 outline-none placeholder:text-steel/60 focus:border-ink"
+            placeholder="Dirección de recogida, destino, qué hay que mover..."></textarea>
+        </label>
+        <button type="submit"
+          class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-signal px-6 py-3.5 font-semibold text-white hover:bg-signaldeep">
+          Solicitar cotización
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <p id="form-success" hidden role="status"
+          class="mt-4 rounded-lg border border-signal bg-signal/10 px-4 py-3 text-sm font-medium text-signaldeep">
+          ¡Gracias! Recibimos tu solicitud y te contactamos muy pronto.
+        </p>
+        <p class="mt-3 text-center font-mono text-[11px] uppercase tracking-widest text-steel">Respuesta el mismo día hábil</p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="border-t-4 border-signal bg-paper">
+  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="lg:col-span-2">
+        <div class="flex items-center gap-2">
+          <span class="grid h-8 w-8 place-items-center rounded-md bg-ink text-paper"><span class="h-2.5 w-2.5 rounded-sm bg-signal"></span></span>
+          <span class="font-display text-lg font-black tracking-tight">DRAKAR</span>
+        </div>
+        <p class="mt-4 max-w-xs text-sm text-steel">
+          Transporte, mudanzas y materiales. Flota propia, carga asegurada y precio cerrado,
+          en tu ciudad y sus alrededores.
+        </p>
+      </div>
+      <div>
+        <p class="font-mono text-xs uppercase tracking-widest text-steel">Servicios</p>
+        <ul class="mt-3 space-y-2 text-sm">
+          <li><a href="#servicios" class="hover:text-signaldeep">Mudanza de hogar</a></li>
+          <li><a href="#servicios" class="hover:text-signaldeep">Retiro en tienda</a></li>
+          <li><a href="#servicios" class="hover:text-signaldeep">Materiales de obra</a></li>
+          <li><a href="#servicios" class="hover:text-signaldeep">Fletes y encomiendas</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-mono text-xs uppercase tracking-widest text-steel">Contacto</p>
+        <ul class="mt-3 space-y-2 text-sm">
+          <li>+00 000 000 0000</li>
+          <li>hola@drakar.example</li>
+          <li><a href="#cotizar" class="hover:text-signaldeep">Cotizar</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-10 flex flex-col gap-2 border-t border-line pt-6 font-mono text-[11px] uppercase tracking-widest text-steel sm:flex-row sm:items-center sm:justify-between">
+      <p>© <span id="year">2026</span> DRAKAR — Mockup demostrativo</p>
+      <p>Fotos: Pexels · Datos de ejemplo</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    var btn = document.getElementById('menu-btn');
+    var menu = document.getElementById('mobile-menu');
+    if (btn && menu) {
+      btn.addEventListener('click', function () {
+        var open = menu.hasAttribute('hidden');
+        if (open) { menu.removeAttribute('hidden'); } else { menu.setAttribute('hidden', ''); }
+        btn.setAttribute('aria-expanded', String(open));
+      });
+      menu.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          menu.setAttribute('hidden', '');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+
+    var form = document.getElementById('quote-form');
+    var success = document.getElementById('form-success');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+        if (success) success.removeAttribute('hidden');
+        form.reset();
+      });
+    }
+
+    var reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && reveals.length) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+      reveals.forEach(function (el) { io.observe(el); });
+    } else {
+      reveals.forEach(function (el) { el.classList.add('is-visible'); });
+    }
+  })();
+</script>
+</body>
+</html>
