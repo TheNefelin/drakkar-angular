@@ -35,19 +35,29 @@
 
 @theme {
   --font-runic: 'Noto Sans Runic', sans-serif;
-  --font-display: 'Cinzel', serif;
+  --font-display: 'Cinzel Decorative', serif;
   --font-body: 'Roboto', sans-serif;
   --color-danger: #dc2626;
 }
 
-.rail-teeth {
-  background-image: repeating-linear-gradient(
-    90deg,
-    var(--color-primary) 0px, var(--color-primary) 14px,
-    transparent 14px, transparent 26px
-  );
-  height: 12px;
+html {
+  scroll-behavior: smooth;
+}
+/* Chrome, Safari */
+body::-webkit-scrollbar{
+  display: none !important;
 }
 
-.scroll-mt-nav { scroll-margin-top: 92px; }
+html::-webkit-scrollbar{
+  display: none !important;
+}
+/* Para Firefox */
+body {
+  scrollbar-width: none !important; 
+}
+
+html {
+  scrollbar-width: none !important; 
+}
+
 .step-rune-shadow { text-shadow: 0 0 18px color-mix(in oklab, var(--color-primary) 55%, transparent); }

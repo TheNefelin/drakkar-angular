@@ -1,0 +1,60 @@
+<section class="py-26">
+  <div class="mx-auto max-w-3xl px-5">
+    <div class="text-center">
+      <p class="mb-3 text-xs font-bold uppercase tracking-[0.4em] text-secondary">Cotización estimativa</p>
+      <h1 class="font-display text-4xl font-black text-base-content sm:text-5xl">Simula tu cotización</h1>
+      <p class="mx-auto mt-4 max-w-md text-base-content/70">Ingresa origen, destino y carga para obtener un estimado al instante.</p>
+    </div>
+
+    <div class="card mt-12 bg-base-200 shadow-sm">
+      <div class="card-body p-7 sm:p-10">
+        <form (submit)="calculate($event)">
+          <fieldset class="grid gap-5 sm:grid-cols-2">
+            <label class="form-control">
+              <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Origen</span>
+              <input name="origen" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Comuna o dirección" />
+            </label>
+            <label class="form-control">
+              <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Destino</span>
+              <input name="destino" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Comuna o dirección" />
+            </label>
+            <label class="form-control sm:col-span-2">
+              <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Servicio</span>
+              <select name="servicio" class="select select-bordered w-full bg-base-100 text-base-content">
+                <option>Flete</option>
+                <option>Mudanza</option>
+                <option>Retiro de escombros</option>
+                <option>Retiro de cachureos</option>
+                <option>Servicio para empresa</option>
+                <option>Otro</option>
+              </select>
+            </label>
+            <label class="form-control">
+              <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Peso (kg)</span>
+              <input name="peso" type="number" min="0" step="1" class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Ej.: 100" />
+            </label>
+            <label class="form-control">
+              <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Volumen (m³)</span>
+              <input name="volumen" type="number" min="0" step="0.1" class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Ej.: 2.5" />
+            </label>
+            <label class="form-control sm:col-span-2">
+              <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Km estimados (opcional)</span>
+              <input name="km" type="number" min="0" step="1" class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Se calcula si no lo ingresas" />
+            </label>
+          </fieldset>
+          <button type="submit" class="btn btn-lg btn-primary mt-7 w-full rounded-sm">Calcular estimado</button>
+        </form>
+
+        @if (result(); as r) {
+          <div class="alert alert-info mt-6 flex-col items-start">
+            <p class="font-bold">Estimado: ${{ r.total.toLocaleString('es-CL') }} CLP</p>
+            <p class="text-sm text-base-content/70">Distancia estimada: {{ r.km.toFixed(1) }} km</p>
+            <p class="text-sm text-base-content/70">Distancia: ${{ r.costoKm.toLocaleString('es-CL') }} · Peso: ${{ r.costoPeso.toLocaleString('es-CL') }} · Volumen: ${{ r.costoVolumen.toLocaleString('es-CL') }}</p>
+            <p class="text-xs text-base-content/50">Estimado referencial, no es cotización final. Envía el resumen por WhatsApp para confirmar.</p>
+            <a href="https://wa.me/56988609980" target="_blank" rel="noopener" class="btn btn-sm btn-outline btn-secondary mt-2">Enviar por WhatsApp</a>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

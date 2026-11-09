@@ -10,6 +10,10 @@ export const routes: Routes = [
         path: '',
         loadChildren: () => import('@features/home/home.routes').then(m => m.ROUTES),
       },
+      {
+        path: 'cotizacion',
+        loadChildren: () => import('@features/cotizacion/cotizacion.routes').then(m => m.ROUTES),
+      },
     ],
   }, 
 ];
