@@ -5,7 +5,7 @@
       <p class="animate-hero-fade [animation-delay:0.08s] mx-auto mt-4 max-w-md text-base-content/70">Ingresa origin, destination y carga para obtener un estimado al instante.</p>
     </div>
 
-    <div class="card mt-12 bg-base-200 shadow-sm">
+    <div appReveal class="reveal card mt-12 bg-base-200 shadow-sm">
       <div class="card-body p-7 sm:p-10">
         <app-form-quote-component (formSubmit)="calculate($event)" />
 

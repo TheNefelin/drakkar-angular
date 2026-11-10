@@ -73,26 +73,19 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .animate-hero-fade,
   .reveal {
-    animation: none;
     opacity: 1;
     transform: none;
+    transition: none;
   }
 }
 
 @utility reveal {
   opacity: 0;
-  transform: translateY(18px);
-  animation-name: reveal;
-  animation-duration: 0.7s;
-  animation-timing-function: ease-out;
-  animation-fill-mode: both;
-  animation-timeline: view();
-  animation-range: entry 0% entry 35%;
+  transform: translateY(1.5rem);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
 }
 
-@keyframes reveal {
-  to {
-    opacity: 1;
-    transform: none;
-  }
+@utility reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
 }

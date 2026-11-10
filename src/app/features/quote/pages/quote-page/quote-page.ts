@@ -1,10 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { SectionHeadingComponent } from '@shared/components/section-heading-component/section-heading-component';
+import { RevealDirective } from '@shared/directives/reveal.directive';
 import { FormQuoteComponent } from '@features/email/components/form-quote-component/form-quote-component';
 import { QuoteFormData, QuoteResult } from '@features/email/models/email-model';
 
 @Component({
-  imports: [SectionHeadingComponent, FormQuoteComponent],
+  imports: [SectionHeadingComponent, FormQuoteComponent, RevealDirective],
   selector: 'app-quote-page',
   templateUrl: './quote-page.html',
 })
