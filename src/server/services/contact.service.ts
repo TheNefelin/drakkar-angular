@@ -1,4 +1,5 @@
 // Servicio de negocio para el formulario de contacto.
+import { randomBytes } from 'node:crypto';
 import { getBrevoConfig } from '../config';
 import { BrevoClient } from '../email/brevo.client';
 import { renderConfirmationEmail, renderLeadEmail } from '../email/templates';
@@ -23,6 +24,13 @@ interface ContactResponse {
     detail: string;
     visitorNotified?: boolean;
   };
+}
+
+// Genera un código de seguimiento sortable en UTC.
+function generateReferenceCode(): string {
+  const stamp = new Date().toISOString().replace(/\D/g, '').slice(0, 14);
+  const suffix = randomBytes(3).toString('hex').toUpperCase();
+  return `DK-${stamp}-${suffix}`;
 }
 
 // Devuelve cadena vacía si el valor no es texto; si lo es, hace trim.
@@ -62,11 +70,12 @@ export class ContactService {
       };
     }
     const brevoClient = new BrevoClient();
+    const reference = generateReferenceCode();
 
     // Paso 1: enviar los datos del lead a Transportes Drakar.
     const leadResult = await brevoClient.send({
-      to: brevo.brevoSenderEmail,
-      subject: `Nuevo contacto desde la landing: ${data.name}`,
+      to: brevo.BREVO_SENDER_EMAIL,
+      subject: `Nuevo contacto [${reference}] desde la landing: ${data.name}`,
       name: data.name,
       email: data.email,
       phone: data.phone,
@@ -76,6 +85,7 @@ export class ContactService {
       ...data,
       service: 'Contacto',
       details: data.message,
+      reference,
     }));
 
     if (!leadResult.ok) {
@@ -89,14 +99,14 @@ export class ContactService {
     const confirmationResult = await brevoClient.send(
       {
         to: data.email,
-        subject: 'Recibimos tu mensaje — Drakar Transportes',
+        subject: `Recibimos tu mensaje [${reference}] — Transportes Drakar`,
         name: data.name,
         email: data.email,
         phone: data.phone,
         service: 'Contacto',
         details: data.message,
       },
-      renderConfirmationEmail(data.name),
+      renderConfirmationEmail(data.name, reference),
     );
 
     return {

@@ -1,5 +1,5 @@
 // Adaptador para el proveedor Brevo. Mantiene todo el detalle de la API externa.
-import { getBrevoConfig } from '../config';
+import { getBrevoConfig } from '@server/config';
 
 
 interface BrevoEmailMessage {
@@ -20,10 +20,10 @@ interface BrevoEmailResult {
 export class BrevoClient {
   // Envía un correo usando Brevo. API key sólo en servidor.
   async send(payload: BrevoEmailMessage, htmlContent: string): Promise<BrevoEmailResult> {
-    const { brevoApiKey, brevoSenderEmail, brevoSenderName } = getBrevoConfig();
+    const { BREVO_API_URL, BREVO_API_KEY, BREVO_SENDER_EMAIL, BREVO_SENDER_NAME } = getBrevoConfig();
 
     const body = {
-      sender: { email: brevoSenderEmail, name: brevoSenderName },
+      sender: { email: BREVO_SENDER_EMAIL, name: BREVO_SENDER_NAME },
       to: [{ email: payload.to, name: payload.name || payload.to }],
       subject: payload.subject,
       htmlContent,
@@ -31,11 +31,11 @@ export class BrevoClient {
 
     try {
       // Llamada a Brevo; si falla el fetch entra al catch.
-      const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      const response = await fetch(BREVO_API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'api-key': brevoApiKey,
+          'api-key': BREVO_API_KEY,
         },
         body: JSON.stringify(body),
       });

@@ -56,19 +56,19 @@ apiProxy.use(async (req: Request, res: Response) => {
 
   try {
     // Lee URL y API key desde variables de entorno (solo servidor).
-    const { PORTFOLIO_API_KEY, PORTFOLIO_API_URL } = getPortfolioConfig();
+    const { API_KEY, API_URL } = getPortfolioConfig();
 
     // Determina si el método enviará body.
     const sendsBody = req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH';
 
     // Hace la llamada real al backend externo.
-    const response = await fetch(`${PORTFOLIO_API_URL}${path}`, {
+    const response = await fetch(`${API_URL}${path}`, {
       method: req.method,
       headers: {
         // Acepta respuesta JSON.
         Accept: 'application/json',
         // Agrega la API key sólo en servidor.
-        ...(PORTFOLIO_API_KEY ? { 'X-API-Key': PORTFOLIO_API_KEY } : {}),
+        ...(API_KEY ? { 'X-API-Key': API_KEY } : {}),
         // Content-Type sólo si hay body que enviar.
         ...(sendsBody ? { 'Content-Type': 'application/json' } : {}),
       },

@@ -8,11 +8,12 @@ try {
 }
 
 export interface ServerConfig {
-  PORTFOLIO_API_URL: string;
-  PORTFOLIO_API_KEY: string;
-  brevoApiKey: string;
-  brevoSenderEmail: string;
-  brevoSenderName: string;
+  API_URL: string;
+  API_KEY: string;
+  BREVO_API_URL:string;
+  BREVO_API_KEY: string;
+  BREVO_SENDER_EMAIL: string;
+  BREVO_SENDER_NAME: string;
 }
 
 function required(name: string): string {
@@ -26,17 +27,18 @@ function required(name: string): string {
   return value;
 }
 
-export function getPortfolioConfig(): Pick<ServerConfig, 'PORTFOLIO_API_URL' | 'PORTFOLIO_API_KEY'> {
+export function getPortfolioConfig(): Pick<ServerConfig, 'API_URL' | 'API_KEY'> {
   return {
-    PORTFOLIO_API_URL: required('PORTFOLIO_API_URL').replace(/\/+$/, ''),
-    PORTFOLIO_API_KEY: required('PORTFOLIO_API_KEY'),
+    API_URL: required('API_URL').replace(/\/+$/, ''),
+    API_KEY: required('API_KEY'),
   };
 }
 
-export function getBrevoConfig(): Pick<ServerConfig, 'brevoApiKey' | 'brevoSenderEmail' | 'brevoSenderName'> {
+export function getBrevoConfig(): Pick<ServerConfig, 'BREVO_API_URL' | 'BREVO_API_KEY' | 'BREVO_SENDER_EMAIL' | 'BREVO_SENDER_NAME'> {
   return {
-    brevoApiKey: required('BREVO_API_KEY'),
-    brevoSenderEmail: required('BREVO_SENDER_EMAIL'),
-    brevoSenderName: required('BREVO_SENDER_NAME'),
+    BREVO_API_URL: required('BREVO_API_URL'),
+    BREVO_API_KEY: required('BREVO_API_KEY'),
+    BREVO_SENDER_EMAIL: required('BREVO_SENDER_EMAIL'),
+    BREVO_SENDER_NAME: required('BREVO_SENDER_NAME'),
   };
 }
