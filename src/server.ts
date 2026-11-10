@@ -8,12 +8,19 @@ import express from 'express';
 import { join } from 'node:path';
 import { apiProxy } from '@server/proxy/api-proxy';
 import { createRateLimit } from '@server/middleware/rate-limit';
+import { getAllowedHosts } from '@server/middleware/allowed-hosts';
 import { API_ENDPOINTS } from '@shared/constants/api-endpoints';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
-const angularApp = new AngularNodeAppEngine();
+
+// [Angular SSR] ── Inicio del código propio ─────────────────────────────────
+// Hosts confiables para SSR (leídos desde NG_ALLOWED_HOSTS).
+const angularApp = new AngularNodeAppEngine({
+  allowedHosts: getAllowedHosts(),
+});
+// [Angular SSR] ── Fin del código propio ───────────────────────────────────
 
 // [BFF] ── Inicio del código propio ─────────────────────────────────────────
 // Todo este bloque es nuestro (BFF), NO parte del server.ts original de Angular SSR.
