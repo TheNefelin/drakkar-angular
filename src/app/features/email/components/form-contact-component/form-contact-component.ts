@@ -48,7 +48,7 @@ export class FormContactComponent {
   }
 
   protected updatePhone(value: string): void {
-    const normalized = value.replace(/\\D/g, '').slice(0, 11);
+    const normalized = value.replace(/\D/g, '').slice(0, 11);
     this.formData.update(d => ({ ...d, phone: normalized }));
     this.errorMessage.set(null);
   }
@@ -96,7 +96,7 @@ export class FormContactComponent {
 
     if (!data.phone) {
       return 'El teléfono es obligatorio.';
-    } else if (!/^\\d{11}$/.test(data.phone)) {
+    } else if (!/^\d{11}$/.test(data.phone)) {
       return 'Ingresa un teléfono válido de 11 dígitos.';
     }
 

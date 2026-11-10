@@ -13,10 +13,14 @@
 
     <div class="card mt-12 bg-base-200 shadow-sm">
       <div class="card-body p-7 sm:p-10">
-        <app-form-contact-component
-          [isLoading]="isLoading()"
-          (formSubmit)="onSubmitForm($event)"
-        />
+        @if (message()) {
+          <app-message-success-component [message]="message()"/>
+        } @else {
+          <app-form-contact-component
+            [isLoading]="isLoading()"
+            (formSubmit)="onSubmitForm($event)"
+          />
+        }
       </div>
     </div>
   </div>

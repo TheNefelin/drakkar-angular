@@ -2,16 +2,17 @@ import { inject, Service } from '@angular/core';
 import { ApiService } from '@core/services/api-service';
 import { ContactFormData, QuoteFormData } from '@features/email/models/email-model';
 import { Observable } from 'rxjs';
+import { API_ENDPOINTS } from '@shared/constants/api-endpoints';
 
 @Service()
 export class EmailService {
   private readonly apiService = inject(ApiService);
 
   emailContact(item: ContactFormData): Observable<void> {
-    return this.apiService.post('contact', item);
+    return this.apiService.post(API_ENDPOINTS.contact, item);
   }
 
   emailQuote(item: QuoteFormData): Observable<void> {
-    return this.apiService.post('quote', item);
+    return this.apiService.post(API_ENDPOINTS.quote, item);
   }
 }
