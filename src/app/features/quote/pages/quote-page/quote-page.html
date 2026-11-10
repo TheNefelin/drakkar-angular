@@ -1,0 +1,24 @@
+<section class="py-30">
+  <div class="mx-auto max-w-3xl px-5">
+    <div class="text-center">
+      <app-section-heading-component eyebrow="Cotización estimativa" title="Simula tu cotización" level="h1" />
+      <p class="animate-hero-fade [animation-delay:0.08s] mx-auto mt-4 max-w-md text-base-content/70">Ingresa origen, destino y carga para obtener un estimado al instante.</p>
+    </div>
+
+    <div class="card mt-12 bg-base-200 shadow-sm">
+      <div class="card-body p-7 sm:p-10">
+        <app-form-quote-component (formSubmit)="calculate($event)" />
+
+        @if (result(); as r) {
+          <div class="alert alert-info mt-6 flex-col items-start">
+            <p class="font-bold">Estimado: ${{ r.total.toLocaleString('es-CL') }} CLP</p>
+            <p class="text-sm text-base-content/70">Distancia estimada: {{ r.km.toFixed(1) }} km</p>
+            <p class="text-sm text-base-content/70">Distancia: ${{ r.costoKm.toLocaleString('es-CL') }} · Peso: ${{ r.costoPeso.toLocaleString('es-CL') }} · Volumen: ${{ r.costoVolumen.toLocaleString('es-CL') }}</p>
+            <p class="text-xs text-base-content/50">Estimado referencial, no es cotización final. Envía el resumen por WhatsApp para confirmar.</p>
+            <a href="https://wa.me/56988609980" target="_blank" rel="noopener" class="btn btn-sm btn-outline btn-secondary mt-2">Enviar por WhatsApp</a>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

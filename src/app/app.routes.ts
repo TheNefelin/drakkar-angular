@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { MainLayout } from '@layouts/main-layout/main-layout';
+import { MainLayoutComponent } from '@layouts/main-layout-component/main-layout-component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: MainLayout, 
+    component: MainLayoutComponent, 
     children: [
       {
         path: '',
@@ -12,7 +12,7 @@ export const routes: Routes = [
       },
       {
         path: 'cotizacion',
-        loadChildren: () => import('@features/cotizacion/cotizacion.routes').then(m => m.ROUTES),
+        loadChildren: () => import('@features/quote/quote.routes').then(m => m.ROUTES),
       },
     ],
   }, 
