@@ -2,4 +2,22 @@
 
 <app-services-component/>
 
-<app-form-contact-component (formSubmit)="onSubmitForm($event)"/>
+<section id="contacto" class="py-24">
+  <div appReveal class="mx-auto max-w-3xl px-5">
+    <div class="text-center">
+      <app-section-heading-component eyebrow="Contacto" title="Escríbenos" />
+      <p class="mx-auto mt-4 max-w-md text-base-content/70">
+        Déjanos tu mensaje y te respondemos a la brevedad.
+      </p>
+    </div>
+
+    <div class="card mt-12 bg-base-200 shadow-sm">
+      <div class="card-body p-7 sm:p-10">
+        <app-form-contact-component
+          [isLoading]="isLoading()"
+          (formSubmit)="onSubmitForm($event)"
+        />
+      </div>
+    </div>
+  </div>
+</section>

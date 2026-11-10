@@ -1,49 +1,54 @@
-<section id="contacto" class="py-24">
-  <div appReveal class="mx-auto max-w-3xl px-5">
-    <div class="text-center">
-      <app-section-heading-component eyebrow="Contacto" title="Escríbenos" />
-      <p class="mx-auto mt-4 max-w-md text-base-content/70">Déjanos tu mensaje y te respondemos a la brevedad.</p>
-    </div>
+@if (errorMessage()) {
+  <app-message-error-component [message]="errorMessage()"/>
+}
+<form novalidate (submit)="onSubmit($event)">
+  <fieldset class="grid gap-5 sm:grid-cols-2" 
+    [disabled]="isLoading()">
+    
+    <legend class="mb-2 sr-only">Contacto</legend>
+    
+    <label class="form-control">
+      <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Nombre</span>
+      <input name="name" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Tu nombre" 
+        #name 
+        maxlength="100"
+        (input)="updateName(name.value)"/>
+    </label>
+    
+    <label class="form-control">
+      <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Email</span>
+      <input name="email" type="email" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="tu@email.com" 
+        #email 
+        maxlength="100"
+        (input)="updateEmail(email.value)"/>
+    </label>
 
-    <div class="card mt-12 bg-base-200 shadow-sm">
-      <div class="card-body p-7 sm:p-10">
+    <label class="form-control">
+      <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Teléfono / WhatsApp</span>
+      <input name="phone" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="+56 9 ..." 
+        #phone
+        maxlength="11"
+        (input)="updatePhone(phone.value)"/>
+    </label>
 
-        <form (submit)="onSubmit($event)" novalidate>
-          <fieldset class="grid gap-5 sm:grid-cols-2">
-            <legend class="mb-2 sr-only">Contacto</legend>
-            <label class="form-control">
-              <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Nombre</span>
-              <input name="nombre" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Tu nombre" [attr.aria-invalid]="errors().nombre ? 'true' : null" [attr.aria-describedby]="errors().nombre ? 'err-nombre' : null" />
-              @if (errors().nombre) {
-                <span id="err-nombre" class="mt-1 text-xs text-error">{{ errors().nombre }}</span>
-              }
-            </label>
-            <label class="form-control">
-              <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Email</span>
-              <input name="email" type="email" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="tu@email.com" [attr.aria-invalid]="errors().email ? 'true' : null" [attr.aria-describedby]="errors().email ? 'err-email' : null" />
-              @if (errors().email) {
-                <span id="err-email" class="mt-1 text-xs text-error">{{ errors().email }}</span>
-              }
-            </label>
-            <label class="form-control">
-              <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Teléfono / WhatsApp</span>
-              <input name="telefono" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="+56 9 ..." [attr.aria-invalid]="errors().telefono ? 'true' : null" [attr.aria-describedby]="errors().telefono ? 'err-telefono' : null" />
-              @if (errors().telefono) {
-                <span id="err-telefono" class="mt-1 text-xs text-error">{{ errors().telefono }}</span>
-              }
-            </label>
-            <label class="form-control sm:col-span-2">
-              <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Mensaje</span>
-              <textarea name="mensaje" required rows="4" class="textarea textarea-bordered w-full bg-base-100 text-base-content" placeholder="Cuéntanos qué necesitas" [attr.aria-invalid]="errors().mensaje ? 'true' : null" [attr.aria-describedby]="errors().mensaje ? 'err-mensaje' : null"></textarea>
-              @if (errors().mensaje) {
-                <span id="err-mensaje" class="mt-1 text-xs text-error">{{ errors().mensaje }}</span>
-              }
-            </label>
-          </fieldset>
-          <button type="submit" class="btn btn-lg btn-primary mt-7 w-full rounded-sm">Enviar mensaje</button>
-        </form>
+    <label class="form-control sm:col-span-2">
+      <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Mensaje</span>
+      <textarea name="message" required rows="4" class="textarea textarea-bordered w-full bg-base-100 text-base-content" placeholder="Cuéntanos qué necesitas"
+        #message
+        maxlength="512"
+        (input)="updateMessage(message.value)"></textarea>
+    </label>
+  </fieldset>
+  
+  <button type="submit" class="btn btn-lg btn-primary mt-7 w-full rounded-sm"
+    [disabled]="isLoading()">
+    
+    @if (isLoading()) {
+      <span class="loading loading-spinner loading-md"></span>
+    } @else {
+      Enviar mensaje
+    }
+  </button>
 
-      </div>
-    </div>
-  </div>
-</section>
+</form>
+

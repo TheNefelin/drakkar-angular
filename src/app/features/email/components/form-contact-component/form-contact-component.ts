@@ -1,74 +1,91 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { ContactFormData } from '@features/email/models/email-model';
-import { SectionHeadingComponent } from '@shared/components/section-heading-component/section-heading-component';
-
-export interface ContactoFormErrors {
-  nombre?: string;
-  email?: string;
-  telefono?: string;
-  mensaje?: string;
-}
+import { MessageErrorComponent } from '@shared/components/message-error-component/message-error-component';
 
 @Component({
-  imports: [SectionHeadingComponent],
+  imports: [MessageErrorComponent],
   selector: 'app-form-contact-component',
   templateUrl: './form-contact-component.html',
 })
 export class FormContactComponent {
-  readonly formSubmit = output<ContactFormData>();
+  readonly isLoading = input<boolean>(false); 
+  protected readonly formSubmit = output<ContactFormData>();
 
-  protected readonly errors = signal<ContactoFormErrors>({});
+  protected readonly errorMessage = signal<string | null>(null);
+  protected formData = signal<ContactFormData>({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+  });
+
+  protected updateName(value: string): void {
+    this.formData.update(d => ({ ...d, name: value }));
+    this.errorMessage.set(null);
+  }
+
+  protected updateEmail(value: string): void {
+    this.formData.update(d => ({ ...d, email: value }));
+    this.errorMessage.set(null);
+  }
+
+  protected updatePhone(value: string): void {
+    this.formData.update(d => ({ ...d, phone: value }));
+    this.errorMessage.set(null);
+  }
+
+  protected updateMessage(value: string): void {
+    this.formData.update(d => ({ ...d, message: value }));
+    this.errorMessage.set(null);
+  }  
 
   protected onSubmit(event: Event): void {
     event.preventDefault();
-    const form = event.target as HTMLFormElement;
-    const data = new FormData(form);
+    const data = this.formData();
 
     const payload: ContactFormData = {
-      nombre: String(data.get('nombre') ?? '').trim(),
-      email: String(data.get('email') ?? '').trim(),
-      telefono: String(data.get('telefono') ?? '').trim(),
-      mensaje: String(data.get('mensaje') ?? '').trim(),
+      name: data.name.trim(),
+      email: data.email.trim(),
+      phone: data.phone.trim(),
+      message: data.message.trim(),
     };
 
-    const errors = this.validate(payload);
-    if (Object.keys(errors).length) {
-      this.errors.set(errors);
-      return;
+    const error = this.validate(payload);
+    if (error) {
+      this.errorMessage.set(error);
+      return
     }
 
-    this.errors.set({});
+    this.errorMessage.set(null);
     this.formSubmit.emit(payload);
   }
 
-  private validate(data: ContactFormData): ContactoFormErrors {
-    const errors: ContactoFormErrors = {};
-
-    if (!data.nombre) {
-      errors.nombre = 'El nombre es obligatorio.';
+  private validate(data: ContactFormData): string | null {
+    if (!data.name) {
+      return 'El nombre es obligatorio.';
     }
 
     if (!data.email) {
-      errors.email = 'El correo es obligatorio.';
+      return 'El correo es obligatorio.';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-      errors.email = 'Ingresa un correo válido.';
+      return 'Ingresa un correo válido.';
     }
 
-    if (!data.telefono) {
-      errors.telefono = 'El teléfono es obligatorio.';
+    if (!data.phone) {
+      return 'El teléfono es obligatorio.';
     } else {
-      const digits = data.telefono.replace(/\D/g, '');
+      const digits = data.phone.replace(/\D/g, '');
       if (digits.length < 8 || digits.length > 15) {
-        errors.telefono = 'Ingresa un teléfono válido (8 a 15 dígitos).';
+        return 'Ingresa un teléfono válido (8 a 15 dígitos).';
       }
     }
 
-    if (!data.mensaje) {
-      errors.mensaje = 'El mensaje es obligatorio.';
-    } else if (data.mensaje.length < 5) {
-      errors.mensaje = 'Cuéntanos un poco más (mínimo 5 caracteres).';
+    if (!data.message) {
+      return 'El mensaje es obligatorio.';
+    } else if (data.message.length < 5) {
+      return 'Cuéntanos un poco más (mínimo 5 caracteres).';
     }
 
-    return errors;
+    return null;
   }
 }

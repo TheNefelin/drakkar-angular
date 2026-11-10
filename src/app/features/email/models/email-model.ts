@@ -1,23 +1,23 @@
 export interface ContactFormData {
-  nombre: string;
+  name: string;
   email: string;
-  telefono: string;
-  mensaje: string;
+  phone: string;
+  message: string;
 }
 
 export interface QuoteFormData {
-  origen: string;
-  destino: string;
-  servicio: string;
-  peso: number;
-  volumen: number;
+  origin: string;
+  destination: string;
+  service: string;
+  weight: number;
+  volume: number;
   km: number;
 }
 
 export interface QuoteResult {
   km: number;
-  costoKm: number;
-  costoPeso: number;
-  costoVolumen: number;
+  distanceCost: number;
+  weightCost: number;
+  volumeCost: number;
   total: number;
 }

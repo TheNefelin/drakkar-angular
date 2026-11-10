@@ -2,21 +2,21 @@
   <fieldset class="grid gap-5 sm:grid-cols-2">
     <label class="form-control">
       <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Origen</span>
-      <input name="origen" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Comuna o dirección" />
-      @if (errors().origen) {
-        <span class="mt-1 text-xs text-error">{{ errors().origen }}</span>
+      <input name="origin" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Comuna o dirección" />
+      @if (errors().origin) {
+        <span class="mt-1 text-xs text-error">{{ errors().origin }}</span>
       }
     </label>
     <label class="form-control">
       <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Destino</span>
-      <input name="destino" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Comuna o dirección" />
-      @if (errors().destino) {
-        <span class="mt-1 text-xs text-error">{{ errors().destino }}</span>
+      <input name="destination" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Comuna o dirección" />
+      @if (errors().destination) {
+        <span class="mt-1 text-xs text-error">{{ errors().destination }}</span>
       }
     </label>
     <label class="form-control sm:col-span-2">
       <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Servicio</span>
-      <select name="servicio" class="select select-bordered w-full bg-base-100 text-base-content">
+      <select name="service" class="select select-bordered w-full bg-base-100 text-base-content">
         <option>Flete</option>
         <option>Mudanza</option>
         <option>Retiro de escombros</option>
@@ -24,22 +24,22 @@
         <option>Servicio para empresa</option>
         <option>Otro</option>
       </select>
-      @if (errors().servicio) {
-        <span class="mt-1 text-xs text-error">{{ errors().servicio }}</span>
+      @if (errors().service) {
+        <span class="mt-1 text-xs text-error">{{ errors().service }}</span>
       }
     </label>
     <label class="form-control">
       <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Peso (kg)</span>
-      <input name="peso" type="number" min="0" step="1" class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Ej.: 100" />
-      @if (errors().peso) {
-        <span class="mt-1 text-xs text-error">{{ errors().peso }}</span>
+      <input name="weight" type="number" min="0" step="1" class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Ej.: 100" />
+      @if (errors().weight) {
+        <span class="mt-1 text-xs text-error">{{ errors().weight }}</span>
       }
     </label>
     <label class="form-control">
       <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Volumen (m³)</span>
-      <input name="volumen" type="number" min="0" step="0.1" class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Ej.: 2.5" />
-      @if (errors().volumen) {
-        <span class="mt-1 text-xs text-error">{{ errors().volumen }}</span>
+      <input name="volume" type="number" min="0" step="0.1" class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Ej.: 2.5" />
+      @if (errors().volume) {
+        <span class="mt-1 text-xs text-error">{{ errors().volume }}</span>
       }
     </label>
     <label class="form-control sm:col-span-2">

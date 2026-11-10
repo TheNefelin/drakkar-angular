@@ -17,12 +17,12 @@ export class QuotePage {
     const tarifaKg = 5;
     const tarifaM3 = 5000;
 
-    const km = data.km || Math.max(1, data.origen.length + data.destino.length);
-    const costoKm = Math.round(km * tarifaKm);
-    const costoPeso = Math.round(data.peso * tarifaKg);
-    const costoVolumen = Math.round(data.volumen * tarifaM3);
-    const total = base + costoKm + costoPeso + costoVolumen;
+    const km = data.km || Math.max(1, data.origin.length + data.destination.length);
+    const distanceCost = Math.round(km * tarifaKm);
+    const weightCost = Math.round(data.weight * tarifaKg);
+    const volumeCost = Math.round(data.volume * tarifaM3);
+    const total = base + distanceCost + weightCost + volumeCost;
 
-    this.result.set({ km, costoKm, costoPeso, costoVolumen, total });
+    this.result.set({ km, distanceCost, weightCost, volumeCost, total });
   }
 }

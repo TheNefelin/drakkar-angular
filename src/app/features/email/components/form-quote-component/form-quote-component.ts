@@ -1,12 +1,12 @@
 import { Component, output, signal } from '@angular/core';
 import { QuoteFormData } from '@features/email/models/email-model';
 
-export interface CotizacionFormErrors {
-  origen?: string;
-  destino?: string;
-  servicio?: string;
-  peso?: string;
-  volumen?: string;
+export interface QuoteFormErrors {
+  origin?: string;
+  destination?: string;
+  service?: string;
+  weight?: string;
+  volume?: string;
   km?: string;
 }
 
@@ -18,7 +18,7 @@ export interface CotizacionFormErrors {
 export class FormQuoteComponent {
   readonly formSubmit = output<QuoteFormData>();
 
-  protected readonly errors = signal<CotizacionFormErrors>({});
+  protected readonly errors = signal<QuoteFormErrors>({});
 
   protected onSubmit(event: Event): void {
     event.preventDefault();
@@ -26,11 +26,11 @@ export class FormQuoteComponent {
     const data = new FormData(form);
 
     const payload: QuoteFormData = {
-      origen: String(data.get('origen') ?? '').trim(),
-      destino: String(data.get('destino') ?? '').trim(),
-      servicio: String(data.get('servicio') ?? '').trim(),
-      peso: Number(data.get('peso') ?? 0),
-      volumen: Number(data.get('volumen') ?? 0),
+      origin: String(data.get('origin') ?? '').trim(),
+      destination: String(data.get('destination') ?? '').trim(),
+      service: String(data.get('service') ?? '').trim(),
+      weight: Number(data.get('weight') ?? 0),
+      volume: Number(data.get('volume') ?? 0),
       km: Number(data.get('km') ?? 0),
     };
 
@@ -44,27 +44,27 @@ export class FormQuoteComponent {
     this.formSubmit.emit(payload);
   }
 
-  private validate(data: QuoteFormData): CotizacionFormErrors {
-    const errors: CotizacionFormErrors = {};
+  private validate(data: QuoteFormData): QuoteFormErrors {
+    const errors: QuoteFormErrors = {};
 
-    if (!data.origen) {
-      errors.origen = 'El origen es obligatorio.';
+    if (!data.origin) {
+      errors.origin = 'El origin es obligatorio.';
     }
 
-    if (!data.destino) {
-      errors.destino = 'El destino es obligatorio.';
+    if (!data.destination) {
+      errors.destination = 'El destination es obligatorio.';
     }
 
-    if (!data.servicio) {
-      errors.servicio = 'El servicio es obligatorio.';
+    if (!data.service) {
+      errors.service = 'El service es obligatorio.';
     }
 
-    if (data.peso < 0) {
-      errors.peso = 'Ingresa un peso válido (0 o más).';
+    if (data.weight < 0) {
+      errors.weight = 'Ingresa un weight válido (0 o más).';
     }
 
-    if (data.volumen < 0) {
-      errors.volumen = 'Ingresa un volumen válido (0 o más).';
+    if (data.volume < 0) {
+      errors.volume = 'Ingresa un volume válido (0 o más).';
     }
 
     if (data.km < 0) {
