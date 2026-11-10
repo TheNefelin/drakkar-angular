@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 import { ContactFormData } from '@features/email/models/email-model';
 import { MessageErrorComponent } from '@shared/components/message-error-component/message-error-component';
 
@@ -19,6 +19,16 @@ export class FormContactComponent {
     message: '',
   });
 
+  protected readonly messageCounter = computed(() => this.formData().message.length);
+
+  protected onNameBeforeInput(event: InputEvent): void {
+    // Permite solo letras, acentos, espacios, guiones y apóstrofes.
+    const data = event.data ?? '';
+    if (data && !/^[\p{L}\p{M} .'-]+$/u.test(data)) {
+      event.preventDefault();
+    }
+  }
+
   protected updateName(value: string): void {
     this.formData.update(d => ({ ...d, name: value }));
     this.errorMessage.set(null);
@@ -29,8 +39,17 @@ export class FormContactComponent {
     this.errorMessage.set(null);
   }
 
+  protected onPhoneBeforeInput(event: InputEvent): void {
+    // Permite solo dígitos en el campo teléfono.
+    const data = event.data ?? '';
+    if (data && !/^\d+$/.test(data)) {
+      event.preventDefault();
+    }
+  }
+
   protected updatePhone(value: string): void {
-    this.formData.update(d => ({ ...d, phone: value }));
+    const normalized = value.replace(/\\D/g, '').slice(0, 11);
+    this.formData.update(d => ({ ...d, phone: normalized }));
     this.errorMessage.set(null);
   }
 
@@ -63,27 +82,30 @@ export class FormContactComponent {
   private validate(data: ContactFormData): string | null {
     if (!data.name) {
       return 'El nombre es obligatorio.';
+    } else if (!/^[\p{L}\p{M}][\p{L}\p{M} .'-]{0,99}$/u.test(data.name)) {
+      return 'El nombre solo puede contener letras, espacios, guiones o apóstrofes.';
     }
 
     if (!data.email) {
       return 'El correo es obligatorio.';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+    } else if (!/^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]{1,64}@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/.test(data.email)) {
       return 'Ingresa un correo válido.';
+    } else if (data.email.length > 254) {
+      return 'El correo es demasiado largo.';
     }
 
     if (!data.phone) {
       return 'El teléfono es obligatorio.';
-    } else {
-      const digits = data.phone.replace(/\D/g, '');
-      if (digits.length < 8 || digits.length > 15) {
-        return 'Ingresa un teléfono válido (8 a 15 dígitos).';
-      }
+    } else if (!/^\\d{11}$/.test(data.phone)) {
+      return 'Ingresa un teléfono válido de 11 dígitos.';
     }
 
     if (!data.message) {
       return 'El mensaje es obligatorio.';
     } else if (data.message.length < 5) {
       return 'Cuéntanos un poco más (mínimo 5 caracteres).';
+    } else if (data.message.length > 500) {
+      return 'El mensaje no puede superar los 500 caracteres.';
     }
 
     return null;

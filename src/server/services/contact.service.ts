@@ -49,8 +49,53 @@ export class ContactService {
       message: stringValue(body.message),
     };
 
-    // Validación server-side: los 4 campos son obligatorios.
-    if (!data.name || !data.email || !data.phone || !data.message) {
+// Validación server-side: los 4 campos son obligatorios y respetan límites.
+    if (!/^[\p{L}\p{M}][\p{L}\p{M} .'-]{0,99}$/u.test(data.name)) {
+      return {
+        status: 400,
+        body: { detail: 'El nombre solo puede contener letras, espacios, guiones o apóstrofes.' },
+      };
+    }
+
+    if (data.name || data.email || data.phone || data.message) {
+      // Validación de formato y longitud en servidor.
+      const emailValid = /^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]{1,64}@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/.test(data.email);
+
+      if (!emailValid) {
+        return {
+          status: 400,
+          body: { detail: 'Ingresa un correo válido.' },
+        };
+      }
+
+      if (data.email.length > 254) {
+        return {
+          status: 400,
+          body: { detail: 'El correo es demasiado largo.' },
+        };
+      }
+
+      if (!/^\d{11}$/.test(data.phone)) {
+        return {
+          status: 400,
+          body: { detail: 'Ingresa un teléfono válido de 11 dígitos.' },
+        };
+      }
+
+      if (data.message.length < 5) {
+        return {
+          status: 400,
+          body: { detail: 'Cuéntanos un poco más (mínimo 5 caracteres).' },
+        };
+      }
+
+      if (data.message.length > 500) {
+        return {
+          status: 400,
+          body: { detail: 'El mensaje no puede superar los 500 caracteres.' },
+        };
+      }
+    } else {
       return {
         status: 400,
         body: { detail: 'Faltan campos obligatorios.' },

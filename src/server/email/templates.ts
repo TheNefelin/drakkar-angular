@@ -68,7 +68,7 @@ export function renderConfirmationEmail(name: string, reference: string): string
         <p style="margin:0 0 16px;color:#b8bcc4;font-size:14px;">Código: <span style="color:#f0b429;font-weight:bold;">${safeReference}</span></p>
         <div style="text-align:center;margin:16px 0;">
           <img src="https://transportesdrakkar.cl/images/qr-code.png" alt="Código QR de WhatsApp" width="160" style="display:inline-block;max-width:100%;height:auto;border-radius:8px;" />
-          <p style="margin:8px 0 0;color:#b8bcc4;font-size:13px;">Escanea el código QR para escribirnos por WhatsApp.</p>
+          <p style="margin:8px 0 0;color:#f0b429;font-size:13px;"><a href="https://transportesdrakkar.cl" style="color:#f0b429;text-decoration:none;">https://transportesdrakkar.cl</a></p>
         </div>
       </div>
     </body>

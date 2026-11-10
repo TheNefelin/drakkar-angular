@@ -14,6 +14,7 @@
       <input name="name" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Tu nombre" 
         #name 
         maxlength="100"
+        (beforeinput)="onNameBeforeInput($event)"
         (input)="updateName(name.value)"/>
     </label>
     
@@ -21,24 +22,24 @@
       <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Email</span>
       <input name="email" type="email" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="tu@email.com" 
         #email 
-        maxlength="100"
+        maxlength="254"
         (input)="updateEmail(email.value)"/>
     </label>
 
     <label class="form-control">
       <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Teléfono / WhatsApp</span>
-      <input name="phone" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="+56 9 ..." 
+      <input name="phone" required inputmode="numeric" type="tel" maxlength="11" class="input input-bordered w-full bg-base-100 text-base-content" placeholder="56 9 XXXXXXXXX" 
         #phone
-        maxlength="11"
+        (beforeinput)="onPhoneBeforeInput($event)"
         (input)="updatePhone(phone.value)"/>
     </label>
 
     <label class="form-control sm:col-span-2">
       <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Mensaje</span>
-      <textarea name="message" required rows="4" class="textarea textarea-bordered w-full bg-base-100 text-base-content" placeholder="Cuéntanos qué necesitas"
-        #message
-        maxlength="512"
+      <textarea #message name="message" required rows="4" class="textarea textarea-bordered w-full bg-base-100 text-base-content" placeholder="Cuéntanos qué necesitas"
+        maxlength="500"
         (input)="updateMessage(message.value)"></textarea>
+      <div class="mt-1 text-right text-xs text-base-content/60">{{ messageCounter() }}/500</div>
     </label>
   </fieldset>
   
