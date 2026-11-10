@@ -1,15 +1,18 @@
 import { Router, type Request, type Response } from 'express';
 import { getPortfolioConfig } from '@server/config';
-import { sendContactEmail } from '@server/services/brevo-service';
+import { ContactService } from '@server/services/contact.service';
 
 // SERVER (Express): proxy BFF para la API externa.
 export const apiProxy = Router();
 
 // ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------
+// Instancia del servicio de contacto.
+const contactService = new ContactService();
+
 // Endpoints para email. Contact delega en el servicio real; quote todavía es placeholder.
 apiProxy.post('/contact', async (req: Request, res: Response) => {
-  const result = await sendContactEmail(req.body);
+  const result = await contactService.send(req.body);
   res.status(result.status).json(result.body);
 });
 
