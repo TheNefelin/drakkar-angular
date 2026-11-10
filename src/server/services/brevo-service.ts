@@ -1,13 +1,15 @@
-import { getBrevoConfig } from '../config';
+import { getBrevoConfig } from '@server/config';
 
-export interface ContactRequestBody {
+// Body que llega desde el navegador (sin confiar en tipos).
+interface ContactRequestBody {
   name?: unknown;
   email?: unknown;
   phone?: unknown;
   message?: unknown;
 }
 
-export interface SendContactResult {
+// Respuesta que devuelve el servidor al cliente.
+interface SendContactResult {
   status: number;
   body: {
     detail: string;
@@ -15,7 +17,8 @@ export interface SendContactResult {
   };
 }
 
-export interface BrevoEmailPayload {
+// Contrato interno usado para llamar a Brevo.
+interface BrevoEmailPayload {
   to: string;
   subject: string;
   name: string;
@@ -25,12 +28,13 @@ export interface BrevoEmailPayload {
   details: string;
 }
 
-export interface BrevoEmailResult {
+// Resultado de una llamada a Brevo.
+interface BrevoEmailResult {
   ok: boolean;
-  message?: string;
   error?: string;
 }
 
+// Escapa texto para interpolar en HTML sin romperlo ni permitir inyección.
 function escapeHtml(value: string): string {
   return value
     .replaceAll('&', '&amp;')
@@ -40,23 +44,25 @@ function escapeHtml(value: string): string {
     .replaceAll("'", '&#39;');
 }
 
-export function buildBrevoConfirmationHtml(name: string): string {
+// Plantilla HTML para la confirmación que recibe el visitante.
+function buildBrevoConfirmationHtml(name: string): string {
   const safeName = escapeHtml(name || '—');
 
   return `<!doctype html>
-<html lang="es">
-<head><meta charset="utf-8"><title>Recibimos tu mensaje — Drakar</title></head>
-<body style="margin:0;background:#0a0c10;font-family:Arial,sans-serif;">
-  <div style="max-width:640px;margin:0 auto;padding:24px;color:#e7e5e4;">
-    <p style="color:#f0b429;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;margin:0 0 8px;">Drakar Transportes</p>
-    <h1 style="margin:0 0 8px;font-size:28px;">Mensaje recibido</h1>
-    <p style="margin:0;color:#e7e5e4;line-height:1.6;">Gracias, ${safeName}. Recibimos tu mensaje y te responderemos en menos de 48 horas.</p>
-  </div>
-</body>
-</html>`;
+  <html lang="es">
+  <head><meta charset="utf-8"><title>Recibimos tu mensaje — Drakar</title></head>
+  <body style="margin:0;background:#0a0c10;font-family:Arial,sans-serif;">
+    <div style="max-width:640px;margin:0 auto;padding:24px;color:#e7e5e4;">
+      <p style="color:#f0b429;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;margin:0 0 8px;">Drakar Transportes</p>
+      <h1 style="margin:0 0 8px;font-size:28px;">Mensaje recibido</h1>
+      <p style="margin:0;color:#e7e5e4;line-height:1.6;">Gracias, ${safeName}. Recibimos tu mensaje y te responderemos en menos de 48 horas.</p>
+    </div>
+  </body>
+  </html>`;
 }
 
-export function buildBrevoEmailHtml(payload: BrevoEmailPayload): string {
+// Plantilla HTML para el correo interno que recibe Transportes Drakar.
+function buildBrevoEmailHtml(payload: BrevoEmailPayload): string {
   const name = escapeHtml(payload.name || '—');
   const email = escapeHtml(payload.email || '—');
   const phone = escapeHtml(payload.phone || '—');
@@ -84,9 +90,12 @@ export function buildBrevoEmailHtml(payload: BrevoEmailPayload): string {
   </html>`;
 }
 
-export async function sendBrevoEmail(payload: BrevoEmailPayload, htmlContent?: string): Promise<BrevoEmailResult> {
+// Envía un correo usando Brevo API. Utiliza la API key sólo en servidor.
+async function sendBrevoEmail(payload: BrevoEmailPayload, htmlContent?: string): Promise<BrevoEmailResult> {
+  // Lee la configuración sólo en el servidor para construir API headers/body.
   const { brevoApiKey, brevoSenderEmail, brevoSenderName } = getBrevoConfig();
 
+  // Arma el body de la transacción para Brevo.
   const body = {
     sender: { email: brevoSenderEmail, name: brevoSenderName },
     to: [{ email: payload.to, name: payload.name || payload.to }],
@@ -95,6 +104,7 @@ export async function sendBrevoEmail(payload: BrevoEmailPayload, htmlContent?: s
   };
 
   try {
+    // Hace la petición a Brevo; si la librería fetch falla, entra al catch.
     const response = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
@@ -104,50 +114,34 @@ export async function sendBrevoEmail(payload: BrevoEmailPayload, htmlContent?: s
       body: JSON.stringify(body),
     });
 
+    // Brevo responde con status no-OK; guardamos el detail del upstream para diagnosticar.
     if (!response.ok) {
       const text = await response.text();
       return { ok: false, error: `Brevo respondió ${response.status}: ${text.slice(0, 200)}` };
     }
 
-    return { ok: true, message: 'Correo enviado.' };
+    // Brevo aceptó la petición.
+    return { ok: true };
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     return { ok: false, error: message };
   }
 }
 
-export async function sendTestEmail(): Promise<SendContactResult> {
-  try {
-    const brevo = getBrevoConfig();
-    const result = await sendBrevoEmail({
-      to: brevo.brevoSenderEmail,
-      subject: 'Drakar — test de envío',
-      name: brevo.brevoSenderName || 'Drakar',
-      email: brevo.brevoSenderEmail,
-      phone: '—',
-      service: 'Test de Brevo',
-      details: 'Correo de prueba enviado desde el botón de test.',
-    });
-
-    return result.ok
-      ? { status: 200, body: { detail: 'FUNCIONA' } }
-      : { status: 502, body: { detail: result.error ?? 'No se pudo enviar el correo.' } };
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    return { status: 500, body: { detail: message } };
-  }
-}
-
+// Devuelve cadena vacía si el valor no es texto; si lo es, hace trim.
 function stringValue(value: unknown): string {
   return typeof value === 'string' ? value.trim() : '';
 }
 
+// Implementa el contacto completo: valida, envía lead a Drakar y correo de confirmación al visitante.
 export async function sendContactEmail(body: ContactRequestBody): Promise<SendContactResult> {
+// Antes de enviar valida que el body sea texto usable.
   const name = stringValue(body.name);
   const email = stringValue(body.email);
   const phone = stringValue(body.phone);
   const message = stringValue(body.message);
 
+  // Validación server-side: los 4 campos son obligatorios.
   if (!name || !email || !phone || !message) {
     return {
       status: 400,
@@ -155,6 +149,7 @@ export async function sendContactEmail(body: ContactRequestBody): Promise<SendCo
     };
   }
 
+  // Obtiene la configuración de Brevo; falla explícito si faltan vars.
   let brevo: ReturnType<typeof getBrevoConfig>;
 
   try {
@@ -167,6 +162,7 @@ export async function sendContactEmail(body: ContactRequestBody): Promise<SendCo
     };
   }
 
+  // Paso 1: enviar los datos del lead a Transportes Drakar.
   const businessResult = await sendBrevoEmail({
     to: brevo.brevoSenderEmail,
     subject: `Nuevo contacto desde la landing: ${name}`,
@@ -184,6 +180,7 @@ export async function sendContactEmail(body: ContactRequestBody): Promise<SendCo
     };
   }
 
+  // Paso 2: enviar confirmación al visitante. Si falla, el lead ya fue recibido.
   const confirmationResult = await sendBrevoEmail(
     {
       to: email,

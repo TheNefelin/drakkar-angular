@@ -6,21 +6,12 @@ import { Observable } from 'rxjs';
 @Service()
 export class EmailService {
   private readonly apiService = inject(ApiService);
-  private readonly endpoint = 'brevo';
 
   emailContact(item: ContactFormData): Observable<void> {
-    return this.apiService.post(this.endpoint, item);
+    return this.apiService.post('contact', item);
   }
 
   emailQuote(item: QuoteFormData): Observable<void> {
-    return this.apiService.post(this.endpoint, item);
-  }
-
-  emailTest(): Observable<void> {
-    return this.apiService.post('email-test', {});
-  }
-
-  getTest(): Observable<any> {
-    return this.apiService.getAll('health');
+    return this.apiService.post('quote', item);
   }
 }
