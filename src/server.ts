@@ -7,6 +7,8 @@ import {
 import express from 'express';
 import { join } from 'node:path';
 import { apiProxy } from '@server/proxy/api-proxy';
+import { createRateLimit } from '@server/middleware/rate-limit';
+import { API_ENDPOINTS } from '@shared/constants/api-endpoints';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -16,7 +18,9 @@ const angularApp = new AngularNodeAppEngine();
 // [BFF] ── Inicio del código propio ─────────────────────────────────────────
 // Todo este bloque es nuestro (BFF), NO parte del server.ts original de Angular SSR.
 // Proxy /ssr-api que oculta la API y las variables de entorno del navegador.
+// Incluye rate limit básico para /contact, que es el endpoint público.
 app.use('/ssr-api', express.json());
+app.use(`/ssr-api/${API_ENDPOINTS.contact}`, createRateLimit(5, 15));
 app.use('/ssr-api', apiProxy);
 // [BFF] ── Fin del código propio ────────────────────────────────────────────
 
