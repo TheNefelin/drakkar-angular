@@ -27,7 +27,7 @@ function required(name: string): string {
   return value;
 }
 
-export function getPortfolioConfig(): Pick<ServerConfig, 'API_URL' | 'API_KEY'> {
+export function getExternalApiConfig(): Pick<ServerConfig, 'API_URL' | 'API_KEY'> {
   return {
     API_URL: required('API_URL').replace(/\/+$/, ''),
     API_KEY: required('API_KEY'),

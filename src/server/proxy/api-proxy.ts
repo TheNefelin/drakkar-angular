@@ -1,5 +1,5 @@
 import { Router, type Request, type Response } from 'express';
-import { getPortfolioConfig } from '@server/config';
+import { getExternalApiConfig } from '@server/config';
 import { ContactService } from '@server/services/contact.service';
 
 // SERVER (Express): proxy BFF para la API externa.
@@ -25,8 +25,33 @@ apiProxy.post('/quote', async (_req: Request, res: Response) => {
 // Timeout máximo de la petición externa al API.
 const PROXY_TIMEOUT_MS = 15_000;
 
-// Métodos HTTP que pueden pasar por el proxy genérico.
-const ALLOWED_METHODS = new Set(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']);
+// Rutas permitidas hacia la API externa. Agregar nuevas entradas cuando el frontend
+// efectivamente las use; el panel interno no se expone como proxy abierto.
+interface AllowedProxyRoute {
+  methods: readonly string[];
+  path: RegExp;
+}
+
+const ALLOWED_PROXY_ROUTES: AllowedProxyRoute[] = [
+  { methods: ['GET'], path: /^\/health$/ },
+  //{ methods: ['GET', 'POST', 'PUT', 'DELETE'], path: /^\/END_POINT$/ },
+];
+
+// Verifica si el método y la ruta relativa están permitidos por la allowlist.
+function isAllowedProxyRoute(method: string, pathname: string): boolean {
+  return ALLOWED_PROXY_ROUTES.some(
+    (route) => route.methods.includes(method) && route.path.test(pathname),
+  );
+}
+
+// Devuelve la ruta sin query string.
+function pathnameOf(rawPath: string): string {
+  try {
+    return new URL(rawPath, 'http://localhost').pathname;
+  } catch {
+    return rawPath.split('?')[0];
+  }
+}
 
 // Intenta convertir body a JSON; si falla, devuelve { detail: texto }.
 function parseJsonSafe(text: string): unknown {
@@ -37,32 +62,25 @@ function parseJsonSafe(text: string): unknown {
   }
 }
 
-// CRUD genérico: reenvía cualquier ruta/método válido al API externa.
+// Proxy seguro hacia la API externa; solo deja pasar lo declarado en ALLOWED_PROXY_ROUTES.
 apiProxy.use(async (req: Request, res: Response) => {
-  // Rechaza métodos no permitidos.
-  if (!ALLOWED_METHODS.has(req.method)) {
-    res.status(405).json({ detail: `Método no permitido: ${req.method}` });
-    return;
-  }
+  const pathname = pathnameOf(req.url);
 
-  // req.url incluye la ruta relativa y la query (ej: '/health?page=1').
-  const path = req.url;
-
-  // La ruta debe empezar en '/' y no contener barras invertidas.
-  if (!path.startsWith('/') || path.includes('\\')) {
-    res.status(400).json({ detail: 'Ruta inválida.' });
+  // Rechaza métodos/rutas no permitidas por la allowlist.
+  if (!isAllowedProxyRoute(req.method, pathname)) {
+    res.status(403).json({ detail: 'Ruta no permitida.' });
     return;
   }
 
   try {
-    // Lee URL y API key desde variables de entorno (solo servidor).
-    const { API_KEY, API_URL } = getPortfolioConfig();
+    // Lee URL y API key desde variables de entorno (sólo servidor).
+    const { API_KEY, API_URL } = getExternalApiConfig();
 
     // Determina si el método enviará body.
     const sendsBody = req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH';
 
-    // Hace la llamada real al backend externo.
-    const response = await fetch(`${API_URL}${path}`, {
+    // Hace la llamada real al backend externo en el path permitido.
+    const response = await fetch(`${API_URL}${pathname}`, {
       method: req.method,
       headers: {
         // Acepta respuesta JSON.
@@ -94,6 +112,3 @@ apiProxy.use(async (req: Request, res: Response) => {
     res.status(502).json({ detail: 'Error de conexión con la API.' });
   }
 });
-
-// ----------------------------------------------------------------------------------------
-// ----------------------------------------------------------------------------------------
