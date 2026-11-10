@@ -16,6 +16,10 @@ export class EmailService {
     return this.apiService.post(this.endpoint, item);
   }
 
+  emailTest(): Observable<void> {
+    return this.apiService.post('email-test', {});
+  }
+
   getTest(): Observable<any> {
     return this.apiService.getAll('health');
   }

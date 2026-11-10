@@ -116,6 +116,28 @@ export async function sendBrevoEmail(payload: BrevoEmailPayload, htmlContent?: s
   }
 }
 
+export async function sendTestEmail(): Promise<SendContactResult> {
+  try {
+    const brevo = getBrevoConfig();
+    const result = await sendBrevoEmail({
+      to: brevo.brevoSenderEmail,
+      subject: 'Drakar — test de envío',
+      name: brevo.brevoSenderName || 'Drakar',
+      email: brevo.brevoSenderEmail,
+      phone: '—',
+      service: 'Test de Brevo',
+      details: 'Correo de prueba enviado desde el botón de test.',
+    });
+
+    return result.ok
+      ? { status: 200, body: { detail: 'FUNCIONA' } }
+      : { status: 502, body: { detail: result.error ?? 'No se pudo enviar el correo.' } };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { status: 500, body: { detail: message } };
+  }
+}
+
 function stringValue(value: unknown): string {
   return typeof value === 'string' ? value.trim() : '';
 }

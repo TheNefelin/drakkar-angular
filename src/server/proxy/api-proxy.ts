@@ -1,11 +1,17 @@
 import { Router, type Request, type Response } from 'express';
 import { getPortfolioConfig } from '@server/config';
+import { sendTestEmail } from '@server/services/brevo-service';
 
 // SERVER (Express): proxy BFF para la API externa.
 export const apiProxy = Router();
 
 const PROXY_TIMEOUT_MS = 15_000;
 const ALLOWED_METHODS = new Set(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']);
+
+apiProxy.post('/email-test', async (_req: Request, res: Response) => {
+  const result = await sendTestEmail();
+  res.status(result.status).json(result.body);
+});
 
 function parseJsonSafe(text: string): unknown {
   try {

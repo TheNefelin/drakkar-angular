@@ -52,7 +52,8 @@ export class HomePage {
     this.isDisabled.set(true);
 
     try {
-      await firstValueFrom(this.emailService.emailContact(form));
+      //await firstValueFrom(this.emailService.emailContact(form));
+      await firstValueFrom(this.emailService.emailTest());
       this.toastService.show('Mensaje enviado correctamente', 'success');
     } catch (error: unknown) {
       this.loggerService.error('HomePage', 'onSubmitForm', error);
