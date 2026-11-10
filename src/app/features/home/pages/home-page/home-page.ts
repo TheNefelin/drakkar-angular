@@ -1,7 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { HeroComponent } from '@features/home/components/hero-component/hero-component';
 import { ServicesComponent } from '@features/home/components/services-component/services-component';
-import { RevealDirective } from '@shared/directives/reveal.directive';
 import { SectionHeadingComponent } from '@shared/components/section-heading-component/section-heading-component';
 import { FormContactComponent } from '@features/email/components/form-contact-component/form-contact-component';
 import { EmailService } from '@features/email/services/email-service';
@@ -15,7 +14,7 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { JsonPipe } from '@angular/common';
 
 @Component({
-  imports: [JsonPipe, HeroComponent, ServicesComponent, FormContactComponent, RevealDirective, SectionHeadingComponent],
+  imports: [JsonPipe, HeroComponent, ServicesComponent, FormContactComponent, SectionHeadingComponent],
   selector: 'app-home-page',
   templateUrl: './home-page.html',
 })

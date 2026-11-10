@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { RevealDirective } from '@shared/directives/reveal.directive';
 import { SectionHeadingComponent } from '@shared/components/section-heading-component/section-heading-component';
 
 interface ServiceItem {
@@ -9,7 +8,7 @@ interface ServiceItem {
 }
 
 @Component({
-  imports: [RevealDirective, SectionHeadingComponent],
+  imports: [SectionHeadingComponent],
   selector: 'app-services-component',
   templateUrl: './services-component.html',
 })
