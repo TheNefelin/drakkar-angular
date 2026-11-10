@@ -1,7 +1,7 @@
 import { inject, Service } from '@angular/core';
 import { ApiService } from '@core/services/api-service';
 import { ContactFormData, QuoteFormData } from '@features/email/models/email-model';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable } from 'rxjs';
 
 @Service()
 export class EmailService {

@@ -1,5 +1,20 @@
 import { config } from '../config';
 
+export interface ContactRequestBody {
+  name?: unknown;
+  email?: unknown;
+  phone?: unknown;
+  message?: unknown;
+}
+
+export interface SendContactResult {
+  status: number;
+  body: {
+    detail: string;
+    visitorNotified?: boolean;
+  };
+}
+
 export interface BrevoEmailPayload {
   to: string;
   subject: string;
@@ -23,6 +38,22 @@ function escapeHtml(value: string): string {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
+}
+
+export function buildBrevoConfirmationHtml(name: string): string {
+  const safeName = escapeHtml(name || '—');
+
+  return `<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Recibimos tu mensaje — Drakar</title></head>
+<body style="margin:0;background:#0a0c10;font-family:Arial,sans-serif;">
+  <div style="max-width:640px;margin:0 auto;padding:24px;color:#e7e5e4;">
+    <p style="color:#f0b429;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;margin:0 0 8px;">Drakar Transportes</p>
+    <h1 style="margin:0 0 8px;font-size:28px;">Mensaje recibido</h1>
+    <p style="margin:0;color:#e7e5e4;line-height:1.6;">Gracias, ${safeName}. Recibimos tu mensaje y te responderemos en menos de 48 horas.</p>
+  </div>
+</body>
+</html>`;
 }
 
 export function buildBrevoEmailHtml(payload: BrevoEmailPayload): string {
@@ -53,7 +84,7 @@ export function buildBrevoEmailHtml(payload: BrevoEmailPayload): string {
 </html>`;
 }
 
-export async function sendBrevoEmail(payload: BrevoEmailPayload): Promise<BrevoEmailResult> {
+export async function sendBrevoEmail(payload: BrevoEmailPayload, htmlContent?: string): Promise<BrevoEmailResult> {
   const { brevoApiKey, brevoSenderEmail, brevoSenderName } = config;
 
   if (!brevoApiKey || !brevoSenderEmail || !brevoSenderName) {
@@ -64,7 +95,7 @@ export async function sendBrevoEmail(payload: BrevoEmailPayload): Promise<BrevoE
     sender: { email: brevoSenderEmail, name: brevoSenderName },
     to: [{ email: payload.to, name: payload.name || payload.to }],
     subject: payload.subject,
-    htmlContent: buildBrevoEmailHtml(payload),
+    htmlContent: htmlContent ?? buildBrevoEmailHtml(payload),
   };
 
   try {
@@ -87,4 +118,60 @@ export async function sendBrevoEmail(payload: BrevoEmailPayload): Promise<BrevoE
     const message = error instanceof Error ? error.message : String(error);
     return { ok: false, error: message };
   }
+}
+
+function stringValue(value: unknown): string {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+export async function sendContactEmail(body: ContactRequestBody): Promise<SendContactResult> {
+  const name = stringValue(body.name);
+  const email = stringValue(body.email);
+  const phone = stringValue(body.phone);
+  const message = stringValue(body.message);
+
+  if (!name || !email || !phone || !message) {
+    return {
+      status: 400,
+      body: { detail: 'Faltan campos obligatorios.' },
+    };
+  }
+
+  const businessResult = await sendBrevoEmail({
+    to: config.brevoSenderEmail,
+    subject: `Nuevo contacto desde la landing: ${name}`,
+    name,
+    email,
+    phone,
+    service: 'Contacto',
+    details: message,
+  });
+
+  if (!businessResult.ok) {
+    return {
+      status: 502,
+      body: { detail: businessResult.error ?? 'No se pudo enviar el correo.' },
+    };
+  }
+
+  const confirmationResult = await sendBrevoEmail(
+    {
+      to: email,
+      subject: 'Recibimos tu mensaje — Drakar Transportes',
+      name,
+      email,
+      phone,
+      service: 'Contacto',
+      details: message,
+    },
+    buildBrevoConfirmationHtml(name),
+  );
+
+  return {
+    status: 200,
+    body: {
+      detail: 'Mensaje enviado.',
+      visitorNotified: confirmationResult.ok,
+    },
+  };
 }

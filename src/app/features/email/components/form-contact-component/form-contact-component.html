@@ -1,5 +1,7 @@
 @if (errorMessage()) {
-  <app-message-error-component [message]="errorMessage()"/>
+  <div class="pb-4">
+    <app-message-error-component [message]="errorMessage()"/>
+  </div>
 }
 <form novalidate (submit)="onSubmit($event)">
   <fieldset class="grid gap-5 sm:grid-cols-2" 

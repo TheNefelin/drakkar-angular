@@ -6,23 +6,19 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
+import { registerApiProxy } from './server/proxy/api-proxy';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
+// [BFF] ── Inicio del código propio ─────────────────────────────────────────
+// Todo este bloque es nuestro (BFF), NO parte del server.ts original de Angular SSR.
+// Proxy /ssr-api que oculta la API y las variables de entorno del navegador.
+app.use(express.json());
+registerApiProxy(app);
+// [BFF] ── Fin del código propio ────────────────────────────────────────────
 
 /**
  * Serve static files from /browser
