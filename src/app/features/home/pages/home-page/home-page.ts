@@ -8,12 +8,14 @@ import { EmailService } from '@features/email/services/email-service';
 import { LoggerService } from '@core/services/logger-service';
 import { ToastService } from '@core/services/toast-service';
 import { ErrorService } from '@core/services/error-service';
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, map, of } from 'rxjs';
 import { ContactFormData } from '@features/email/models/email-model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { JsonPipe } from '@angular/common';
 
 @Component({
-  imports: [HeroComponent, ServicesComponent, FormContactComponent, RevealDirective, SectionHeadingComponent],
+  imports: [JsonPipe, HeroComponent, ServicesComponent, FormContactComponent, RevealDirective, SectionHeadingComponent],
   selector: 'app-home-page',
   templateUrl: './home-page.html',
 })
@@ -29,6 +31,18 @@ export class HomePage {
 
   // FETCH-SERVICES-STATES --------------------------------------------------
   private readonly emailService = inject(EmailService);
+
+  readonly getTest = rxResource({
+    stream: () => {
+      return this.emailService.getTest().pipe(
+        map(response => response),
+        catchError(err => {
+          console.error('[LanguageService::LanguagePage] getAllPagination:', err);
+          return of(null);
+        })
+      );
+    },
+  });
 
   // EVENTS -----------------------------------------------------------------
 

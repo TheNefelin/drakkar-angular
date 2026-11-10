@@ -1,4 +1,5 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
+import { ErrorService } from '@core/services/error-service';
 
 @Component({
   imports: [],
@@ -6,6 +7,5 @@ import { Component, input, output } from '@angular/core';
   templateUrl: './modal-error-component.html',
 })
 export class ModalErrorComponent {
-  readonly message = input<string | null>(null);
-  readonly closed = output<void>();
+  protected readonly errorService = inject(ErrorService);
 }

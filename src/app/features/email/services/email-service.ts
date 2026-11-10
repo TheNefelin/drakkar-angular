@@ -15,4 +15,8 @@ export class EmailService {
   emailQuote(item: QuoteFormData): Observable<void> {
     return this.apiService.post(this.endpoint, item);
   }
+
+  getTest(): Observable<any> {
+    return this.apiService.getAll('health');
+  }
 }

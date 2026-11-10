@@ -18,6 +18,7 @@
       "@features/*": ["./src/app/features/*"],
       "@layouts/*": ["./src/app/layouts/*"],
       "@shared/*": ["./src/app/shared/*"],
+      "@server/*": ["./src/server/*"]
     }
   },
   "angularCompilerOptions": {
