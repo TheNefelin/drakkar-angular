@@ -9,6 +9,9 @@ Implementación Zoho Mail (implementación paralela; Sin enrutamiento de proveed
 
 ## Último avance comprobado
 
+- **Zoho Mail implementado** (Build OK, suite 3/3); contacto validado por el usuario (local). Cotización E2E pendiente de validación en prod.
+- **Estado Git**: pendiente de confirmar por el usuario si el commit/push del mensaje propuesto quedó ejecutado. Si no, sigue como trabajo local sin subir.
+
 - **Zoho Mail cliente implementado** (`src/server/email/zoho.client.ts`): OAuth 2.0 refresh_token → POST `mail.zoho.com/api/accounts/{accountId}/messages`; access token cacheado en memoria.
 - **Servicios** `contact.service.ts` y `quote.service.ts` usan `ZohoClient` directamente + `getZohoConfig()` (falla 500 si faltan vars). Templates idénticos a los de Brevo.
 - **Brevo desconectado** (no invocado); `brevo.client.ts`/`getBrevoConfig()` conservados como referencia.
