@@ -1,100 +1,102 @@
 # Transportes Drakar
 
 Landing y cotizador estimativo para Transportes Drakar (fletes, mudanzas y retiro de escombros).
-Stack: Angular 21+ signal-based, SSR, Tailwind 4 + DaisyUI 5, pnpm.
+
+Stack: Angular 22 (signal-based), SSR, Tailwind 4 + DaisyUI 5, pnpm.
 
 ## Rutas
 
-- `/` — Home con hero, servicios y contacto.
-- `/cotizacion` — Simula tu cotización (origen, destino, servicio, peso, volumen, km) y obtiene un estimado con desglose.
+- `/`: Home con hero, servicios y contacto.
+- `/cotizacion`: Simula tu cotización y obtén un desglose estimativo.
+
+## Arquitectura
+
+`/` y `/cotizacion` están prerenderizadas.
+
+La app incluye un **BFF Express en `src/server.ts`** para trabajo que requiere credenciales o acceso a APIs externas.
+
+### Endpoints BFF
+
+- `POST /ssr-api/contact`: envía correo de contacto a Brevo y notificación al visitante.
+- `POST /ssr-api/quote`: placeholder; aún no implementado.
+
+El proxy distingue entre:
+
+- Contacto de email público → `contact.service` → Brevo.
+- Petición hacia API externa → reenrutado con una lista permitida de rutas.
+
+## Seguridad
+
+- `NG_ALLOWED_HOSTS` configura hosts permitidos para SSR (`transportesdrakkar.cl`, `www.transportesdrakkar.cl`, `localhost`, `127.0.0.1`).
+- Los secretos viven en variables de entorno del servidor, nunca en el cliente.
+- `.env` no está versionado.
+- El proxy externo sólo permite `/health`; el resto responde `403 Ruta no permitida.`
+- El endpoint `POST /ssr-api/contact` está protegido en producción con una regla WAF por IP configurada en Vercel.
+- `POST /ssr-api/contact` también tiene un rate limit básico en memoria dentro del BFF (`createRateLimit`).
+
+## Contacto end-to-end validado
+
+- El formulario de contacto envía los datos como `POST /ssr-api/contact`.
+- El servidor envía el correo a Brevo hacia la casilla de Transportes Drakar.
+- El visitante recibe un correo de confirmación con código de referencia y QR a `https://transportesdrakkar.cl`.
+- Validación en cliente y servidor (nombre, email, teléfono y mensaje).
+- Estado de éxito visible dentro del mismo bloque de contacto (`message-success-component`).
 
 ## Estructura
 
 ```text
 src/app/
-├── layouts/main-layout/        → navbar + router-outlet + footer + rune-line
-├── shared/components/          → navbar, footer, rune-line
-└── features/
-    ├── home/
-    │   ├── components/         → hero, services, contacto
-    │   └── pages/home-page/  → compone las secciones
-    └── cotizacion/
-        └── pages/cotizacion-page/
+├─ app.config.ts                 → router, hydration, fetch + interceptor
+├─ app.routes.server.ts          → prerender de páginas
+├─ app.routes.ts                 → rutas principales
+├─ core/                         → ApiService, ErrorService, LoggerService, Toast/Modal
+├─ shared/
+│  ├─ constants/api-endpoints.ts → rutas compartidas frontend/BFF
+│  ├─ components/                → navbar, footer, rune-line, section-heading,
+│  │                              message-error, message-success, modal-error, toast
+│  └─ directives/reveal.directive.ts
+├─ features/
+│  ├─ email/
+│  │  ├─ components/form-contact-component/
+│  │  ├─ components/form-quote-component/
+│  │  ├─ models/email-model.ts
+│  │  └─ services/email-service.ts
+│  ├─ home/
+│  │  ├─ components/
+│  │  │  ├─ hero-component/
+│  │  │  ├─ services-component/
+│  │  │  └─ pages/home-page/
+│  └─ quote/
+│     └─ pages/quote-page/
+└─ server.ts                    → servidor Express SSR + BFF
 ```
 
 ## Fuentes y tema
 
-- Fuentes por CDN: Noto Sans Runic (runas), Cinzel Decorative (display), Roboto (cuerpo).
+- Fuentes por CDN: Noto Sans Runic, Cinzel Decorative, Roboto.
 - Tema `drakar` en `src/styles.css` con variables DaisyUI/Tailwind.
 
 ## Comandos
 
 ```bash
-pnpm start        # ng serve (desarrollo)
-pnpm build        # build de producción
-pnpm test -- --watch=false  # tests (Vitest)
+pnpm start         # ng serve (desarrollo)
+pnpm build         # build de producción
+pnpm test -- --watch=false   # tests (Vitest)
+pnpm serve:ssr:drakar-angular  # node dist/drakar-angular/server/server.mjs
 ```
 
----
----
----
+## Variables de entorno
 
-# DrakarAngular
+Plantilla en `.env.example`:
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.4.
-
-## Development server
-
-To start a local development server, run:
-
-```bash
-ng serve
+```env
+NG_ALLOWED_HOSTS=localhost,127.0.0.1,transportesdrakkar.cl,www.transportesdrakkar.cl
+BREVO_API_URL=https://api.brevo.com/v3/smtp/email
+BREVO_API_KEY=...
+BREVO_SENDER_EMAIL=...
+BREVO_SENDER_NAME=...
+API_URL=http://127.0.0.1:8000/api
+API_KEY=...
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+`NG_ALLOWED_HOSTS` debe estar configurada en Vercel para producción.

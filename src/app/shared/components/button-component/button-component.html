@@ -1,0 +1,9 @@
+<button (click)="click.emit()" class="btn btn-lg btn-primary w-full rounded-sm"
+  [disabled]="isLoading()">
+ 
+  @if (isLoading()) {
+    <app-loading-component/>
+  } @else {
+    {{ btnText() }}
+  }
+</button>

@@ -25,9 +25,10 @@ const angularApp = new AngularNodeAppEngine({
 // [BFF] ── Inicio del código propio ─────────────────────────────────────────
 // Todo este bloque es nuestro (BFF), NO parte del server.ts original de Angular SSR.
 // Proxy /ssr-api que oculta la API y las variables de entorno del navegador.
-// Incluye rate limit básico para /contact, que es el endpoint público.
+// Proxy /ssr-api que oculta la API y las variables de entorno del navegador.
 app.use('/ssr-api', express.json());
-app.use(`/ssr-api/${API_ENDPOINTS.contact}`, createRateLimit(5, 15));
+// Rate limit local de ejemplo (desactivado): Vercel WAF maneja /contact en producción.
+// app.use(`/ssr-api/${API_ENDPOINTS.contact}`, createRateLimit(3, 10));
 app.use('/ssr-api', apiProxy);
 // [BFF] ── Fin del código propio ────────────────────────────────────────────
 

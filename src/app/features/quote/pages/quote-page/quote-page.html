@@ -7,16 +7,14 @@
 
     <div appReveal class="reveal card mt-12 bg-base-200 shadow-sm">
       <div class="card-body p-7 sm:p-10">
-        <app-form-quote-component (formSubmit)="calculate($event)" />
-
-        @if (result(); as r) {
-          <div class="alert alert-info mt-6 flex-col items-start">
-            <p class="font-bold">Estimado: ${{ r.total.toLocaleString('es-CL') }} CLP</p>
-            <p class="text-sm text-base-content/70">Distancia estimada: {{ r.km.toFixed(1) }} km</p>
-            <p class="text-sm text-base-content/70">Distancia: ${{ r.distanceCost.toLocaleString('es-CL') }} · Peso: ${{ r.weightCost.toLocaleString('es-CL') }} · Volumen: ${{ r.volumeCost.toLocaleString('es-CL') }}</p>
-            <p class="text-xs text-base-content/50">Estimado referencial, no es cotización final. Envía el resumen por WhatsApp para confirmar.</p>
-            <a href="https://wa.me/56988609980" target="_blank" rel="noopener" class="btn btn-sm btn-outline btn-secondary mt-2">Enviar por WhatsApp</a>
-          </div>
+        @if (quoteResult()) {
+          <app-previewe-quote-component
+            [quoteResult]="quoteResult()"
+            (recalculate)="recalculate()"
+            (submit)="submit()"
+          />          
+        } @else {
+          <app-form-quote-component (formSubmit)="calculate($event)"/>
         }
       </div>
     </div>
