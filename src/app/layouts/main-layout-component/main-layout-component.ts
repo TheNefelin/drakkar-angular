@@ -4,9 +4,10 @@ import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '@shared/components/navbar-component/navbar-component';
 import { FooterComponent } from '@shared/components/footer-component/footer-component';
 import { RuneLineComponent } from '@shared/components/rune-line-component/rune-line-component';
+import { ButtonBackToTopComponent } from '@shared/components/button-back-to-top-component/button-back-to-top-component';
 
 @Component({
-  imports: [NavbarComponent, FooterComponent, RuneLineComponent, RouterOutlet, NgOptimizedImage],
+  imports: [NavbarComponent, FooterComponent, RuneLineComponent, RouterOutlet, NgOptimizedImage, ButtonBackToTopComponent],
   selector: 'app-main-layout-component',
   templateUrl: './main-layout-component.html',
 })
