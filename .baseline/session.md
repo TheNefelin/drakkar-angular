@@ -5,40 +5,39 @@
 
 ## Tarea activa
 
-Cierre/pulido del MVP de email + producción SSR.
+Cierre y pulido final de cotización + email.
 
 ## Último avance comprobado
 
-- **Contacto end-to-end** validado con usuario (lead a Drakar y confirmación al visitante con QR y DK-xxx).
+- **Cotización end-to-end** implementada: formulario, preview de los datos, envío a Brevo (lead en Drakar + confirmación al visitante).
+- **Email** validado en producción: contacto y cotización llegan correctamente.
 - **Build**: OK. **Tests**: 3/3 en verde.
-- **WAF Vercel** configurado para `POST` (Email-Rate-Limit): 429 tras 5 req en 15 min por IP.
-- **SSR** protegido con `NG_ALLOWED_HOSTS` (`localhost,127.0.0.1,transportesdrakkar.cl,www.transportesdrakkar.cl`).
-- **Proxy `/ssr-api`** solo permite `GET /health`; el resto responde `403`.
-- **Endpoint `POST /ssr-api/contact`** con `createRateLimit(5, 15)` y contacto real validado.
-- Multiajuste: inline `message-success`, `API_ENDPOINTS` en cliente/servidor, `NG_ALLOWED_HOSTS` con `getAllowedHosts()`.
+- **WAF Vercel** activo para `POST` (todas las rutas de email); 429 / Demasiadas solicitudes funcionando.
+- **SSR** protegido con `NG_ALLOWED_HOSTS`.
+- **Proxy `/ssr-api`**: solo `/health`; resto responde `403`.
+- Deshabilitado el rate limit local del BFF (se mantiene solo WAF en producción).
+- `button-component` usa `type="button"` para evitar submit indeseado.
+- Envío reentrante evitado: `if (this.isLoading()) return;` en `submit()`.
 
 ## Archivos tocados
 
-- `README.md`
-- `src/server/` (`api-proxy.ts`, `middleware/`, `services/contact.service.ts`, `email/`, `config.ts`)
-- `src/app/features/email/` (services, components, model)
-- `src/app/features/home/` (hero, services, pages)
-- `src/app/shared/` (message-success, message-error, constants)
+- `README.md` (actualizado documentación real)
+- `src/server/` (`quote.service.ts`, `email/helpers.ts`, `email/brevo.client.ts`, `email/templates.ts`)
+- `src/app/features/email/` (email-model, form-quote, previewe-quote, button/loading compartidos)
+- `src/app/features/quote/` (quote-page)
 - `public/images/qr-code.png`
 
 ## Pruebas ejecutadas y resultado real
 
 - `pnpm build`: OK, 2 rutas prerenderizadas.
 - `pnpm test -- --watch=false`: 3/3 en verde.
-- Verificación en navegador: contact exito 100%.
-- `/ssr-api/health`: responde JSON.
-- Vercel WAF: regla activa para ambos endpoints POST.
+- **Prueba end-to-end de cotización en producción**: correo interno en Drakar OK + confirmación al visitante OK.
+- **Contacto y cotización**: ambos funcionan en Vercel.
 
 ## Bloqueos
 
-- `quote` endpoint sigue 501 (pendiente de implementación real).
-- `NG_ALLOWED_HOSTS` debe estar configurada en Vercel (recomendado: ver .env.example).
+- `quote` en producción: depende de que `POST /ssr-api/quote` llegue al BFF en Vercel y de WAF permita POST; confirmado por el usuario.
 
 ## Siguiente paso
 
-- Pulido final de diseño y después volver a revisar `reveal` (compatibilidad con Brave/otros navegadores modernos).
+- MVP cerrado. Siguiente: revisión/documentación final y commit del tab anterior si no se hizo.

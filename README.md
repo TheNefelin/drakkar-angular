@@ -18,11 +18,12 @@ La app incluye un **BFF Express en `src/server.ts`** para trabajo que requiere c
 ### Endpoints BFF
 
 - `POST /ssr-api/contact`: envía correo de contacto a Brevo y notificación al visitante.
-- `POST /ssr-api/quote`: placeholder; aún no implementado.
+- `POST /ssr-api/quote`: envía cotización tentativa a Drakar y confirmación al visitante.
 
 El proxy distingue entre:
 
 - Contacto de email público → `contact.service` → Brevo.
+- Cotización tentativa → `quote.service` → Brevo.
 - Petición hacia API externa → reenrutado con una lista permitida de rutas.
 
 ## Seguridad
@@ -32,15 +33,15 @@ El proxy distingue entre:
 - `.env` no está versionado.
 - El proxy externo sólo permite `/health`; el resto responde `403 Ruta no permitida.`
 - El endpoint `POST /ssr-api/contact` está protegido en producción con una regla WAF por IP configurada en Vercel.
-- `POST /ssr-api/contact` también tiene un rate limit básico en memoria dentro del BFF (`createRateLimit`).
 
-## Contacto end-to-end validado
+## Email end-to-end validado
 
 - El formulario de contacto envía los datos como `POST /ssr-api/contact`.
 - El servidor envía el correo a Brevo hacia la casilla de Transportes Drakar.
 - El visitante recibe un correo de confirmación con código de referencia y QR a `https://transportesdrakkar.cl`.
-- Validación en cliente y servidor (nombre, email, teléfono y mensaje).
-- Estado de éxito visible dentro del mismo bloque de contacto (`message-success-component`).
+- La cotización envía los datos del formulario como `POST /ssr-api/quote`, calcula el estimado en frontend y muestra una preview antes de enviar.
+- Validación en cliente y servidor (nombre, email, teléfono, origen, destino, servicio, peso, volumen y km).
+- Estado de éxito visible dentro del mismo bloque (`message-success-component`).
 
 ## Estructura
 
@@ -53,12 +54,13 @@ src/app/
 ├─ shared/
 │  ├─ constants/api-endpoints.ts → rutas compartidas frontend/BFF
 │  ├─ components/                → navbar, footer, rune-line, section-heading,
-│  │                              message-error, message-success, modal-error, toast
+│  │                              button, loading, message-error, message-success, modal-error, toast
 │  └─ directives/reveal.directive.ts
 ├─ features/
 │  ├─ email/
 │  │  ├─ components/form-contact-component/
 │  │  ├─ components/form-quote-component/
+│  │  ├─ components/previewe-quote-component/
 │  │  ├─ models/email-model.ts
 │  │  └─ services/email-service.ts
 │  ├─ home/
