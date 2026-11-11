@@ -187,10 +187,11 @@ export class FormQuoteComponent {
       return 'El volumen no puede superar los 20000 m³.';
     }
 
-    if (data.km < 0) {
-      return 'Ingresa kilómetros válidos (0 o más).';
+    // Km obligatorio (sin estimado por largos de texto).
+    if (!data.km || data.km <= 0) {
+      return 'Ingresa los kilómetros del trayecto.';
     } else if (data.km > 5000) {
-      return 'El kilómetro no puede superar los 5000 km.';
+      return 'Los kilómetros no pueden superar los 5000 km.';
     }
 
     return null;

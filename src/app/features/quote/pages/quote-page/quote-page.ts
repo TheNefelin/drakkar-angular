@@ -8,6 +8,7 @@ import { PrevieweQuoteComponent } from '@features/email/components/previewe-quot
 import { EmailService } from '@features/email/services/email-service';
 import { LoggerService } from '@core/services/logger-service';
 import { firstValueFrom } from 'rxjs';
+import { QUOTE_PRICING_RULES as pricing } from '@shared/constants/quote-pricing';
 
 @Component({
   imports: [SectionHeadingComponent, FormQuoteComponent, PrevieweQuoteComponent, RevealDirective, MessageSuccessComponent],
@@ -16,7 +17,6 @@ import { firstValueFrom } from 'rxjs';
 })
 export class QuotePage {
   protected readonly quoteResult = signal<QuoteResult | null>(null);
-  protected readonly baseRate = 1500;
   protected readonly message = signal<string | null>(null);
   protected readonly isLoading = signal<boolean>(false);
   protected readonly resetTrigger = signal<number>(0);
@@ -24,17 +24,18 @@ export class QuotePage {
   private readonly loggerService = inject(LoggerService);
 
   protected calculate(data: QuoteFormData): void {
-    const tarifaKm = 100;
-    const tarifaKg = 50;
-    const tarifaM3 = 500;
-
     this.message.set(null);
 
-    const km = data.km || Math.max(1, data.origin.length + data.destination.length);
-    const costDistance = Math.round(km * tarifaKm);
-    const costWeight = Math.round(data.weight * tarifaKg);
-    const costVolume = Math.round(data.volume * tarifaM3);
-    const total = this.baseRate + costDistance + costWeight + costVolume;
+    // Km requerido; sin estimado por largos de texto.
+    const km = data.km;
+    const costDistance = Math.round(km * pricing.pricePerKm);
+    const costWeight = data.weight > pricing.includedWeightKg
+      ? Math.ceil((data.weight - pricing.includedWeightKg) / pricing.weightBlockKg) * pricing.blockSurcharge
+      : 0;
+    const costVolume = data.volume > pricing.includedVolumeM3
+      ? Math.ceil((data.volume - pricing.includedVolumeM3) / pricing.volumeBlockM3) * pricing.blockSurcharge
+      : 0;
+    const total = pricing.baseRate + costDistance + costWeight + costVolume;
 
     this.quoteResult.set({ 
       name: data.name,
@@ -46,7 +47,7 @@ export class QuotePage {
       service: data.service,
       weight: data.weight,
       volume: data.volume,
-      baseRate: this.baseRate,
+      baseRate: pricing.baseRate,
       costDistance, 
       costWeight, 
       costVolume, 

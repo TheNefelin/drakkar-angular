@@ -79,8 +79,8 @@
     </label>
 
     <label class="form-control sm:col-span-2">
-      <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Km estimados (opcional)</span>
-      <input name="km" type="number" min="0" step="1" max="5000" class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Se calcula si no lo ingresas"
+      <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Km estimados (requerido)</span>
+      <input name="km" type="number" min="1" step="1" max="5000" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Ej.: 120"
         #km
         (input)="updateKm(km.value)"/>
     </label>

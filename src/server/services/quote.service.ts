@@ -106,7 +106,15 @@ export class QuoteService {
     const costVolume = numberValue(body.costVolume);
     const total = numberValue(body.total);
 
-    if (weight === null || volume === null || km === null || baseRate === null ||
+    // Km obligatorio; sin estimado por largos de texto.
+    if (km === null || km <= 0) {
+      return {
+        status: 400,
+        body: { detail: 'Ingresa los kilómetros del trayecto.' },
+      };
+    }
+
+    if (weight === null || volume === null || baseRate === null ||
         costDistance === null || costWeight === null || costVolume === null || total === null) {
       return {
         status: 400,
