@@ -59,6 +59,10 @@ export class QuotePage {
   }
 
   protected async submit(): Promise<void> {
+    if (this.isLoading()) {
+      return;
+    }
+
     const result = this.quoteResult();
 
     if (!result) {

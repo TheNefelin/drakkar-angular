@@ -72,8 +72,16 @@ function money(value: number): string {
   return value.toLocaleString('es-CL');
 }
 
+function rowPrimary(label: string, value: string): string {
+  return `<tr><td style="padding:12px 16px;color:#8b93a1;font-size:13px;">${label}</td><td style="padding:12px 16px;color:#f0b429;">${escapeHtml(value)}</td></tr>`;
+}
+
 function row(label: string, value: string): string {
-  return `<tr><td style="padding:12px 16px;color:#8b93a1;font-size:13px;">${label}</td><td style="padding:12px 16px;color:#e7e5e4;">${escapeHtml(value)}</td></tr>`;
+  return `<tr><td style="padding:12px 16px;color:#8b93a1;font-size:13px;">${label}</td><td style="padding:12px 16px;">${escapeHtml(value)}</td></tr>`;
+}
+
+function rowMail(label: string, value: string): string {
+  return `<tr><td style="padding:12px 16px;color:#8b93a1;font-size:13px;">${label}</td><td style="padding:12px 16px;"><a href="mailto:${escapeHtml(value)}" style="color:#f0b429;text-decoration:none;">${escapeHtml(value)}</a></td></tr>`;
 }
 
 // Plantilla HTML compartida para cotización.
@@ -88,9 +96,9 @@ export function renderQuoteEmail(data: QuoteEmailData, audience: 'business' | 'c
     : 'Gracias por tu cotización. Te responderemos en menos de 48 horas.';
 
   const body = `<table style="width:100%;border-collapse:collapse;background:#11141b;border-radius:8px;">
-    ${row('Código', reference)}
-    ${row('Nombre', name)}
-    ${row('Correo', data.email)}
+    ${rowPrimary('Código', reference)}
+    ${rowPrimary('Nombre', name)}
+    ${rowMail('Correo', data.email)}
     ${row('Teléfono', data.phone)}
     ${row('Servicio', data.service)}
     ${row('Origen', data.origin)}
@@ -102,8 +110,19 @@ export function renderQuoteEmail(data: QuoteEmailData, audience: 'business' | 'c
     ${row('Distancia', `$${money(data.costDistance)}`)}
     ${row('Peso', `$${money(data.costWeight)}`)}
     ${row('Volumen', `$${money(data.costVolume)}`)}
-    ${row('Total', `$${money(data.total)}`)}
+    ${rowPrimary('Total', `$${money(data.total)}`)}
   </table>`;
+
+  const note = audience === 'customer'
+    ? `<div style="margin:20px 0;padding:12px;border:1px solid #f0b429;border-radius:8px;background:rgba(240,180,41,0.12);">
+        <p style="margin:0;color:#f0b429;font-size:14px;"><strong>No respondas a este correo.</strong> Es un mensaje automático.</p>
+      </div>
+      <p style="margin:0 0 16px;color:#b8bcc4;font-size:14px;">Código: <span style="color:#f0b429;font-weight:bold;">${reference}</span></p>
+      <div style="text-align:center;margin:16px 0;">
+        <img src="https://transportesdrakkar.cl/images/qr-code.png" alt="Código QR de WhatsApp" width="160" style="display:inline-block;max-width:100%;height:auto;border-radius:8px;" />
+        <p style="margin:8px 0 0;color:#f0b429;font-size:13px;"><a href="https://transportesdrakkar.cl" style="color:#f0b429;text-decoration:none;">https://transportesdrakkar.cl</a></p>
+      </div>`
+    : '';
 
   return `<!doctype html>
 <html lang="es">
@@ -114,6 +133,7 @@ export function renderQuoteEmail(data: QuoteEmailData, audience: 'business' | 'c
       <h1 style="margin:0 0 8px;font-size:28px;">${escapeHtml(title)}</h1>
       <p style="margin:0 0 24px;color:#b8bcc4;font-size:14px;">${escapeHtml(headline)}</p>
       ${body}
+      ${note}
       <p style="margin:24px 0 0;font-size:12px;color:#5b616e;">Transportes Drakar · Cotización tentativa</p>
     </div>
   </body>
