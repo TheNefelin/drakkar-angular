@@ -1,8 +1,9 @@
 // Servicio de negocio para la cotización tentativa.
-import { getBrevoConfig } from '@server/config';
-import { BrevoClient } from '@server/email/brevo.client';
+import { getZohoConfig } from '@server/config';
+import { ZohoClient } from '@server/email/zoho.client';
 import { renderQuoteEmail, type QuoteEmailData } from '@server/email/templates';
 import { generateReferenceCode, stringValue, validateContactFields } from '@server/email/helpers';
+// Brevo (`brevo.client.ts`) quedó desconectado como referencia para otros proyectos.
 
 interface QuoteRequestInput {
   name?: unknown;
@@ -122,11 +123,11 @@ export class QuoteService {
       };
     }
 
-    let brevo: ReturnType<typeof getBrevoConfig>;
+    let zoho: ReturnType<typeof getZohoConfig>;
 
     // Obtiene la configuración; falla explícito con 500 si faltan vars.
     try {
-      brevo = getBrevoConfig();
+      zoho = getZohoConfig();
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       return {
@@ -135,7 +136,7 @@ export class QuoteService {
       };
     }
 
-    const brevoClient = new BrevoClient();
+    const client = new ZohoClient();
     const reference = generateReferenceCode();
 
     const emailData: QuoteEmailData = {
@@ -157,9 +158,9 @@ export class QuoteService {
     };
 
     // Paso 1: enviar la cotización a Transportes Drakar.
-    const leadResult = await brevoClient.send(
+    const leadResult = await client.send(
       {
-        to: brevo.BREVO_SENDER_EMAIL,
+        to: zoho.ZOHO_SENDER_EMAIL,
         subject: `Cotización [${reference}]: ${name}`,
         name,
         email,
@@ -178,7 +179,7 @@ export class QuoteService {
     }
 
     // Paso 2: enviar confirmación al visitante. Si falla, la cotización ya fue recibida.
-    const confirmationResult = await brevoClient.send(
+    const confirmationResult = await client.send(
       {
         to: email,
         subject: `Recibimos tu cotización [${reference}] — Transportes Drakar`,
@@ -201,3 +202,4 @@ export class QuoteService {
     };
   }
 }
+

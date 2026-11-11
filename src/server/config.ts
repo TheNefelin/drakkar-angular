@@ -14,6 +14,11 @@ export interface ServerConfig {
   BREVO_API_KEY: string;
   BREVO_SENDER_EMAIL: string;
   BREVO_SENDER_NAME: string;
+  ZOHO_CLIENT_ID: string;
+  ZOHO_CLIENT_SECRET: string;
+  ZOHO_REFRESH_TOKEN: string;
+  ZOHO_ACCOUNT_ID: string;
+  ZOHO_SENDER_EMAIL: string;
 }
 
 function required(name: string): string {
@@ -40,5 +45,15 @@ export function getBrevoConfig(): Pick<ServerConfig, 'BREVO_API_URL' | 'BREVO_AP
     BREVO_API_KEY: required('BREVO_API_KEY'),
     BREVO_SENDER_EMAIL: required('BREVO_SENDER_EMAIL'),
     BREVO_SENDER_NAME: required('BREVO_SENDER_NAME'),
+  };
+}
+
+export function getZohoConfig(): Pick<ServerConfig, 'ZOHO_CLIENT_ID' | 'ZOHO_CLIENT_SECRET' | 'ZOHO_REFRESH_TOKEN' | 'ZOHO_ACCOUNT_ID' | 'ZOHO_SENDER_EMAIL'> {
+  return {
+    ZOHO_CLIENT_ID: required('ZOHO_CLIENT_ID'),
+    ZOHO_CLIENT_SECRET: required('ZOHO_CLIENT_SECRET'),
+    ZOHO_REFRESH_TOKEN: required('ZOHO_REFRESH_TOKEN'),
+    ZOHO_ACCOUNT_ID: required('ZOHO_ACCOUNT_ID'),
+    ZOHO_SENDER_EMAIL: required('ZOHO_SENDER_EMAIL'),
   };
 }

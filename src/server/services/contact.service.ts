@@ -1,8 +1,9 @@
 // Servicio de negocio para el formulario de contacto.
 import { generateReferenceCode, stringValue, validateContactFields } from '@server/email/helpers';
-import { getBrevoConfig } from '../config';
-import { BrevoClient } from '../email/brevo.client';
+import { getZohoConfig } from '../config';
+import { ZohoClient } from '../email/zoho.client';
 import { renderConfirmationEmail, renderLeadEmail } from '../email/templates';
+// Brevo (`brevo.client.ts`) quedó desconectado como referencia para otros proyectos.
 
 interface ContactRequestInput {
   name?: unknown;
@@ -61,11 +62,11 @@ export class ContactService {
       };
     }
 
-    let brevo: ReturnType<typeof getBrevoConfig>;
+    let zoho: ReturnType<typeof getZohoConfig>;
 
     // Obtiene la configuración; falla explícito con 500 si faltan vars.
     try {
-      brevo = getBrevoConfig();
+      zoho = getZohoConfig();
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       return {
@@ -73,12 +74,12 @@ export class ContactService {
         body: { detail: message },
       };
     }
-    const brevoClient = new BrevoClient();
+    const client = new ZohoClient();
     const reference = generateReferenceCode();
 
     // Paso 1: enviar los datos del lead a Transportes Drakar.
-    const leadResult = await brevoClient.send({
-      to: brevo.BREVO_SENDER_EMAIL,
+    const leadResult = await client.send({
+      to: zoho.ZOHO_SENDER_EMAIL,
       subject: `Nuevo contacto [${reference}] desde la landing: ${data.name}`,
       name: data.name,
       email: data.email,
@@ -100,7 +101,7 @@ export class ContactService {
     }
 
     // Paso 2: enviar confirmación al visitante. Si falla, el lead ya fue recibido.
-    const confirmationResult = await brevoClient.send(
+    const confirmationResult = await client.send(
       {
         to: data.email,
         subject: `Recibimos tu mensaje [${reference}] — Transportes Drakar`,
