@@ -5,39 +5,32 @@
 
 ## Tarea activa
 
-Cierre y pulido final de cotización + email.
+Evaluación y planificación de migración de envío de correo: Brevo → Zoho Mail (Brevo se mantiene, solo desactivado).
 
 ## Último avance comprobado
 
-- **Cotización end-to-end** implementada: formulario, preview de los datos, envío a Brevo (lead en Drakar + confirmación al visitante).
-- **Email** validado en producción: contacto y cotización llegan correctamente.
-- **Build**: OK. **Tests**: 3/3 en verde.
-- **WAF Vercel** activo para `POST` (todas las rutas de email); 429 / Demasiadas solicitudes funcionando.
-- **SSR** protegido con `NG_ALLOWED_HOSTS`.
-- **Proxy `/ssr-api`**: solo `/health`; resto responde `403`.
-- Deshabilitado el rate limit local del BFF (se mantiene solo WAF en producción).
-- `button-component` usa `type="button"` para evitar submit indeseado.
-- Envío reentrante evitado: `if (this.isLoading()) return;` en `submit()`.
+- **MVP email end-to-end** validado en producción (contacto y cotización; WAF Vercel; SSR `NG_ALLOWED_HOSTS`).
+- **Evaluación Zoho Mail (usuario tiene Zoho Free con dominio propio, región US)**:
+  - SMTP documentado para free organization: `smtp.zoho.com` 465 SSL / 587 TLS.
+  - API REST de Zoho Mail (POST `/api/accounts/{accountId}/messages`, scope `ZohoMail.messages.CREATE`) usa OAuth: `client_id` + `client_secret` + `refresh_token` (sin contraseña; revocable; scope mínimo). Token vive en env vars, nunca en cliente.
+  - Plan usuario: probar primero si el plan gratuito permite la API; si falla → `2FA + app-password` + nodemailer (alternativa sin contraseña normal).
+  - No se necesita `no-reply@`: la casilla elegida envía y recibe; respuestas de clientes llegan ahí.
+  - Si Zoho falla: Brevo soporta el mismo dominio (DKIM + código TXT; MX de Zoho intacto; DMARC único). `no-reply@dominio` en Brevo + `BREVO_SENDER_EMAIL` cambiado, sin tocar código.
 
 ## Archivos tocados
 
-- `README.md` (actualizado documentación real)
-- `src/server/` (`quote.service.ts`, `email/helpers.ts`, `email/brevo.client.ts`, `email/templates.ts`)
-- `src/app/features/email/` (email-model, form-quote, previewe-quote, button/loading compartidos)
-- `src/app/features/quote/` (quote-page)
-- `public/images/qr-code.png`
+- Ninguno en esta sesión (solo investigación; `.env` real no se lee).
 
 ## Pruebas ejecutadas y resultado real
 
-- `pnpm build`: OK, 2 rutas prerenderizadas.
-- `pnpm test -- --watch=false`: 3/3 en verde.
-- **Prueba end-to-end de cotización en producción**: correo interno en Drakar OK + confirmación al visitante OK.
-- **Contacto y cotización**: ambos funcionan en Vercel.
+- (Sesión anterior confirmada por usuario) Contacto y cotización end-to-end OK en producción.
 
 ## Bloqueos
 
-- `quote` en producción: depende de que `POST /ssr-api/quote` llegue al BFF en Vercel y de WAF permita POST; confirmado por el usuario.
+- Falta confirmar si la API de Zoho funciona con cuenta gratuita (requiere crear Self Client en api-console.zoho.com y probar antes de implementar).
 
 ## Siguiente paso
 
-- MVP cerrado. Siguiente: revisión/documentación final y commit del tab anterior si no se hizo.
+1. El usuario crea Self Client en api-console.zoho.com y confirma acceso; define qué casilla será remitente y si el correo interno va a la misma o a la otra.
+2. Prueba manual de envío con token OAuth (sin tocar código).
+3. Implementar `src/server/email/zoho.client.ts` + selector `EMAIL_PROVIDER=zoho|brevo` (o Space → implementación directa, según feedback). Verificar build/tests y envío real.
