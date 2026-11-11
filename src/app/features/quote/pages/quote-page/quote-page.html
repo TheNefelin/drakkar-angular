@@ -7,14 +7,21 @@
 
     <div appReveal class="reveal card mt-12 bg-base-200 shadow-sm">
       <div class="card-body p-7 sm:p-10">
-        @if (quoteResult()) {
+        <app-form-quote-component
+          [class.hidden]="quoteResult() || message() === 'Cotización enviada correctamente.'"
+          [resetTrigger]="resetTrigger()"
+          (formSubmit)="calculate($event)"
+        />
+
+        @if (message()) {
+          <app-message-success-component [message]="message()"/>
+        } @else if (quoteResult()) {
           <app-previewe-quote-component
             [quoteResult]="quoteResult()"
+            [isLoading]="isLoading()"
             (recalculate)="recalculate()"
             (submit)="submit()"
           />          
-        } @else {
-          <app-form-quote-component (formSubmit)="calculate($event)"/>
         }
       </div>
     </div>

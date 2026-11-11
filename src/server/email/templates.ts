@@ -49,6 +49,77 @@ export function renderLeadEmail(data: LeadEmailData): string {
   </html>`;
 }
 
+export interface QuoteEmailData {
+  name: string;
+  email: string;
+  phone: string;
+  reference: string;
+  origin: string;
+  destination: string;
+  service: string;
+  weight: number;
+  volume: number;
+  km: number;
+  baseRate: number;
+  costDistance: number;
+  costWeight: number;
+  costVolume: number;
+  total: number;
+}
+
+// Devuelve el valor formateado como moneda local.
+function money(value: number): string {
+  return value.toLocaleString('es-CL');
+}
+
+function row(label: string, value: string): string {
+  return `<tr><td style="padding:12px 16px;color:#8b93a1;font-size:13px;">${label}</td><td style="padding:12px 16px;color:#e7e5e4;">${escapeHtml(value)}</td></tr>`;
+}
+
+// Plantilla HTML compartida para cotización.
+// audience = 'business' para el correo interno a Drakar; 'customer' para el cliente.
+export function renderQuoteEmail(data: QuoteEmailData, audience: 'business' | 'customer'): string {
+  const name = escapeHtml(data.name);
+  const reference = escapeHtml(data.reference);
+
+  const title = audience === 'business' ? 'Cotización tentativa' : 'Cotización recibida';
+  const headline = audience === 'business'
+    ? 'Recibe los datos del solicitante desde la landing. Atiende en menos de 48 horas.'
+    : 'Gracias por tu cotización. Te responderemos en menos de 48 horas.';
+
+  const body = `<table style="width:100%;border-collapse:collapse;background:#11141b;border-radius:8px;">
+    ${row('Código', reference)}
+    ${row('Nombre', name)}
+    ${row('Correo', data.email)}
+    ${row('Teléfono', data.phone)}
+    ${row('Servicio', data.service)}
+    ${row('Origen', data.origin)}
+    ${row('Destino', data.destination)}
+    ${row('Km estimados', `${data.km} km`)}
+    ${row('Peso', `${data.weight} kg`)}
+    ${row('Volumen', `${data.volume} m³`)}
+    ${row('Tarifa base', `$${money(data.baseRate)}`)}
+    ${row('Distancia', `$${money(data.costDistance)}`)}
+    ${row('Peso', `$${money(data.costWeight)}`)}
+    ${row('Volumen', `$${money(data.costVolume)}`)}
+    ${row('Total', `$${money(data.total)}`)}
+  </table>`;
+
+  return `<!doctype html>
+<html lang="es">
+  <head><meta charset="utf-8"><title>${escapeHtml(title)} — Transportes Drakar</title></head>
+  <body style="margin:0;background:#0a0c10;font-family:Arial,sans-serif;">
+    <div style="max-width:640px;margin:0 auto;padding:24px;color:#e7e5e4;">
+      <p style="color:#f0b429;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;margin:0 0 8px;">Transportes Drakar</p>
+      <h1 style="margin:0 0 8px;font-size:28px;">${escapeHtml(title)}</h1>
+      <p style="margin:0 0 24px;color:#b8bcc4;font-size:14px;">${escapeHtml(headline)}</p>
+      ${body}
+      <p style="margin:24px 0 0;font-size:12px;color:#5b616e;">Transportes Drakar · Cotización tentativa</p>
+    </div>
+  </body>
+</html>`;
+}
+
 // Plantilla HTML para la confirmación que recibe el visitante.
 export function renderConfirmationEmail(name: string, reference: string): string {
   const safeName = escapeHtml(name || '—');

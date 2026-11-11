@@ -1,6 +1,7 @@
 import { Router, type Request, type Response } from 'express';
 import { getExternalApiConfig } from '@server/config';
 import { ContactService } from '@server/services/contact.service';
+import { QuoteService } from '@server/services/quote.service';
 import { API_ENDPOINTS } from '@shared/constants/api-endpoints';
 
 // SERVER (Express): proxy BFF para la API externa.
@@ -10,6 +11,7 @@ export const apiProxy = Router();
 // ----------------------------------------------------------------------------------------
 // Instancia del servicio de contacto.
 const contactService = new ContactService();
+const quoteService = new QuoteService();
 
 // Endpoints para email. Contact delega en el servicio real; quote todavía es placeholder.
 apiProxy.post(`/${API_ENDPOINTS.contact}`, async (req: Request, res: Response) => {
@@ -17,8 +19,9 @@ apiProxy.post(`/${API_ENDPOINTS.contact}`, async (req: Request, res: Response) =
   res.status(result.status).json(result.body);
 });
 
-apiProxy.post(`/${API_ENDPOINTS.quote}`, async (_req: Request, res: Response) => {
-  res.status(501).json({ detail: 'Quote email no implementado todavía.' });
+apiProxy.post(`/${API_ENDPOINTS.quote}`, async (req: Request, res: Response) => {
+  const result = await quoteService.send(req.body);
+  res.status(result.status).json(result.body);
 });
 
 // ----------------------------------------------------------------------------------------

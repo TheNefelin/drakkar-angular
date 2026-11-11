@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, effect, input, output, signal } from '@angular/core';
 import { QuoteFormData } from '@features/email/models/email-model';
 import { MessageErrorComponent } from '@shared/components/message-error-component/message-error-component';
 
@@ -9,6 +9,7 @@ import { MessageErrorComponent } from '@shared/components/message-error-componen
 })
 export class FormQuoteComponent {
   readonly isLoading = input<boolean>(false);
+  readonly resetTrigger = input<number>(0);
   protected readonly formSubmit = output<QuoteFormData>();
 
   protected readonly errorMessage = signal<string | null>(null);
@@ -23,6 +24,25 @@ export class FormQuoteComponent {
     email: '',
     phone: '',
   });
+
+  constructor() {
+    // Reset del formulario desde el padre tras el envío.
+    effect(() => {
+      if (this.resetTrigger()) {
+        this.formData.set({
+          origin: '',
+          destination: '',
+          service: 'Flete',
+          weight: 0,
+          volume: 0,
+          km: 0,
+          name: '',
+          email: '',
+          phone: '',
+        });
+      }
+    });
+  }
 
   protected onNameBeforeInput(event: InputEvent): void {
     // Permite solo letras, acentos, espacios, guiones y apóstrofes.

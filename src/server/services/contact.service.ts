@@ -1,5 +1,5 @@
 // Servicio de negocio para el formulario de contacto.
-import { randomBytes } from 'node:crypto';
+import { generateReferenceCode, stringValue, validateContactFields } from '@server/email/helpers';
 import { getBrevoConfig } from '../config';
 import { BrevoClient } from '../email/brevo.client';
 import { renderConfirmationEmail, renderLeadEmail } from '../email/templates';
@@ -26,18 +26,6 @@ interface ContactResponse {
   };
 }
 
-// Genera un código de seguimiento sortable en UTC.
-function generateReferenceCode(): string {
-  const stamp = new Date().toISOString().replace(/\D/g, '').slice(0, 14);
-  const suffix = randomBytes(3).toString('hex').toUpperCase();
-  return `DK-${stamp}-${suffix}`;
-}
-
-// Devuelve cadena vacía si el valor no es texto; si lo es, hace trim.
-function stringValue(value: unknown): string {
-  return typeof value === 'string' ? value.trim() : '';
-}
-
 export class ContactService {
   // Implementa el flujo completo de contacto.
   async send(body: ContactRequestInput): Promise<ContactResponse> {
@@ -49,56 +37,27 @@ export class ContactService {
       message: stringValue(body.message),
     };
 
-// Validación server-side: los 4 campos son obligatorios y respetan límites.
-    if (!/^[\p{L}\p{M}][\p{L}\p{M} .'-]{0,99}$/u.test(data.name)) {
+    // Validación server-side: name, email y phone.
+    const contactError = validateContactFields(data.name, data.email, data.phone);
+
+    if (contactError) {
       return {
         status: 400,
-        body: { detail: 'El nombre solo puede contener letras, espacios, guiones o apóstrofes.' },
+        body: { detail: contactError },
       };
     }
 
-    if (data.name || data.email || data.phone || data.message) {
-      // Validación de formato y longitud en servidor.
-      const emailValid = /^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]{1,64}@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/.test(data.email);
-
-      if (!emailValid) {
-        return {
-          status: 400,
-          body: { detail: 'Ingresa un correo válido.' },
-        };
-      }
-
-      if (data.email.length > 254) {
-        return {
-          status: 400,
-          body: { detail: 'El correo es demasiado largo.' },
-        };
-      }
-
-      if (!/^\d{11}$/.test(data.phone)) {
-        return {
-          status: 400,
-          body: { detail: 'Ingresa un teléfono válido de 11 dígitos.' },
-        };
-      }
-
-      if (data.message.length < 5) {
-        return {
-          status: 400,
-          body: { detail: 'Cuéntanos un poco más (mínimo 5 caracteres).' },
-        };
-      }
-
-      if (data.message.length > 500) {
-        return {
-          status: 400,
-          body: { detail: 'El mensaje no puede superar los 500 caracteres.' },
-        };
-      }
-    } else {
+    if (data.message.length < 5) {
       return {
         status: 400,
-        body: { detail: 'Faltan campos obligatorios.' },
+        body: { detail: 'Cuéntanos un poco más (mínimo 5 caracteres).' },
+      };
+    }
+
+    if (data.message.length > 500) {
+      return {
+        status: 400,
+        body: { detail: 'El mensaje no puede superar los 500 caracteres.' },
       };
     }
 

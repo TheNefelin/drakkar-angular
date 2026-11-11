@@ -1,6 +1,6 @@
 import { inject, Service } from '@angular/core';
 import { ApiService } from '@core/services/api-service';
-import { ContactFormData, QuoteFormData } from '@features/email/models/email-model';
+import { ContactFormData, QuoteResult } from '@features/email/models/email-model';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '@shared/constants/api-endpoints';
 
@@ -12,7 +12,7 @@ export class EmailService {
     return this.apiService.post(API_ENDPOINTS.contact, item);
   }
 
-  emailQuote(item: QuoteFormData): Observable<void> {
+  emailQuote(item: QuoteResult): Observable<void> {
     return this.apiService.post(API_ENDPOINTS.quote, item);
   }
 }
