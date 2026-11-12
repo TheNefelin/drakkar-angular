@@ -1,6 +1,6 @@
-# Transportes Drakar
+# Transportes Drakkar
 
-Landing y cotizador estimativo para Transportes Drakar (fletes, mudanzas y retiro de escombros).
+Landing y cotizador estimativo para Transportes Drakkar (fletes, mudanzas y retiro de escombros).
 
 Stack: Angular 22 (signal-based), SSR, Tailwind 4 + DaisyUI 5, pnpm.
 
@@ -37,7 +37,7 @@ El proxy distingue entre:
 ## Email end-to-end validado
 
 - El formulario de contacto envía los datos como `POST /ssr-api/contact`.
-- El servidor envía el correo vía Zoho Mail API hacia la casilla de Transportes Drakar. (La cotización reproduce el mismo flujo; validación final en producción.)
+- El servidor envía el correo vía Zoho Mail API hacia la casilla de Transportes Drakkar. (La cotización reproduce el mismo flujo; validación final en producción.)
 - El visitante recibe un correo de confirmación con código de referencia y QR a `https://transportesdrakkar.cl`.
 - La cotización envía los datos del formulario como `POST /ssr-api/quote`, calcula el estimado en frontend y muestra una preview antes de enviar.
 - Validación en cliente y servidor (nombre, email, teléfono, origen, destino, servicio, peso, volumen y km).
@@ -160,7 +160,7 @@ src/app/
 │  ├─ email/
 │  │  ├─ components/form-contact-component/
 │  │  ├─ components/form-quote-component/
-│  │  ├─ components/previewe-quote-component/
+│  │  ├─ components/preview-quote-component/
 │  │  ├─ models/email-model.ts
 │  │  └─ services/email-service.ts
 │  ├─ home/
@@ -176,7 +176,7 @@ src/app/
 ## Fuentes y tema
 
 - Fuentes por CDN: Noto Sans Runic, Cinzel Decorative, Roboto.
-- Tema `drakar` en `src/styles.css` con variables DaisyUI/Tailwind.
+- Tema `drakkar` en `src/styles.css` con variables DaisyUI/Tailwind.
 
 ## Comandos
 

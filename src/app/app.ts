@@ -9,5 +9,5 @@ import { ModalErrorComponent } from '@shared/components/modal-error-component/mo
   templateUrl: './app.html',
 })
 export class App {
-  protected readonly title = signal('Drakar Trasnporte');
+  protected readonly title = signal('Drakkar Transportes');
 }

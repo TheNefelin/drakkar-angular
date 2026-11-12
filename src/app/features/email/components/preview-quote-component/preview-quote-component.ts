@@ -1,13 +1,13 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { QuoteResult } from '@features/email/models/email-model';
 import { ButtonComponent } from '@shared/components/button-component/button-component';
 
 @Component({
   imports: [ButtonComponent],
-  selector: 'app-previewe-quote-component',
-  templateUrl: './previewe-quote-component.html',
+  selector: 'app-preview-quote-component',
+  templateUrl: './preview-quote-component.html',
 })
-export class PrevieweQuoteComponent {
+export class PreviewQuoteComponent {
   readonly isLoading = input<boolean>(false);
   readonly quoteResult = input<QuoteResult | null>(null);
   protected readonly recalculate = output<void>();

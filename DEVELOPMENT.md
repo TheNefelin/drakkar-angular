@@ -1,11 +1,11 @@
-# DEVELOPMENT.md — Transportes Drakar (Angular 22 + SSR)
+# DEVELOPMENT.md — Transportes Drakkar (Angular 22 + SSR)
 
 Memoria del proyecto para decisiones y proceso en curso. No es un diario.
 (Patrón: memory viva del proyecto; el checkpoint vive en `.baseline/session.md`.)
 
 ## Propósito
 
-Landing + cotizador estimativo de Transportes Drakar (fletes, mudanzas, retiro de escombros). Objetivo cercano: cerrar envío de correos transaccionales con Zoho Mail y dejar el MVP email sólido.
+Landing + cotizador estimativo de Transportes Drakkar (fletes, mudanzas, retiro de escombros). Objetivo cercano: cerrar envío de correos transaccionales con Zoho Mail y dejar el MVP email sólido.
 
 ## Stack
 

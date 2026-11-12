@@ -4,14 +4,14 @@ import { RevealDirective } from '@shared/directives/reveal.directive';
 import { MessageSuccessComponent } from '@shared/components/message-success-component/message-success-component';
 import { FormQuoteComponent } from '@features/email/components/form-quote-component/form-quote-component';
 import { QuoteFormData, QuoteResult } from '@features/email/models/email-model';
-import { PrevieweQuoteComponent } from '@features/email/components/previewe-quote-component/previewe-quote-component';
+import { PreviewQuoteComponent } from '@features/email/components/preview-quote-component/preview-quote-component';
 import { EmailService } from '@features/email/services/email-service';
 import { LoggerService } from '@core/services/logger-service';
 import { firstValueFrom } from 'rxjs';
 import { QUOTE_PRICING_RULES as pricing } from '@shared/constants/quote-pricing';
 
 @Component({
-  imports: [SectionHeadingComponent, FormQuoteComponent, PrevieweQuoteComponent, RevealDirective, MessageSuccessComponent],
+  imports: [SectionHeadingComponent, FormQuoteComponent, PreviewQuoteComponent, RevealDirective, MessageSuccessComponent],
   selector: 'app-quote-page',
   templateUrl: './quote-page.html',
 })
@@ -37,7 +37,7 @@ export class QuotePage {
       : 0;
     const total = pricing.baseRate + costDistance + costWeight + costVolume;
 
-    this.quoteResult.set({ 
+    this.quoteResult.set({
       name: data.name,
       email: data.email,
       phone: data.phone,
@@ -48,11 +48,19 @@ export class QuotePage {
       weight: data.weight,
       volume: data.volume,
       baseRate: pricing.baseRate,
-      costDistance, 
-      costWeight, 
-      costVolume, 
-      total 
+      costDistance,
+      costWeight,
+      costVolume,
+      total,
     });
+
+    // Scroll suave al resultado (solo en el navegador; calculate() ocurre tras submit).
+    if (typeof document !== 'undefined') {
+      document.getElementById('quote-result')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
   }
 
   protected recalculate(): void {

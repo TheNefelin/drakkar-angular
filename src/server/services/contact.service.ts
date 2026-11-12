@@ -77,7 +77,7 @@ export class ContactService {
     const client = new ZohoClient();
     const reference = generateReferenceCode();
 
-    // Paso 1: enviar los datos del lead a Transportes Drakar.
+    // Paso 1: enviar los datos del lead a Transportes Drakkar.
     const leadResult = await client.send({
       to: zoho.ZOHO_SENDER_EMAIL,
       subject: `Nuevo contacto [${reference}] desde la landing: ${data.name}`,
@@ -104,7 +104,7 @@ export class ContactService {
     const confirmationResult = await client.send(
       {
         to: data.email,
-        subject: `Recibimos tu mensaje [${reference}] — Transportes Drakar`,
+        subject: `Recibimos tu mensaje [${reference}] — Transportes Drakkar`,
         name: data.name,
         email: data.email,
         phone: data.phone,

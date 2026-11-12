@@ -1,8 +1,3 @@
-@if (errorMessage()) {
-  <div class="pb-4">
-    <app-message-error-component [message]="errorMessage()"/>
-  </div>
-}
 <form novalidate (submit)="onSubmit($event)">
   <fieldset class="grid gap-5 sm:grid-cols-2" 
     [disabled]="isLoading()">
@@ -42,8 +37,14 @@
       <div class="mt-1 text-right text-xs text-base-content/60">{{ messageCounter() }}/500</div>
     </label>
   </fieldset>
+
+  @if (errorMessage()) {
+    <div>
+      <app-message-error-component [message]="errorMessage()"/>
+    </div>
+  }
   
-  <button type="submit" class="btn btn-lg btn-primary mt-7 w-full rounded-sm"
+  <button type="submit" class="btn btn-lg btn-primary mt-4 w-full rounded-sm"
     [disabled]="isLoading()">
     
     @if (isLoading()) {

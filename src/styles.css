@@ -4,7 +4,7 @@
 @plugin "daisyui";
 
 @plugin "daisyui/theme" {
-  name: "drakar";
+  name: "drakkar";
   default: true;
   prefersdark: true;
   color-scheme: dark;

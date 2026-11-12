@@ -5,7 +5,7 @@
       <p class="animate-hero-fade [animation-delay:0.08s] mx-auto mt-4 max-w-md text-base-content/70">Ingresa origen, destino y carga para obtener un estimado al instante.</p>
     </div>
 
-    <div appReveal class="reveal card mt-12 bg-base-200 shadow-sm">
+    <div id="quote-result" appReveal class="reveal card mt-12 bg-base-200 shadow-sm">
       <div class="card-body p-2 sm:p-10">
         <app-form-quote-component class="p-5"
           [class.hidden]="quoteResult() || message() === 'Cotización enviada correctamente.'"
@@ -16,7 +16,7 @@
         @if (message()) {
           <app-message-success-component [message]="message()"/>
         } @else if (quoteResult()) {
-          <app-previewe-quote-component
+          <app-preview-quote-component
             [quoteResult]="quoteResult()"
             [isLoading]="isLoading()"
             (recalculate)="recalculate()"

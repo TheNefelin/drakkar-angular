@@ -1,4 +1,4 @@
-<section class="bg-base-300 p-4">
+<section id="preview" class="bg-base-300 p-4">
   <app-button-component 
     [btnText]="'Vovler a Calcular'" 
     [isLoading]="isLoading()"
@@ -40,13 +40,6 @@
 
   <div class="divider"></div>
   
-  <app-button-component 
-    [btnText]="'Enviar Cotizacion'" 
-    [isLoading]="isLoading()"
-    (click)="submit.emit()"/>
-  
-  <div class="divider"></div>
-
   <div class="text-xs text-base-content/70">
     <p class="mb-1 font-bold text-success">Así se aplican los recargos:</p>
     <ul class="list-disc space-y-1 pl-5">
@@ -57,4 +50,11 @@
     </ul>
   </div>
   <h1 class="mt-2 text-xs text-success">Estimado referencial, no es cotización final. Al pulsar «Enviar cotización», este resumen se envía por correo y te contactaremos para confirmar.</h1>
+
+  <div class="divider"></div>
+  
+  <app-button-component 
+    [btnText]="'Enviar Cotizacion'" 
+    [isLoading]="isLoading()"
+    (click)="submit.emit()"/>
 </section>

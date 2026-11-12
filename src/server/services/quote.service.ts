@@ -58,7 +58,7 @@ function numberValue(value: unknown): number | null {
 }
 
 export class QuoteService {
-  // Envía la cotización tentativa a Drakar y al cliente.
+  // Envía la cotización tentativa a Drakkar y al cliente.
   async send(body: QuoteRequestInput): Promise<QuoteResponse> {
     const name = stringValue(body.name);
     const email = stringValue(body.email);
@@ -157,7 +157,7 @@ export class QuoteService {
       reference,
     };
 
-    // Paso 1: enviar la cotización a Transportes Drakar.
+    // Paso 1: enviar la cotización a Transportes Drakkar.
     const leadResult = await client.send(
       {
         to: zoho.ZOHO_SENDER_EMAIL,
@@ -182,7 +182,7 @@ export class QuoteService {
     const confirmationResult = await client.send(
       {
         to: email,
-        subject: `Recibimos tu cotización [${reference}] — Transportes Drakar`,
+        subject: `Recibimos tu cotización [${reference}] — Transportes Drakkar`,
         name,
         email,
         phone,

@@ -1,4 +1,4 @@
-// Plantillas HTML para los correos de contacto de Drakar.
+// Plantillas HTML para los correos de contacto de Drakkar.
 interface LeadEmailData {
   name: string;
   email: string;
@@ -18,7 +18,7 @@ function escapeHtml(value: string): string {
     .replaceAll("'", '&#39;');
 }
 
-// Plantilla HTML para el correo interno que recibe Transportes Drakar.
+// Plantilla HTML para el correo interno que recibe Transportes Drakkar.
 export function renderLeadEmail(data: LeadEmailData): string {
   const name = escapeHtml(data.name);
   const email = escapeHtml(data.email);
@@ -29,10 +29,10 @@ export function renderLeadEmail(data: LeadEmailData): string {
 
   return `<!doctype html>
   <html lang="es">
-    <head><meta charset="utf-8"><title>Nuevo Contacto — Transportes Drakar</title></head>
+    <head><meta charset="utf-8"><title>Nuevo Contacto — Transportes Drakkar</title></head>
     <body style="margin:0;background:#0a0c10;font-family:Arial,sans-serif;">
       <div style="max-width:640px;margin:0 auto;padding:16px;color:#e7e5e4;">
-        <p style="color:#f0b429;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;margin:0 0 8px;">Transportes Drakar</p>
+        <p style="color:#f0b429;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;margin:0 0 8px;">Transportes Drakkar</p>
         <h1 style="margin:0 0 8px;font-size:28px;">Nuevo contacto</h1>
         <p style="margin:0 0 14px;color:#b8bcc4;font-size:14px;">Solicitud desde la landing. Atiende en menos de 48 horas.</p>
         <table style="width:100%;border-collapse:collapse;background:#11141b;border-radius:8px;">
@@ -43,7 +43,7 @@ export function renderLeadEmail(data: LeadEmailData): string {
           <tr><td style="padding:8px 14px;color:#8b93a1;font-size:13px;">Servicio</td><td style="padding:8px 14px;">${service}</td></tr>
           <tr><td style="padding:8px 14px;color:#8b93a1;font-size:13px;vertical-align:top;">Mensaje</td><td style="padding:8px 14px;">${details}</td></tr>
         </table>
-        <p style="margin:12px 0 0;font-size:12px;color:#5b616e;">Transportes Drakar · Cotización estimativa</p>
+        <p style="margin:12px 0 0;font-size:12px;color:#5b616e;">Transportes Drakkar · Cotización estimativa</p>
       </div>
     </body>
   </html>`;
@@ -85,7 +85,7 @@ function rowMail(label: string, value: string): string {
 }
 
 // Plantilla HTML compartida para cotización.
-// audience = 'business' para el correo interno a Drakar; 'customer' para el cliente.
+// audience = 'business' para el correo interno a Drakkar; 'customer' para el cliente.
 export function renderQuoteEmail(data: QuoteEmailData, audience: 'business' | 'customer'): string {
   const name = escapeHtml(data.name);
   const reference = escapeHtml(data.reference);
@@ -126,15 +126,15 @@ export function renderQuoteEmail(data: QuoteEmailData, audience: 'business' | 'c
 
   return `<!doctype html>
 <html lang="es">
-  <head><meta charset="utf-8"><title>${escapeHtml(title)} — Transportes Drakar</title></head>
+  <head><meta charset="utf-8"><title>${escapeHtml(title)} — Transportes Drakkar</title></head>
   <body style="margin:0;background:#0a0c10;font-family:Arial,sans-serif;">
     <div style="max-width:640px;margin:0 auto;padding:16px;color:#e7e5e4;">
-      <p style="color:#f0b429;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;margin:0 0 8px;">Transportes Drakar</p>
+      <p style="color:#f0b429;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;margin:0 0 8px;">Transportes Drakkar</p>
       <h1 style="margin:0 0 8px;font-size:28px;">${escapeHtml(title)}</h1>
       <p style="margin:0 0 14px;color:#b8bcc4;font-size:14px;">${escapeHtml(headline)}</p>
       ${body}
       ${note}
-      <p style="margin:12px 0 0;font-size:12px;color:#5b616e;">Transportes Drakar · Cotización tentativa</p>
+      <p style="margin:12px 0 0;font-size:12px;color:#5b616e;">Transportes Drakkar · Cotización tentativa</p>
     </div>
   </body>
 </html>`;
@@ -147,10 +147,10 @@ export function renderConfirmationEmail(name: string, reference: string): string
 
   return `<!doctype html>
   <html lang="es">
-    <head><meta charset="utf-8"><title>Recibimos tu Mensaje — Transportes Drakar</title></head>
+    <head><meta charset="utf-8"><title>Recibimos tu Mensaje — Transportes Drakkar</title></head>
     <body style="margin:0;background:#0a0c10;font-family:Arial,sans-serif;">
       <div style="max-width:640px;margin:0 auto;padding:16px;color:#e7e5e4;">
-        <p style="color:#f0b429;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;margin:0 0 8px;">Transportes Drakar</p>
+        <p style="color:#f0b429;font-size:12px;letter-spacing:0.3em;text-transform:uppercase;margin:0 0 8px;">Transportes Drakkar</p>
         <h1 style="margin:0 0 8px;font-size:28px;">Mensaje recibido</h1>
         <p style="margin:0;color:#e7e5e4;line-height:1.6;">Gracias, <span style="color:#f0b429;">${safeName}</span>. Recibimos tu mensaje y te responderemos en menos de 48 horas.</p>
         <div style="margin:14px 0;padding:12px;border:1px solid #f0b429;border-radius:8px;background:rgba(240,180,41,0.12);">
