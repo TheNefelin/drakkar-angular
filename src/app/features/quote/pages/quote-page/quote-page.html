@@ -18,15 +18,15 @@
           (formSubmit)="calculateBase($event)"/>
 
         <app-quote-preview-component
-          [class.hidden]="!quoteResult()"
+          [class.hidden]="isEstimating()"
           [quoteResult]="quoteResult()"
-          [isLoading]="isLoading()"
+          [isLoading]="isSaving()"
           (recalculate)="recalculate()"/>
 
         <app-quote-form-detail-component
-          [class.hidden]="!quoteResult()"
+          [class.hidden]="isEstimating()"
           [resetTrigger]="resetTrigger()"
-          [isLoading]="isLoading()"
+          [isLoading]="isSaving()"
           (valuesChanged)="previewDetail($event)"
           (formSubmit)="submit($event)"/>
       </div>

@@ -23,7 +23,7 @@ export class QuotePage {
 
   // STATES -----------------------------------------------------------------
   protected readonly successMessage = signal<string | null>(null);
-  protected readonly isLoading = signal<boolean>(false);
+  protected readonly isSaving = signal<boolean>(false);
   protected readonly resetTrigger = signal<number>(0);
   protected readonly quoteResult = signal<QuoteResult | null>(null);
   protected readonly isEstimating = signal<boolean>(true);
@@ -64,7 +64,6 @@ export class QuotePage {
   }
 
   protected recalculate(): void {
-    this.quoteResult.set(null);
     this.successMessage.set(null);
     this.isEstimating.set(true);
     this.scrollToResult();
@@ -72,7 +71,7 @@ export class QuotePage {
 
   // Envío con el desglose completo calculado en vivo desde el detalle.
   protected async submit(details: QuoteFormDetailData): Promise<void> {
-    if (this.isLoading()) {
+    if (this.isSaving()) {
       return;
     }
 
@@ -89,7 +88,7 @@ export class QuotePage {
 
     const result = this.buildQuoteResult(base, details);
 
-    this.isLoading.set(true);
+    this.isSaving.set(true);
     this.successMessage.set(null);
 
     try {
@@ -101,7 +100,7 @@ export class QuotePage {
       this.loggerService.error('QuotePage', 'submit', error);
       this.successMessage.set('No se pudo enviar la cotización.');
     } finally {
-      this.isLoading.set(false);
+      this.isSaving.set(false);
     }
   }
 
