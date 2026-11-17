@@ -9,25 +9,25 @@
       <div class="card-body p-2 sm:p-10">
         @if (successMessage()) {
           <app-message-success-component [message]="successMessage()"/>
+        } @else {
+          <app-quote-form-base-component
+            [class.hidden]="!isEstimating()"
+            [resetTrigger]="resetTrigger()"
+            (formSubmit)="calculateBase($event)"/>
+
+          <app-quote-preview-component
+            [class.hidden]="isEstimating()"
+            [quoteResult]="quoteResult()"
+            [isLoading]="isSaving()"
+            (recalculate)="recalculate()"/>
+
+          <app-quote-form-detail-component
+            [class.hidden]="isEstimating()"
+            [resetTrigger]="resetTrigger()"
+            [isLoading]="isSaving()"
+            (valuesChanged)="previewDetail($event)"
+            (formSubmit)="submit($event)"/>
         }
-
-        <app-quote-form-base-component
-          [class.hidden]="!isEstimating()"
-          [resetTrigger]="resetTrigger()"
-          (formSubmit)="calculateBase($event)"/>
-
-        <app-quote-preview-component
-          [class.hidden]="isEstimating()"
-          [quoteResult]="quoteResult()"
-          [isLoading]="isSaving()"
-          (recalculate)="recalculate()"/>
-
-        <app-quote-form-detail-component
-          [class.hidden]="isEstimating()"
-          [resetTrigger]="resetTrigger()"
-          [isLoading]="isSaving()"
-          (valuesChanged)="previewDetail($event)"
-          (formSubmit)="submit($event)"/>
       </div>
     </div>
   </div>

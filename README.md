@@ -159,8 +159,6 @@ src/app/
 ├─ features/
 │  ├─ email/
 │  │  ├─ components/form-contact-component/
-│  │  ├─ components/form-quote-component/
-│  │  ├─ components/preview-quote-component/
 │  │  ├─ models/email-model.ts
 │  │  └─ services/email-service.ts
 │  ├─ home/
@@ -169,6 +167,11 @@ src/app/
 │  │  │  ├─ services-component/
 │  │  │  └─ pages/home-page/
 │  └─ quote/
+│     ├─ components/
+│     │  ├─ quote-form-base-component/
+│     │  ├─ quote-form-detail-component/
+│     │  └─ quote-preview-component/
+│     ├─ models/quote-model.ts
 │     └─ pages/quote-page/
 └─ server.ts                    → servidor Express SSR + BFF
 ```

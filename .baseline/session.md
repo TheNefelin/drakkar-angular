@@ -5,22 +5,22 @@
 
 ## Tarea activa
 
-Sin tarea activa; pendiente de definir las próximas modificaciones.
+Cierre del ciclo de cotización end-to-end (Zoho) con refactor de UI.
 
 ## Último avance comprobado
 
-- **Email contacto y cotización (Zoho) validado end-to-end en producción** por el usuario: flujo completo OK.
-- UI: `ButtonBackToTopComponent` (runa ᛏ) en `main-layout`; navbar sin fragment en logo; texto de quote-page corregido; scroll suave a `#quote-result` tras calcular.
-- Convenciones: código en inglés, contenido en español; ids `quote-result`/`home`/`contact`/`preview`; componente `preview-quote-component` renombrado.
-- Marca: `Drakar` → `Drakkar` en textos visibles; identificadores `drakar-*` del proyecto intactos.
-- Skills/AGENTS: `npm start` → `pnpm serve:ssr` en el repo; presupuesto verificado OK en agent-baseline (v0.3.1).
-- Build OK (2 rutas prerenderizadas). Suite 3/3 en verde. Commit de la sesión anterior hecho (`docs+ui`, todo pusheado).
+- **Zoho validado end-to-end en producción** (contacto y cotización en ambos escenarios).
+- Refactor quote: `features/email/` se descompone en `features/quote/components/{base,detail,preview}` con models propios (`quote-model.ts`). El flow calculado: base → preview → detalle con recalc en vivo, coste de peso/kg y redondeo al bloque.
+- `ButtonComponent` ahora acepta `type` (`button`|`submit`) con default `button`; los forms de cotización son `submit` reales.
+- Estado reactivo correcto: recalc conserva datos; éxito tras envío colapsa todo al mensaje (vista de reset).
+- Sin fugas en dropdown móvil (`invisible`/`pointer-events-none` combinados con group-focus-within).
+- Build OK (2 rutas prerenderizadas). Suite 3/3 en verde.
 
 ## Bloqueos
 
-- Ninguno; proyecto operativo.
+- Ninguno. Pendiente validación móvil en navegador real por el usuario.
 
 ## Siguiente paso
 
-1. Definir y ejecutar las modificaciones pendientes.
-2. Confirmar E2E en producción como cierre (ya validado).
+1. User prueba en navegador, especialmente: recalc conserva datos, éxito tras envío colapsa todo, hamburger ok con/sin foco, cotización tras deploy.
+2. Commit del lote con mensaje propuesto por el agente.
