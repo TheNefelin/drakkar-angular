@@ -26,7 +26,7 @@
       <input name="phone" required inputmode="numeric" type="tel" maxlength="11" class="input input-bordered w-full bg-base-100 text-base-content" placeholder="56 9 XXXXXXXXX" 
         #phone
         (beforeinput)="onPhoneBeforeInput($event)"
-        (input)="updatePhone(phone.value)"/>
+        (input)="updatePhone(phone)"/>
     </label>
 
     <label class="form-control sm:col-span-2">

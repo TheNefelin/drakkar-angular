@@ -68,8 +68,12 @@ export class QuoteFormDetailComponent {
     this.emitValues();
   }
 
-  protected updatePhone(value: string): void {
-    const normalized = value.replace(/\D/g, '').slice(0, 11);
+  protected updatePhone(input: HTMLInputElement): void {
+    const normalized = input.value.replace(/\D/g, '').slice(0, 11);
+    // Reescribe el DOM para que el usuario nunca vea el pegado con símbolos.
+    if (input.value !== normalized) {
+      input.value = normalized;
+    }
     this.formData.update(d => ({ ...d, phone: normalized }));
     this.errorMessage.set(null);
     this.emitValues();
