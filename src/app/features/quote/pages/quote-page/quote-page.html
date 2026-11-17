@@ -2,27 +2,33 @@
   <div class="mx-auto max-w-3xl px-2">
     <div class="text-center">
       <app-section-heading-component eyebrow="Cotización estimativa" title="Simula tu cotización" level="h1" />
-      <p class="animate-hero-fade [animation-delay:0.08s] mx-auto mt-4 max-w-md text-base-content/70">Ingresa origen, destino y carga para obtener un estimado al instante.</p>
+      <p class="animate-hero-fade [animation-delay:0.08s] mx-auto mt-4 max-w-md text-base-content/70">Ingresa origen, destino y kilómetros para obtener un estimado al instante.</p>
     </div>
 
     <div id="quote-result" appReveal class="reveal card mt-12 bg-base-200 shadow-sm">
       <div class="card-body p-2 sm:p-10">
-        <app-form-quote-component class="p-5"
-          [class.hidden]="quoteResult() || message() === 'Cotización enviada correctamente.'"
-          [resetTrigger]="resetTrigger()"
-          (formSubmit)="calculate($event)"
-        />
-
-        @if (message()) {
-          <app-message-success-component [message]="message()"/>
-        } @else if (quoteResult()) {
-          <app-preview-quote-component
-            [quoteResult]="quoteResult()"
-            [isLoading]="isLoading()"
-            (recalculate)="recalculate()"
-            (submit)="submit()"
-          />          
+        @if (successMessage()) {
+          <app-message-success-component [message]="successMessage()"/>
         }
+
+        <app-quote-form-base-component
+          class="p-5"
+          [class.hidden]="!isEstimating()"
+          [resetTrigger]="resetTrigger()"
+          (formSubmit)="calculateBase($event)"/>
+
+        <app-quote-preview-component
+          [class.hidden]="!quoteResult()"
+          [quoteResult]="quoteResult()"
+          [isLoading]="isLoading()"
+          (recalculate)="recalculate()"/>
+
+        <app-quote-form-detail-component
+          [class.hidden]="!quoteResult()"
+          [resetTrigger]="resetTrigger()"
+          [isLoading]="isLoading()"
+          (valuesChanged)="previewDetail($event)"
+          (formSubmit)="submit($event)"/>
       </div>
     </div>
   </div>

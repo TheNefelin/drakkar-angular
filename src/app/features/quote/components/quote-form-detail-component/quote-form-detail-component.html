@@ -1,4 +1,4 @@
-<form novalidate (submit)="onSubmit($event)">
+<form novalidate (submit)="onSubmit($event)" class="bg-base-300 p-4">
   <fieldset class="grid gap-5 sm:grid-cols-2"
     [disabled]="isLoading()">
 
@@ -27,37 +27,7 @@
         #phone
         (beforeinput)="onPhoneBeforeInput($event)"
         (input)="updatePhone(phone.value)"/>
-    </label>
-
-    <label class="form-control">
-      <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Origen</span>
-      <input name="origin" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Comuna o dirección"
-        #origin
-        maxlength="200"
-        (input)="updateOrigin(origin.value)"/>
-    </label>
-
-    <label class="form-control">
-      <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Destino</span>
-      <input name="destination" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Comuna o dirección"
-        #destination
-        maxlength="200"
-        (input)="updateDestination(destination.value)"/>
-    </label>
-
-    <label class="form-control sm:col-span-2">
-      <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Servicio</span>
-      <select name="service" class="select select-bordered w-full bg-base-100 text-base-content"
-        #service
-        (change)="updateService(service.value)">
-        <option>Flete</option>
-        <option>Mudanza</option>
-        <option>Retiro de escombros</option>
-        <option>Retiro de cachureos</option>
-        <option>Servicio para empresa</option>
-        <option>Otro</option>
-      </select>
-    </label>
+    </label>   
 
     <label class="form-control">
       <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Peso (kg)</span>
@@ -72,13 +42,6 @@
         #volume
         (input)="updateVolume(volume.value)"/>
     </label>
-
-    <label class="form-control sm:col-span-2">
-      <span class="label-text mb-1.5 text-xs font-bold uppercase tracking-widest text-base-content/60">Km estimados (requerido)</span>
-      <input name="km" type="number" min="1" step="1" max="5000" required class="input input-bordered w-full bg-base-100 text-base-content" placeholder="Ej.: 120"
-        #km
-        (input)="updateKm(km.value)"/>
-    </label>
   </fieldset>
 
   @if (errorMessage()) {
@@ -87,13 +50,10 @@
     </div>
   }
 
-  <button type="submit" class="btn btn-lg btn-primary mt-5 w-full rounded-sm"
-    [disabled]="isLoading()">
-
-    @if (isLoading()) {
-      <span class="loading loading-spinner loading-md"></span>
-    } @else {
-      Calcular estimado
-    }
-  </button>
+  <div class="pt-4">
+    <app-button-component
+      [type]="'submit'"
+      [btnText]="'Enviar Cotización'"
+      [isLoading]="isLoading()"/>
+  </div>
 </form>

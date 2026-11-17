@@ -9,5 +9,6 @@ import { LoadingComponent } from '@shared/components/loading-component/loading-c
 export class ButtonComponent {
   readonly isLoading = input<boolean>(false);
   readonly btnText = input<string>('');
+  readonly type = input<'button' | 'submit'>('button');
   protected readonly click = output<void>();
 }

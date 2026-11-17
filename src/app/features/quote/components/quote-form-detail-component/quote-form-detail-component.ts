@@ -1,49 +1,81 @@
 import { Component, effect, input, output, signal } from '@angular/core';
-import { QuoteFormData } from '@features/email/models/email-model';
+import { QuoteFormDetailData } from '@features/quote/models/quote-model';
 import { MessageErrorComponent } from '@shared/components/message-error-component/message-error-component';
+import { ButtonComponent } from '@shared/components/button-component/button-component';
 
 @Component({
-  imports: [MessageErrorComponent],
-  selector: 'app-form-quote-component',
-  templateUrl: './form-quote-component.html',
+  imports: [MessageErrorComponent, ButtonComponent],
+  selector: 'app-quote-form-detail-component',
+  templateUrl: './quote-form-detail-component.html',
 })
-export class FormQuoteComponent {
+export class QuoteFormDetailComponent {
+  // INPUTS/OUTPUTS ---------------------------------------------------------
   readonly isLoading = input<boolean>(false);
   readonly resetTrigger = input<number>(0);
-  protected readonly formSubmit = output<QuoteFormData>();
+  protected readonly formSubmit = output<QuoteFormDetailData>();
+  protected readonly valuesChanged = output<QuoteFormDetailData>();
 
+  // STATES -----------------------------------------------------------------  
   protected readonly errorMessage = signal<string | null>(null);
-  protected formData = signal<QuoteFormData>({
-    origin: '',
-    destination: '',
-    service: 'Flete',
+  protected formData = signal<QuoteFormDetailData>({
     weight: 0,
     volume: 0,
-    km: 0,
     name: '',
     email: '',
     phone: '',
   });
 
   constructor() {
-    // Reset del formulario desde el padre tras el envío.
     effect(() => {
       if (this.resetTrigger()) {
         this.formData.set({
-          origin: '',
-          destination: '',
-          service: 'Flete',
           weight: 0,
           volume: 0,
-          km: 0,
           name: '',
           email: '',
           phone: '',
         });
+        this.emitValues();
       }
     });
   }
 
+  private emitValues(): void {
+    this.valuesChanged.emit(this.formData());
+  }
+
+  protected updateWeight(value: string): void {
+    this.formData.update(d => ({ ...d, weight: Number(value || 0) }));
+    this.errorMessage.set(null);
+    this.emitValues();
+  }
+
+  protected updateVolume(value: string): void {
+    this.formData.update(d => ({ ...d, volume: Number(value || 0) }));
+    this.errorMessage.set(null);
+    this.emitValues();
+  }
+
+  protected updateName(value: string): void {
+    this.formData.update(d => ({ ...d, name: value }));
+    this.errorMessage.set(null);
+    this.emitValues();
+  }
+
+  protected updateEmail(value: string): void {
+    this.formData.update(d => ({ ...d, email: value }));
+    this.errorMessage.set(null);
+    this.emitValues();
+  }
+
+  protected updatePhone(value: string): void {
+    const normalized = value.replace(/\D/g, '').slice(0, 11);
+    this.formData.update(d => ({ ...d, phone: normalized }));
+    this.errorMessage.set(null);
+    this.emitValues();
+  }
+
+  // EVENTS -----------------------------------------------------------------
   protected onNameBeforeInput(event: InputEvent): void {
     // Permite solo letras, acentos, espacios, guiones y apóstrofes.
     const data = event.data ?? '';
@@ -59,64 +91,14 @@ export class FormQuoteComponent {
       event.preventDefault();
     }
   }
-
-  protected updateOrigin(value: string): void {
-    this.formData.update(d => ({ ...d, origin: value }));
-    this.errorMessage.set(null);
-  }
-
-  protected updateDestination(value: string): void {
-    this.formData.update(d => ({ ...d, destination: value }));
-    this.errorMessage.set(null);
-  }
-
-  protected updateService(value: string): void {
-    this.formData.update(d => ({ ...d, service: value }));
-    this.errorMessage.set(null);
-  }
-
-  protected updateWeight(value: string): void {
-    this.formData.update(d => ({ ...d, weight: Number(value || 0) }));
-    this.errorMessage.set(null);
-  }
-
-  protected updateVolume(value: string): void {
-    this.formData.update(d => ({ ...d, volume: Number(value || 0) }));
-    this.errorMessage.set(null);
-  }
-
-  protected updateKm(value: string): void {
-    this.formData.update(d => ({ ...d, km: Number(value || 0) }));
-    this.errorMessage.set(null);
-  }
-
-  protected updateName(value: string): void {
-    this.formData.update(d => ({ ...d, name: value }));
-    this.errorMessage.set(null);
-  }
-
-  protected updateEmail(value: string): void {
-    this.formData.update(d => ({ ...d, email: value }));
-    this.errorMessage.set(null);
-  }
-
-  protected updatePhone(value: string): void {
-    const normalized = value.replace(/\D/g, '').slice(0, 11);
-    this.formData.update(d => ({ ...d, phone: normalized }));
-    this.errorMessage.set(null);
-  }
-
-  protected onSubmit(event: Event): void {
-    event.preventDefault();
+  
+  protected onSubmit(event?: Event): void {
+    event?.preventDefault();
     const data = this.formData();
 
-    const payload: QuoteFormData = {
-      origin: data.origin.trim(),
-      destination: data.destination.trim(),
-      service: data.service.trim(),
+    const payload: QuoteFormDetailData = {
       weight: Number(data.weight),
       volume: Number(data.volume),
-      km: Number(data.km),
       name: data.name.trim(),
       email: data.email.trim(),
       phone: data.phone.trim(),
@@ -132,7 +114,7 @@ export class FormQuoteComponent {
     this.formSubmit.emit(payload);
   }
 
-  private validate(data: QuoteFormData): string | null {
+  private validate(data: QuoteFormDetailData): string | null {
     // Solo letras, acentos, espacios, guiones y apóstrofes.
     if (!data.name) {
       return 'El nombre es obligatorio.';
@@ -156,24 +138,6 @@ export class FormQuoteComponent {
       return 'Ingresa un teléfono válido de 11 dígitos.';
     }
 
-    // Origen y destino.
-    if (!data.origin) {
-      return 'El origen es obligatorio.';
-    } else if (!/^[a-zA-ZÀ-ÖØ-öø-ÿ0-9 .,'-]{1,199}$/u.test(data.origin)) {
-      return 'El origen contiene caracteres no válidos.';
-    }
-
-    if (!data.destination) {
-      return 'El destino es obligatorio.';
-    } else if (!/^[a-zA-ZÀ-ÖØ-öø-ÿ0-9 .,'-]{1,199}$/u.test(data.destination)) {
-      return 'El destino contiene caracteres no válidos.';
-    }
-
-    // Servicio.
-    if (!data.service) {
-      return 'El servicio es obligatorio.';
-    }
-
     // Volumen físico: máximo 20000 m³ o 20000 kg.
     if (data.weight < 0) {
       return 'Ingresa un peso válido (0 o más).';
@@ -185,13 +149,6 @@ export class FormQuoteComponent {
       return 'Ingresa un volumen válido (0 o más).';
     } else if (data.volume > 20000) {
       return 'El volumen no puede superar los 20000 m³.';
-    }
-
-    // Km obligatorio (sin estimado por largos de texto).
-    if (!data.km || data.km <= 0) {
-      return 'Ingresa los kilómetros del trayecto.';
-    } else if (data.km > 5000) {
-      return 'Los kilómetros no pueden superar los 5000 km.';
     }
 
     return null;

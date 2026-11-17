@@ -2,95 +2,143 @@ import { Component, inject, signal } from '@angular/core';
 import { SectionHeadingComponent } from '@shared/components/section-heading-component/section-heading-component';
 import { RevealDirective } from '@shared/directives/reveal.directive';
 import { MessageSuccessComponent } from '@shared/components/message-success-component/message-success-component';
-import { FormQuoteComponent } from '@features/email/components/form-quote-component/form-quote-component';
-import { QuoteFormData, QuoteResult } from '@features/email/models/email-model';
-import { PreviewQuoteComponent } from '@features/email/components/preview-quote-component/preview-quote-component';
 import { EmailService } from '@features/email/services/email-service';
 import { LoggerService } from '@core/services/logger-service';
 import { firstValueFrom } from 'rxjs';
-import { QUOTE_PRICING_RULES as pricing } from '@shared/constants/quote-pricing';
+import { QUOTE_PRICING_RULES } from '@shared/constants/quote-pricing';
+import { QuoteFormBaseComponent } from '@features/quote/components/quote-form-base-component/quote-form-base-component';
+import { QuoteFormDetailComponent } from '@features/quote/components/quote-form-detail-component/quote-form-detail-component';
+import { QuoteFormData, QuoteFormDetailData, QuoteResult } from '@features/quote/models/quote-model';
+import { QuotePreviewComponent } from '@features/quote/components/quote-preview-component/quote-preview-component';
 
 @Component({
-  imports: [SectionHeadingComponent, FormQuoteComponent, PreviewQuoteComponent, RevealDirective, MessageSuccessComponent],
+  imports: [SectionHeadingComponent, RevealDirective, MessageSuccessComponent, QuoteFormBaseComponent, QuoteFormDetailComponent, QuotePreviewComponent],
   selector: 'app-quote-page',
   templateUrl: './quote-page.html',
 })
 export class QuotePage {
-  protected readonly quoteResult = signal<QuoteResult | null>(null);
-  protected readonly message = signal<string | null>(null);
-  protected readonly isLoading = signal<boolean>(false);
-  protected readonly resetTrigger = signal<number>(0);
+  // SERVICES ---------------------------------------------------------------
   private readonly emailService = inject(EmailService);
   private readonly loggerService = inject(LoggerService);
 
-  protected calculate(data: QuoteFormData): void {
-    this.message.set(null);
+  // STATES -----------------------------------------------------------------
+  protected readonly successMessage = signal<string | null>(null);
+  protected readonly isLoading = signal<boolean>(false);
+  protected readonly resetTrigger = signal<number>(0);
+  protected readonly quoteResult = signal<QuoteResult | null>(null);
+  protected readonly isEstimating = signal<boolean>(true);
 
-    // Km requerido; sin estimado por largos de texto.
+  // EVENTS -----------------------------------------------------------------
+  protected calculateBase(data: QuoteFormData): void {
+    this.successMessage.set(null);
+
     const km = data.km;
-    const costDistance = Math.round(km * pricing.pricePerKm);
-    const costWeight = data.weight > pricing.includedWeightKg
-      ? Math.ceil((data.weight - pricing.includedWeightKg) / pricing.weightBlockKg) * pricing.blockSurcharge
-      : 0;
-    const costVolume = data.volume > pricing.includedVolumeM3
-      ? Math.ceil((data.volume - pricing.includedVolumeM3) / pricing.volumeBlockM3) * pricing.blockSurcharge
-      : 0;
-    const total = pricing.baseRate + costDistance + costWeight + costVolume;
+    const details: QuoteFormDetailData = {
+      weight: this.quoteResult()?.weight ?? 0,
+      volume: this.quoteResult()?.volume ?? 0,
+      name: this.quoteResult()?.name ?? '',
+      email: this.quoteResult()?.email ?? '',
+      phone: this.quoteResult()?.phone ?? '',
+    };
 
-    this.quoteResult.set({
-      name: data.name,
-      email: data.email,
-      phone: data.phone,
-      origin: data.origin,
-      destination: data.destination,
-      km,
-      service: data.service,
-      weight: data.weight,
-      volume: data.volume,
-      baseRate: pricing.baseRate,
-      costDistance,
-      costWeight,
-      costVolume,
+    this.quoteResult.set(this.buildQuoteResult(data, details));
+    this.isEstimating.set(false);
+    this.scrollToResult();
+  }
+
+  protected previewDetail(data: QuoteFormDetailData): void {
+    this.successMessage.set(null);
+
+    const base: QuoteFormData = {
+      km: this.quoteResult()?.km ?? 0,
+      origin: this.quoteResult()?.origin ?? '',
+      destination: this.quoteResult()?.destination ?? '',
+      service: this.quoteResult()?.service ?? '',
+    };
+
+    if (!base.km) {
+      return;
+    }
+
+    this.quoteResult.set(this.buildQuoteResult(base, data));
+  }
+
+  protected recalculate(): void {
+    this.quoteResult.set(null);
+    this.successMessage.set(null);
+    this.isEstimating.set(true);
+    this.scrollToResult();
+  }
+
+  // Envío con el desglose completo calculado en vivo desde el detalle.
+  protected async submit(details: QuoteFormDetailData): Promise<void> {
+    if (this.isLoading()) {
+      return;
+    }
+
+    const base: QuoteFormData = {
+      km: this.quoteResult()?.km ?? 0,
+      origin: this.quoteResult()?.origin ?? '',
+      destination: this.quoteResult()?.destination ?? '',
+      service: this.quoteResult()?.service ?? '',
+    };
+
+    if (!base.km) {
+      return;
+    }
+
+    const result = this.buildQuoteResult(base, details);
+
+    this.isLoading.set(true);
+    this.successMessage.set(null);
+
+    try {
+      await firstValueFrom(this.emailService.emailQuote(result));
+      this.successMessage.set('Cotización enviada correctamente.');
+      this.quoteResult.set(null);
+      this.resetTrigger.set(Date.now());
+    } catch (error: unknown) {
+      this.loggerService.error('QuotePage', 'submit', error);
+      this.successMessage.set('No se pudo enviar la cotización.');
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  private buildQuoteResult(base: QuoteFormData, details: QuoteFormDetailData): QuoteResult {
+    const distanceCost = Math.round(base.km * QUOTE_PRICING_RULES.pricePerKm);
+    const weightCost = details.weight > QUOTE_PRICING_RULES.includedWeightKg
+      ? Math.ceil((details.weight - QUOTE_PRICING_RULES.includedWeightKg) / QUOTE_PRICING_RULES.weightBlockKg) * QUOTE_PRICING_RULES.blockSurcharge
+      : 0;
+    const volumeCost = details.volume > QUOTE_PRICING_RULES.includedVolumeM3
+      ? Math.ceil((details.volume - QUOTE_PRICING_RULES.includedVolumeM3) / QUOTE_PRICING_RULES.volumeBlockM3) * QUOTE_PRICING_RULES.blockSurcharge
+      : 0;
+    const total = QUOTE_PRICING_RULES.baseRate + distanceCost + weightCost + volumeCost;
+
+    return {
+      origin: base.origin,
+      destination: base.destination,
+      service: base.service,
+      km: base.km,
+      name: details.name,
+      email: details.email,
+      phone: details.phone,
+      weight: details.weight,
+      volume: details.volume,
+      baseRate: QUOTE_PRICING_RULES.baseRate,
+      costDistance: distanceCost,
+      costWeight: weightCost,
+      costVolume: volumeCost,
       total,
-    });
+    };
+  }
 
-    // Scroll suave al resultado (solo en el navegador; calculate() ocurre tras submit).
+  private scrollToResult(): void {
     if (typeof document !== 'undefined') {
       document.getElementById('quote-result')?.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
       });
-    }
-  }
-
-  protected recalculate(): void {
-    this.quoteResult.set(null);
-  }
-
-  protected async submit(): Promise<void> {
-    if (this.isLoading()) {
-      return;
-    }
-
-    const result = this.quoteResult();
-
-    if (!result) {
-      return;
-    }
-
-    this.isLoading.set(true);
-    this.message.set(null);
-
-    try {
-      await firstValueFrom(this.emailService.emailQuote(result));
-      this.message.set('Cotización enviada correctamente.');
-      this.quoteResult.set(null);
-      this.resetTrigger.set(Date.now());
-    } catch (error: unknown) {
-      this.loggerService.error('QuotePage', 'submit', error);
-      this.message.set('No se pudo enviar la cotización.');
-    } finally {
-      this.isLoading.set(false);
     }
   }
 }

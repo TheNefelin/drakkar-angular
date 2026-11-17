@@ -18,7 +18,7 @@ import { MessageSuccessComponent } from '@shared/components/message-success-comp
   templateUrl: './home-page.html',
 })
 export class HomePage {
-  // SERVICES ---------------------------------------------------------------  
+  // SERVICES ---------------------------------------------------------------
   private readonly loggerService = inject(LoggerService);
   private readonly errorService = inject(ErrorService);
   

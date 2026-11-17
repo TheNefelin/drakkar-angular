@@ -1,9 +1,10 @@
 import { Component, computed, input, output, signal } from '@angular/core';
 import { ContactFormData } from '@features/email/models/email-model';
 import { MessageErrorComponent } from '@shared/components/message-error-component/message-error-component';
+import { ButtonComponent } from '@shared/components/button-component/button-component';
 
 @Component({
-  imports: [MessageErrorComponent],
+  imports: [MessageErrorComponent, ButtonComponent],
   selector: 'app-form-contact-component',
   templateUrl: './form-contact-component.html',
 })

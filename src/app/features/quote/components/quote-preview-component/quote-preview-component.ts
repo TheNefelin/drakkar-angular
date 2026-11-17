@@ -1,17 +1,16 @@
 import { Component, computed, input, output } from '@angular/core';
-import { QuoteResult } from '@features/email/models/email-model';
+import { QuoteResult } from '@features/quote/models/quote-model';
 import { ButtonComponent } from '@shared/components/button-component/button-component';
 
 @Component({
   imports: [ButtonComponent],
-  selector: 'app-preview-quote-component',
-  templateUrl: './preview-quote-component.html',
+  selector: 'app-quote-preview-component',
+  templateUrl: './quote-preview-component.html',
 })
-export class PreviewQuoteComponent {
+export class QuotePreviewComponent {
   readonly isLoading = input<boolean>(false);
   readonly quoteResult = input<QuoteResult | null>(null);
   protected readonly recalculate = output<void>();
-  protected readonly submit = output<void>();
 
   protected readonly data = computed<QuoteResult | null>(() => {
     const res = this.quoteResult();
