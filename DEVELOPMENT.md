@@ -20,10 +20,8 @@ Landing + cotizador estimativo de Transportes Drakkar (fletes, mudanzas, retiro 
 
 ## Estado verificado
 
-- **Email contacto (Zoho)**: flujo probado por el usuario (local). OK.
-- **Email cotización (Zoho)**: validado bajo Brevo previamente; hoy apunta a Zoho; pendiente validación en producción tras deploy.
+- **Email contacto y cotización (Zoho)**: validado end-to-end en producción por el usuario (formulario → envío → OK).
 - **WAF** Vercel activo para POST email; **SSR** protegido por `NG_ALLOWED_HOSTS`; proxy restringido a `/health`.
-- **Contacto y cotización** validados de extremo a extremo en producción antes de Zoho (con Brevo).
 
 ## Decisiones de diseño (en curso)
 
@@ -64,9 +62,7 @@ src/server/
 
 ## Pendientes
 
-- Validar **cotización E2E en producción** con Zoho (deploy + env vars Vercel + envío real).
 - **DKIM** en el admin de Zoho para el dominio (mejora entregabilidad a visitantes).
-- Commit/push pendiente de esta sesión (mensaje a emitir tras confirmación).
 
 ## Comandos
 
