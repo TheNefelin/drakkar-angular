@@ -22,13 +22,14 @@
       <a routerLink="/" fragment="contact" class="btn btn-primary hidden rounded-sm sm:inline-flex">Contáctanos</a>
 
       <!-- Bajo 640px: hamburguesa con el botón dentro -->
-      <div class="dropdown dropdown-end sm:hidden">
+      <div class="dropdown dropdown-end sm:hidden group">
         <div tabindex="0" role="button" class="btn btn-ghost" aria-label="Abrir menú">
           <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </div>
-        <ul tabindex="-1" class="menu dropdown-content z-10 mt-3 w-56 rounded-box bg-base-100 p-2 shadow grid gap-2">
+        <ul tabindex="-1"
+          class="menu dropdown-content z-10 mt-3 w-56 rounded-box bg-base-100 p-2 shadow grid gap-2 invisible opacity-0 pointer-events-none transition-all duration-200 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:pointer-events-auto">
           <li>
             <a routerLink="/" fragment="contact" class="btn btn-primary rounded-sm" onclick="document.activeElement.blur()">Contáctanos</a>
           </li>
