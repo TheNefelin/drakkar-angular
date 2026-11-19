@@ -9,10 +9,13 @@
   <div class="text-xs text-base-content/70">
     <p class="mb-1 font-bold text-success">Así se aplican los recargos:</p>
     <ul class="list-disc space-y-1 pl-5">
-      <li>Tarifa base: $10.000, siempre incluidos.</li>
+      <li>Valores netos, no incluyen IVA. Se emiten facturas electrónicas.</li>
+      <li>Peajes no incluidos, su costo será de cargo del cliente.</li>
+      <li>Servicio no incluye pioneta ni personal de carga y descarga.</li>
+      <li>Tarifa base: $10.000 (incluida).</li>
       <li>Distancia: $2.000 por cada km.</li>
-      <li>Peso: hasta 1200 kg incluidos; sobre eso $10.000 por cada 500 kg (redondeo hacia arriba).</li>
-      <li>Volumen: hasta 3 m³ incluidos; sobre eso $10.000 por cada 1 m³ (redondeo hacia arriba).</li>
+      <li>Peso: hasta 1.200 kg incluidos; sobre ese límite, $10.000 por cada 500 kg adicionales (redondeo hacia arriba).</li>
+      <li>Volumen: hasta 3 m³ incluidos; sobre ese límite, $10.000 por cada 1 m³ adicional (redondeo hacia arriba).</li>
     </ul>
   </div>
 
@@ -20,13 +23,15 @@
   
   <div class="divider"></div>
     
+  <!--
   <p class="flex gap-2"><span class="font-bold text-primary">Nombre:</span>{{ data()?.name }}</p>
   <p class="flex gap-2"><span class="font-bold text-primary">Correo:</span>{{ data()?.email }}</p>
   <p class="flex gap-2"><span class="font-bold text-primary">Teléfono:</span>+{{ data()?.phone }}</p>
+  <div class="divider"></div>
+  -->
+
   <p class="flex gap-2"><span class="font-bold text-primary">Servicio:</span>{{ data()?.service }}</p>
   <p class="flex gap-2"><span class="font-bold text-primary">Origen / Destino:</span>{{ data()?.origin }} - {{ data()?.destination }}</p>
-
-  <div class="divider"></div>
 
   <div class="grid grid-cols-2 gap-2 justify-between">
     <p class="flex gap-2"><span class="font-bold text-primary">Tarifa base:</span></p>
