@@ -11,15 +11,14 @@
     <ul class="list-disc space-y-1 pl-5">
       <li>Valores netos, no incluyen IVA. Se emiten facturas electrónicas.</li>
       <li>Peajes no incluidos, su costo será de cargo del cliente.</li>
-      <li>Servicio no incluye pioneta ni personal de carga y descarga.</li>
+      <li>Servicio no incluye peoneta ni personal de carga y descarga.</li>
       <li>Tarifa base: $10.000 (incluida).</li>
       <li>Distancia: $2.000 por cada km.</li>
       <li>Peso: hasta 1.200 kg incluidos; sobre ese límite, $10.000 por cada 500 kg adicionales (redondeo hacia arriba).</li>
-      <li>Volumen: hasta 3 m³ incluidos; sobre ese límite, $10.000 por cada 1 m³ adicional (redondeo hacia arriba).</li>
+      <li>Volumen: hasta 2 m³ incluidos; sobre ese límite, $10.000 por cada 1 m³ adicional (redondeo hacia arriba).</li>
     </ul>
+    <p class="mt-2 text-xs text-success">Estimado referencial, no es cotización final. Al pulsar «Enviar cotización», este resumen se envía por correo y te contactaremos para confirmar.</p>
   </div>
-
-  <h1 class="mt-2 text-xs text-success">Estimado referencial, no es cotización final. Al pulsar «Enviar cotización», este resumen se envía por correo y te contactaremos para confirmar.</h1>
   
   <div class="divider"></div>
     
@@ -53,7 +52,7 @@
   <div class="divider"></div>
   
   <div class="grid grid-cols-2 gap-2 justify-between">
-    <p class="flex gap-2"><span class="font-bold text-primary">TOTAL:</span></p>
+    <p class="flex gap-2"><span class="font-bold text-primary">TOTAL NETO:</span></p>
     <p class="flex justify-between"><span>$</span>{{ formatThousands(data()?.total ?? 0) }}</p>
   </div>
 

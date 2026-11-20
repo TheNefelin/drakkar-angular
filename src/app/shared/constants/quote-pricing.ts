@@ -22,7 +22,7 @@ export const QUOTE_PRICING_RULES: QuotePricingRules = {
   pricePerKm: 2000,
   includedWeightKg: 1200,
   weightBlockKg: 500,
-  includedVolumeM3: 3,
+  includedVolumeM3: 2,
   volumeBlockM3: 1,
   blockSurcharge: 10000,
 };

@@ -73,15 +73,19 @@ function money(value: number): string {
 }
 
 function rowPrimary(label: string, value: string): string {
-  return `<tr><td style="padding:8px 14px;color:#8b93a1;font-size:13px;">${label}</td><td style="padding:8px 14px;color:#f0b429;">${escapeHtml(value)}</td></tr>`;
+  return `<tr><td style="padding:4px 14px;color:#8b93a1;font-size:13px;">${label}</td><td style="padding:4px 14px;color:#f0b429;">${escapeHtml(value)}</td></tr>`;
 }
 
 function row(label: string, value: string): string {
-  return `<tr><td style="padding:8px 14px;color:#8b93a1;font-size:13px;">${label}</td><td style="padding:8px 14px;">${escapeHtml(value)}</td></tr>`;
+  return `<tr><td style="padding:4px 14px;color:#8b93a1;font-size:13px;">${label}</td><td style="padding:4px 14px;">${escapeHtml(value)}</td></tr>`;
 }
 
 function rowMail(label: string, value: string): string {
-  return `<tr><td style="padding:8px 14px;color:#8b93a1;font-size:13px;">${label}</td><td style="padding:8px 14px;"><a href="mailto:${escapeHtml(value)}" style="color:#f0b429;text-decoration:none;">${escapeHtml(value)}</a></td></tr>`;
+  return `<tr><td style="padding:4px 14px;color:#8b93a1;font-size:13px;">${label}</td><td style="padding:4px 14px;"><a href="mailto:${escapeHtml(value)}" style="color:#f0b429;text-decoration:none;">${escapeHtml(value)}</a></td></tr>`;
+}
+
+function rowTotal(label: string, value: string): string {
+  return `<tr><td style="padding:6px 14px;color:#8b93a1;font-size:13px;">${label}</td><td style="padding:6px 14px;color:#f0b429;font-weight:bold;">${escapeHtml(value)}</td></tr>`;
 }
 
 // Plantilla HTML compartida para cotización.
@@ -110,8 +114,22 @@ export function renderQuoteEmail(data: QuoteEmailData, audience: 'business' | 'c
     ${row('Distancia', `$${money(data.costDistance)}`)}
     ${row('Peso', `$${money(data.costWeight)}`)}
     ${row('Volumen', `$${money(data.costVolume)}`)}
-    ${rowPrimary('Total', `$${money(data.total)}`)}
+    ${rowTotal('Total', `$${money(data.total)}`)}
   </table>`;
+
+
+  const legend = `<div style="margin:14px 0 0;padding:12px;border:1px solid #2a2f3a;border-radius:8px;background:#0f1116;">
+    <ul style="margin:0;padding:0 0 0 18px;color:#b8bcc4;font-size:12px;line-height:1.6;">
+      <li style="margin:0 0 4px;">Valores netos, no incluyen IVA. Se emiten facturas electrónicas.</li>
+      <li style="margin:0 0 4px;">Peajes no incluidos, su costo será de cargo del cliente.</li>
+      <li style="margin:0 0 4px;">Servicio no incluye peoneta ni personal de carga y descarga.</li>
+      <li style="margin:0 0 4px;">Tarifa base: $10.000 (incluida).</li>
+      <li style="margin:0 0 4px;">Distancia: $2.000 por cada km.</li>
+      <li style="margin:0 0 4px;">Peso: hasta 1.200 kg incluidos; sobre ese límite, $10.000 por cada 500 kg adicionales (redondeo hacia arriba).</li>
+      <li style="margin:0 0 4px;">Volumen: hasta 2 m³ incluidos; sobre ese límite, $10.000 por cada 1 m³ adicional (redondeo hacia arriba).</li>
+    </ul>
+    <p style="margin:10px 0 0;font-size:12px;color:#f0b429;font-weight:bold;">Estimado referencial, no es cotización final.</p>
+  </div>`;
 
   const note = audience === 'customer'
     ? `<div style="margin:14px 0;padding:12px;border:1px solid #f0b429;border-radius:8px;background:rgba(240,180,41,0.12);">
@@ -133,6 +151,7 @@ export function renderQuoteEmail(data: QuoteEmailData, audience: 'business' | 'c
       <h1 style="margin:0 0 8px;font-size:28px;">${escapeHtml(title)}</h1>
       <p style="margin:0 0 14px;color:#b8bcc4;font-size:14px;">${escapeHtml(headline)}</p>
       ${body}
+      ${legend}
       ${note}
       <p style="margin:12px 0 0;font-size:12px;color:#5b616e;">Transportes Drakkar · Cotización tentativa</p>
     </div>
